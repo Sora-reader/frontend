@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Box,
   Container,
@@ -12,7 +12,10 @@ import {grey, teal} from '@material-ui/core/colors';
 import {Header} from './components/Header';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import {Search} from './components/Search/Search';
+import {SearchView} from './components/views/search/SearchView';
+import {DetailView} from './components/views/detail/DetailView';
+import {IndexView} from './components/views/index/IndexView';
+import {MangaType} from './catalogs/baseCatalog';
 
 const defaultTheme = createMuiTheme({
   palette: {
@@ -38,14 +41,19 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     padding: theme.spacing(0),
   },
   main: {
-    [theme.breakpoints.down('md')]: {
-      paddingLeft: 0,
-      paddingRight: 0,
-    },
+    padding: 0,
+    backgroundColor: defaultTheme.palette.background.paper,
+    color: 'white',
   },
 }));
 
 function App() {
+  const [manga, setManga] = useState({
+    title: '',
+    link: '',
+    imageUrl: '',
+  } as MangaType);
+
   const classes = useStyles();
 
   return (
@@ -60,14 +68,11 @@ function App() {
                        className={classes.main}
             >
               <Switch>
-
-                <Route path={'/search'}>
-                  <Search/>
-                </Route>
-
-                <Route path={'/'}>
-                  Index
-                </Route>
+                <Route exact path={'/'} component={IndexView}/>
+                <Route exact path={'/search'} component={SearchView}
+                       setManga={setManga}/>
+                <Route exact path={'/search/manga'} component={DetailView}
+                       manga={manga} setManga={setManga}/>
 
               </Switch>
             </Container>

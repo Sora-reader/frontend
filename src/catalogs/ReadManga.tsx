@@ -1,28 +1,33 @@
 import {load} from 'cheerio';
+import {BaseCatalog, SearchResultsType} from './baseCatalog';
+import {CORSProxyUrl} from '../config';
 
-export const searchUrl = 'https://readmanga.live/search';
+const searchRequest = async (query: string) => {
+  const body = 'q=' + query;
+  let output = '';
 
-type ListItem = {
-  title: string,
-  alternateTitle?: string,
-  description?: string,
-  imageUrl: string,
-  link: string,
-  starRate?: number,
-  author?: string,
-  genres?: Array<string>,
-}
+  const request = fetch(CORSProxyUrl + ReadManga.getSearchUrl(), {
+    method: 'POST',
+    body: body,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+  });
 
-export type ListDataType = {
-  results: number,
-  invalidResults: number,
-  items: Array<ListItem>,
-}
+  try {
+    const response = await request;
+    output = await response.text();
+  } catch (e) {
+    console.log('Request error\n' + e);
+  }
 
-export function getListData(html: string): ListDataType {
+  return output;
+};
+
+const searchParser = (html: string): SearchResultsType => {
   const $ = load(html);
   let tiles = $('.tiles .tile');
-  let output: ListDataType = {
+  let output: SearchResultsType = {
     results: tiles.length,
     invalidResults: 0,
     items: [],
@@ -73,4 +78,27 @@ export function getListData(html: string): ListDataType {
 
   console.log(output);
   return output;
-}
+};
+
+export const ReadManga: BaseCatalog = {
+  url: 'https://readmanga.live/',
+
+  getSearchUrl: function() {
+    return this.url + '/search';
+  },
+  getDetailsUrl: function(link: string) {
+    return this.url + link;
+  },
+  getChapterUrl: function(link: string) {
+    return this.url + link;
+  },
+
+  search: {
+    run: async function(query: string) {
+      const html = await this.searchRequest(query);
+      return this.searchParser(html);
+    },
+    searchRequest: searchRequest,
+    searchParser: searchParser,
+  },
+};

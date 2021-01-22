@@ -13,8 +13,6 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import {useHistory} from 'react-router-dom';
 
-type Props = {};
-
 const useStyles = makeStyles((theme: Theme) => createStyles({
       navbar: {
         backgroundColor: theme.palette.secondary.light,
@@ -46,18 +44,22 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }),
 );
 
-export function Header(props: Props) {
+export function Header() {
   const classes = useStyles();
   const history = useHistory();
-  const nameInput = useRef();
+  const nameInput = useRef<HTMLInputElement>();
+
+  let nameInputCurrent = nameInput.current;
 
   function submitSearch(e: FormEvent): void {
     e.preventDefault();
-    if (nameInput.current) {
-      // @ts-ignore
-      const name = encodeURI(nameInput.current.value);
-      const path = `/search?name=` + name;
-      history.push(path);
+    nameInputCurrent = nameInput.current;
+    if (nameInputCurrent) {
+      const name = encodeURI(nameInputCurrent.value);
+      history.push({
+        pathname: '/search',
+        search: '?name=' + name,
+      });
     }
   }
 
