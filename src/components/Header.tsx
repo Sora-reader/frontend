@@ -15,7 +15,9 @@ import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
       navbar: {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.type === 'dark' ?
+            theme.palette.grey['800'] :
+            theme.palette.primary.main,
         [theme.breakpoints.up('sm')]: {
           padding: theme.spacing(0.5, 1),
         },
@@ -24,16 +26,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         },
       },
       toolbar: {
-        color: 'white',
         display: 'flex',
         justifyContent: 'space-between',
       },
-      toolbarIcon: {
-        color: 'inherit',
-      },
+      toolbarIcon: {},
       search: {
-        color: 'white',
-        backgroundColor: theme.palette.secondary.main,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         padding: theme.spacing(1),

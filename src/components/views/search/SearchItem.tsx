@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import {Dispatch, useCallback} from 'react';
 import {
   Avatar,
   createStyles,
@@ -10,6 +11,7 @@ import {
 } from '@material-ui/core';
 import {MangaType} from '../../../catalogs/baseCatalog';
 import {SearchItemDesc} from './SearchItemDesc';
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -28,25 +30,33 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
 })));
 
 type Props = {
-  manga: MangaType,
+  data: MangaType,
+  setManga: Dispatch<any>
 }
 
 export function SearchItem(props: Props) {
   const classes = useStyles();
-  const {manga} = props;
+  const history = useHistory();
+  const {data, setManga} = props;
+
+  const passManga = useCallback(() => {
+    setManga(data);
+    history.push('/manga');
+  }, [history, data, setManga]);
 
   return (
       <ListItem button
-                key={manga.link}
+                onClick={passManga}
+                key={data.link}
                 alignItems={'flex-start'}
                 className={classes.root}
       >
         <ListItemAvatar className={classes.avatarWrapper}>
           <Avatar variant={'rounded'}
-                  src={manga.imageUrl}
+                  src={data.imageUrl}
                   className={classes.avatar}/>
         </ListItemAvatar>
-        <SearchItemDesc {...manga}/>
+        <SearchItemDesc {...data}/>
       </ListItem>
   );
 }

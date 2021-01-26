@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import {Rating} from '@material-ui/lab';
 import {MangaType} from '../../../catalogs/baseCatalog';
+import {CustomChip} from '../../muiCustoms/CustomChip';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -21,28 +22,30 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
   },
   footer: {},
   title: {
+    marginTop: 0,
     '& span': {
-      fontSize: 'x-large',
+      fontSize: 'xx-large',
+      lineHeight: '2rem',
     },
   },
   author: {
-    color: theme.palette.grey.A100,
+    marginBottom: theme.spacing(2),
+    color: theme.palette.text.secondary,
   },
   rating: {},
   genres: {
     display: 'flex',
-    flexFlow: 'row wrap',
-  },
-  genre: {
-    marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    listStyle: 'none',
     padding: theme.spacing(0.5),
-    borderRadius: 5,
-    backgroundColor: theme.palette.primary.dark,
+    margin: 0,
   },
 })));
 
-export function SearchItemDesc(props: MangaType) {
+type Props = MangaType;
+
+export function SearchItemDesc(props: Props) {
   const classes = useStyles();
 
   return (
@@ -62,15 +65,11 @@ export function SearchItemDesc(props: MangaType) {
           <ListItemText className={classes.author}>
             {props.author}
           </ListItemText>
-          <ListItemText disableTypography classes={{root: classes.genres}}>
-            {props.genres?.map(genre => {
-              return (
-                  <span key={genre} className={classes.genre}>
-                            {genre}
-                  </span>
-              );
+          <ul className={classes.genres}>
+            {props.genres?.map((genre) => {
+              return <CustomChip component={'li'} label={genre} key={genre}/>;
             })}
-          </ListItemText>
+          </ul>
         </div>
       </div>
   );

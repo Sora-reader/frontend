@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import {Dispatch, useEffect, useState} from 'react';
 import {
-  CircularProgress,
-  createStyles, LinearProgress,
+  createStyles,
+  LinearProgress,
   List,
   makeStyles,
   Theme,
@@ -31,7 +31,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
   },
 })));
 
-type Props = {}
+type Props = {
+  setManga: Dispatch<any>,
+}
 
 export function SearchView(props: Props) {
   const initialState: SearchResultsType = {
@@ -42,6 +44,8 @@ export function SearchView(props: Props) {
 
   const [listData, setListData] = useState(initialState);
   const [loading, setLoading] = useState(true);
+
+  const {setManga} = props;
 
   const classes = useStyles();
   const query = String(useQuery().get('name'));
@@ -70,7 +74,8 @@ export function SearchView(props: Props) {
           <h1 className={classes.header}>Итог поиска по запросу: "{query}"</h1>
           <List className={classes.list}> {
             listData.items.map(item => {
-              return <SearchItem key={item.link} manga={item}/>;
+              return <SearchItem key={item.link} data={item}
+                                 setManga={setManga}/>;
             })
           }
           </List>
