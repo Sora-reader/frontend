@@ -30,6 +30,21 @@ export function useCustomTheme(defaultValue?: ThemeModeType): [Theme, Dispatch<a
   useEffect(() => {
     console.log('Theme type ', themeMode);
     let themeData: ThemeOptions = {
+      // typography: {
+      //   fontFamily: [
+      //     '-apple-system',
+      //     'BlinkMacSystemFont',
+      //     '"Montserrat"',
+      //     '"Segoe UI"',
+      //     'Roboto',
+      //     '"Helvetica Neue"',
+      //     'Arial',
+      //     'sans-serif',
+      //     '"Apple Color Emoji"',
+      //     '"Segoe UI Emoji"',
+      //     '"Segoe UI Symbol"',
+      //   ].join(','),
+      // },
       palette: {
         type: themeMode,
         primary: {},

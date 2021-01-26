@@ -62,14 +62,17 @@ const searchParser = (html: string): SearchResultsType => {
       return output;
     };
 
+    const description = descClass.find('.long-description-holder')[0]
+        // @ts-ignore
+        .children.filter(node => node.name !== "h5")
+
     output.items.push({
       title: cleanText(descClass.find('h3').text()),
       imageUrl: cleanText(imgClass.find('img').data('original')),
       link: cleanText(imgClass.find('a').attr('href')),
 
       alternateTitle: cleanText(descClass.find('h4').text()),
-      description: cleanText(
-          descClass.find('.long-description-holder').text()),
+      description: cleanText($(description).text()),
       author: cleanText(descClass.find('.person-link').text()),
       starRate: cleanRating(descClass.find('.rating').attr('title')),
       genres: cleanGenres(descClass.find('.element-link')),

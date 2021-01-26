@@ -16,7 +16,6 @@ import {useQuery} from '../../../utils/hooks';
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
     paddingTop: theme.spacing(1),
-    minHeight: '100vh',
   },
   header: {
     padding: theme.spacing(0, 1),

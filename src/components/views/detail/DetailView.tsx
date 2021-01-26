@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
 import {Dispatch} from 'react';
-import {createStyles, makeStyles, Theme} from '@material-ui/core';
+import {createStyles, Divider, makeStyles, Theme} from '@material-ui/core';
 import {MangaType} from '../../../catalogs/baseCatalog';
+import {DetailHeader} from './DetailHeader';
+import {DetailDescription} from './DetailDescription';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -27,7 +29,9 @@ export function DetailView(props: Props) {
 
   return (
       <div className={classes.root}>
-        Манга {manga.title}
+        <DetailHeader {...manga}/>
+        <Divider/>
+        <DetailDescription text={String(manga.description)}/>
       </div>
   );
 }

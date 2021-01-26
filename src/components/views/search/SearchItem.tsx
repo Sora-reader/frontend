@@ -2,7 +2,6 @@
 import * as React from 'react';
 import {Dispatch, useCallback} from 'react';
 import {
-  Avatar,
   createStyles,
   ListItem,
   ListItemAvatar,
@@ -12,6 +11,7 @@ import {
 import {MangaType} from '../../../catalogs/baseCatalog';
 import {SearchItemDesc} from './SearchItemDesc';
 import {useHistory} from 'react-router-dom';
+import {CustomAvatar} from '../../muiCustoms/CustomAvatar';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -52,9 +52,8 @@ export function SearchItem(props: Props) {
                 className={classes.root}
       >
         <ListItemAvatar className={classes.avatarWrapper}>
-          <Avatar variant={'rounded'}
-                  src={data.imageUrl}
-                  className={classes.avatar}/>
+          <CustomAvatar src={data.imageUrl}
+                        className={classes.avatar}/>
         </ListItemAvatar>
         <SearchItemDesc {...data}/>
       </ListItem>

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Container,
-  createStyles,
-  CssBaseline,
-  makeStyles,
-} from '@material-ui/core';
+import {Box, Container, createStyles, makeStyles} from '@material-ui/core';
 import {ThemeProvider} from '@material-ui/styles';
 import {Header} from './components/Header';
 
@@ -30,6 +24,7 @@ function App() {
           padding: 0,
           backgroundColor: theme.palette.background.paper,
           color: theme.palette.text.primary,
+          minHeight: '100vh',
         },
       }),
   );
@@ -50,7 +45,6 @@ function App() {
 
   return (
       <Router>
-        <CssBaseline/>
         <ThemeProvider theme={theme}>
           <Box className={classes.box}>
             <header>

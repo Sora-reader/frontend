@@ -1,6 +1,13 @@
 // @flow
 import * as React from 'react';
-import {Chip, createStyles, makeStyles, Theme} from '@material-ui/core';
+import {
+  Chip,
+  ChipProps,
+  createStyles,
+  makeStyles,
+  Theme, useMediaQuery, useTheme,
+} from '@material-ui/core';
+import {OverridableComponentMock} from './index';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -12,10 +19,18 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export function CustomChip(props: any) {
-  const classes = useStyles();
+type Props = ChipProps | OverridableComponentMock;
+
+export function CustomChip(props: Props) {
+  const propClasses = props.classes ? props.classes : {};
+  const classes = {...useStyles(), ...propClasses};
+
+  const theme = useTheme();
+  const smallMedia = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-      <Chip className={classes.root} {...props}/>
+      <Chip {...props} size={smallMedia ? 'small' : 'medium'}
+            className={classes.root}/>
   );
 }
+

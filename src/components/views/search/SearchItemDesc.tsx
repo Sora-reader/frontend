@@ -6,9 +6,9 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import {Rating} from '@material-ui/lab';
 import {MangaType} from '../../../catalogs/baseCatalog';
 import {CustomChip} from '../../muiCustoms/CustomChip';
+import {CustomRating} from '../../muiCustoms/CustomRating';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
     marginBottom: theme.spacing(2),
     color: theme.palette.text.secondary,
   },
-  rating: {},
   genres: {
     display: 'flex',
     justifyContent: 'flex-start',
@@ -54,10 +53,7 @@ export function SearchItemDesc(props: Props) {
           <ListItemText className={classes.title}>
             {props.title}
           </ListItemText>
-          <Rating readOnly
-                  precision={0.1}
-                  className={classes.rating}
-                  value={props.starRate ? props.starRate / 2 : 0}
+          <CustomRating value={props.starRate}
           />
         </div>
 
