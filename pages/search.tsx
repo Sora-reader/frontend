@@ -8,10 +8,10 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import {SearchResultsType} from '../../../catalogs/baseCatalog';
-import {ReadManga} from '../../../catalogs/ReadManga';
-import {SearchItem} from './SearchItem';
-import {useQuery} from '../../../utils/hooks';
+import {SearchResultsType} from '../catalogs/baseCatalog';
+import {ReadManga} from '../catalogs/ReadManga';
+import {SearchItem} from '../components/views/search/SearchItem';
+import {useRouter} from 'next/router';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -34,7 +34,7 @@ type Props = {
   setManga: Dispatch<any>,
 }
 
-export function SearchView(props: Props) {
+export default function Search(props: Props) {
   const initialState: SearchResultsType = {
     results: 0,
     invalidResults: 0,
@@ -47,7 +47,8 @@ export function SearchView(props: Props) {
   const {setManga} = props;
 
   const classes = useStyles();
-  const query = String(useQuery().get('name'));
+  const router = useRouter();
+  const query = String(router.query.name);
 
   useEffect(() => {
     if (query) {

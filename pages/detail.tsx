@@ -2,9 +2,9 @@
 import * as React from 'react';
 import {Dispatch} from 'react';
 import {createStyles, Divider, makeStyles, Theme} from '@material-ui/core';
-import {MangaType} from '../../../catalogs/baseCatalog';
-import {DetailHeader} from './DetailHeader';
-import {DetailDescription} from './DetailDescription';
+import {MangaType} from '../catalogs/baseCatalog';
+import {DetailHeader} from '../components/views/detail/DetailHeader';
+import {DetailDescription} from '../components/views/detail/DetailDescription';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -17,7 +17,7 @@ type Props = {
   setManga: Dispatch<any>,
 }
 
-export function DetailView(props: Props) {
+export default function Detail(props: Props) {
   const classes = useStyles();
 
   const {manga} = props;

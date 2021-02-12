@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import {MangaType} from '../../../catalogs/baseCatalog';
 import {SearchItemDesc} from './SearchItemDesc';
-import {useHistory} from 'react-router-dom';
+import {useRouter} from 'next/router';
 import {CustomAvatar} from '../../muiCustoms/CustomAvatar';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
@@ -36,13 +36,13 @@ type Props = {
 
 export function SearchItem(props: Props) {
   const classes = useStyles();
-  const history = useHistory();
+  const router = useRouter();
   const {data, setManga} = props;
 
   const passManga = useCallback(() => {
     setManga(data);
-    history.push('/manga');
-  }, [history, data, setManga]);
+    router.push('/manga').then();
+  }, [router, data, setManga]);
 
   return (
       <ListItem button

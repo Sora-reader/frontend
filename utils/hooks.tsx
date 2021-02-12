@@ -1,22 +1,24 @@
-import {useLocation} from 'react-router-dom';
 import React, {Dispatch, useEffect, useState} from 'react';
 import {createMuiTheme, Theme, ThemeOptions} from '@material-ui/core';
 import {green, teal} from '@material-ui/core/colors';
-
-export function useQuery(): URLSearchParams {
-  return new URLSearchParams(useLocation().search);
-}
+import {useRouter} from 'next/router';
+import {ParsedUrlQuery} from 'querystring';
 
 export function useStickyState(defaultValue: any, key: string) {
-  const [value, setValue] = React.useState(() => {
+  const [value, setValue] = React.useState(defaultValue );
+
+  React.useEffect(() => {
     const stickyValue = window.localStorage.getItem(key);
-    return stickyValue !== null
-        ? JSON.parse(stickyValue)
-        : defaultValue;
-  });
+
+    if (stickyValue !== null) {
+      setValue(JSON.parse(stickyValue));
+    }
+  }, [key]);
+
   React.useEffect(() => {
     window.localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
+
   return [value, setValue];
 }
 
@@ -30,21 +32,6 @@ export function useCustomTheme(defaultValue?: ThemeModeType): [Theme, Dispatch<a
   useEffect(() => {
     console.log('Theme type ', themeMode);
     let themeData: ThemeOptions = {
-      // typography: {
-      //   fontFamily: [
-      //     '-apple-system',
-      //     'BlinkMacSystemFont',
-      //     '"Montserrat"',
-      //     '"Segoe UI"',
-      //     'Roboto',
-      //     '"Helvetica Neue"',
-      //     'Arial',
-      //     'sans-serif',
-      //     '"Apple Color Emoji"',
-      //     '"Segoe UI Emoji"',
-      //     '"Segoe UI Symbol"',
-      //   ].join(','),
-      // },
       palette: {
         type: themeMode,
         primary: {},
