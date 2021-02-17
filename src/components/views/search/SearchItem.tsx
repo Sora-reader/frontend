@@ -12,6 +12,8 @@ import {MangaType} from '../../../catalogs/baseCatalog';
 import {SearchItemDesc} from './SearchItemDesc';
 import {useRouter} from 'next/router';
 import {CustomAvatar} from '../../muiCustoms/CustomAvatar';
+import {useDispatch} from 'react-redux';
+import {setManga} from '../../../redux/manga/action';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -31,17 +33,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
 
 type Props = {
   data: MangaType,
-  setManga: Dispatch<any>
 }
 
 export function SearchItem(props: Props) {
   const classes = useStyles();
   const router = useRouter();
-  const {data, setManga} = props;
-
+  const {data} = props;
+  const dispatch = useDispatch();
   const passManga = useCallback(() => {
-    setManga(data);
-    router.push('/manga').then();
+    dispatch(setManga(data));
+    router.push('/detail').then();
   }, [router, data, setManga]);
 
   return (

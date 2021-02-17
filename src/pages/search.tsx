@@ -30,11 +30,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
   },
 })));
 
-type Props = {
-  setManga: Dispatch<any>,
-}
-
-export default function Search(props: Props) {
+export default function Search() {
   const initialState: SearchResultsType = {
     results: 0,
     invalidResults: 0,
@@ -43,8 +39,6 @@ export default function Search(props: Props) {
 
   const [listData, setListData] = useState(initialState);
   const [loading, setLoading] = useState(true);
-
-  const {setManga} = props;
 
   const classes = useStyles();
   const router = useRouter();
@@ -74,8 +68,7 @@ export default function Search(props: Props) {
           <h1 className={classes.header}>Итог поиска по запросу: "{query}"</h1>
           <List className={classes.list}> {
             listData.items.map(item => {
-              return <SearchItem key={item.link} data={item}
-                                 setManga={setManga}/>;
+              return <SearchItem key={item.link} data={item}/>;
             })
           }
           </List>
