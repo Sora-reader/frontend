@@ -17,12 +17,16 @@
     "@types/react-redux": "^7.1.16",
     "cheerio": "^1.0.0-rc.5",
     "next": "10.0.6",
+    "next-google-fonts": "^1.2.1",
     "next-redux-wrapper": "^6.0.2",
+    "query-string": "^6.14.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-redux": "^7.2.2",
-    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "typescript": "^4.1.5"
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.8"
   }
 }

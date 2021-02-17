@@ -1,8 +1,6 @@
 // @flow
 import {createStyles, makeStyles} from '@material-ui/core';
 
-type Props = {}
-
 const useStyles = makeStyles((theme) => createStyles({
   root: {
     paddingTop: theme.spacing(1),
@@ -14,7 +12,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-export default function IndexView(props: Props) {
+export default function IndexView() {
   const classes = useStyles();
 
   return (

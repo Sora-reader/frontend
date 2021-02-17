@@ -3,15 +3,18 @@ import * as React from 'react';
 import {FormEvent, useRef} from 'react';
 import {
   AppBar,
-  createStyles,
+  createStyles, FormControl,
   IconButton,
-  Input,
+  Input, InputLabel,
+  Link,
   makeStyles,
+  SwipeableDrawer,
   Theme,
   Toolbar,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import {useRouter} from 'next/router';
+import {stringifyUrl} from 'query-string';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
       navbar: {
@@ -46,9 +49,29 @@ export function Header() {
   const router = useRouter();
   const nameInput = useRef<HTMLInputElement>();
 
+  const drawer = Boolean(router.query.drawer);
   let nameInputCurrent = nameInput.current;
 
-  function submitSearch(e: FormEvent): void {
+  const toggleDrawer = (value: boolean) => () => {
+    const drawerQuery = {drawer: value ? value : ''};
+
+    const newPathname = stringifyUrl(
+        {
+          url: router.pathname,
+          query: {...router.query, ...drawerQuery},
+        });
+    const newAsPath = stringifyUrl({
+      url: router.asPath,
+      query: drawerQuery,
+    });
+
+    if (value)
+      router.push(newPathname, newAsPath).then(null);
+    else
+      router.back();
+  };
+
+  function submitSearch(e: FormEvent) {
     e.preventDefault();
     nameInputCurrent = nameInput.current;
     if (nameInputCurrent) {
@@ -62,16 +85,24 @@ export function Header() {
 
   return (
       <div>
+        <SwipeableDrawer onClose={toggleDrawer(false)}
+                         onOpen={toggleDrawer(true)}
+                         open={drawer}>
+          <h3>Drawer</h3>
+        </SwipeableDrawer>
         <AppBar className={classes.navbar} position={'sticky'}>
           <Toolbar className={classes.toolbar}>
-            <IconButton className={classes.toolbarIcon}>
+            <IconButton onClick={toggleDrawer(true)}
+                        className={classes.toolbarIcon}>
               <MenuIcon/>
             </IconButton>
             <form onSubmit={submitSearch}>
               <Input name={'name'}
+                     id={'search-input'}
                      inputRef={nameInput}
                      className={classes.search}
-                     placeholder={'Поиск'}/>
+                     placeholder={'Поиск'}
+              />
             </form>
           </Toolbar>
         </AppBar>

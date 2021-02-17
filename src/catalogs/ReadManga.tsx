@@ -87,7 +87,7 @@ export const ReadManga: BaseCatalog = {
   url: 'https://readmanga.live/',
 
   getSearchUrl: function() {
-    return this.url + '/search';
+    return this.url + 'search';
   },
   getDetailsUrl: function(link: string) {
     return this.url + link;
