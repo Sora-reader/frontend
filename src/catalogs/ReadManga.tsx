@@ -64,7 +64,7 @@ const searchParser = (html: string): SearchResultsType => {
 
     const description = descClass.find('.long-description-holder')[0]
         // @ts-ignore
-        .children.filter(node => node.name !== "h5")
+        .children.filter(node => node.name !== 'h5');
 
     output.items.push({
       title: cleanText(descClass.find('h3').text()),
@@ -79,7 +79,7 @@ const searchParser = (html: string): SearchResultsType => {
     });
   });
 
-  console.log(output);
+  console.log('Search results', output);
   return output;
 };
 

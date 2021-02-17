@@ -1,5 +1,4 @@
 // @flow
-import * as React from 'react';
 import {createStyles, makeStyles} from '@material-ui/core';
 
 type Props = {}
@@ -15,7 +14,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-export function IndexView(props: Props) {
+export default function IndexView(props: Props) {
   const classes = useStyles();
 
   return (

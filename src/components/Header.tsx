@@ -11,7 +11,7 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import {useHistory} from 'react-router-dom';
+import {useRouter} from 'next/router';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
       navbar: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export function Header() {
   const classes = useStyles();
-  const history = useHistory();
+  const router = useRouter();
   const nameInput = useRef<HTMLInputElement>();
 
   let nameInputCurrent = nameInput.current;
@@ -53,10 +53,10 @@ export function Header() {
     nameInputCurrent = nameInput.current;
     if (nameInputCurrent) {
       const name = encodeURI(nameInputCurrent.value);
-      history.push({
+      router.push({
         pathname: '/search',
         search: '?name=' + name,
-      });
+      }).then();
     }
   }
 

@@ -2,9 +2,11 @@
 import * as React from 'react';
 import {Dispatch} from 'react';
 import {createStyles, Divider, makeStyles, Theme} from '@material-ui/core';
-import {MangaType} from '../../../catalogs/baseCatalog';
-import {DetailHeader} from './DetailHeader';
-import {DetailDescription} from './DetailDescription';
+import {MangaType} from '../catalogs/baseCatalog';
+import {DetailHeader} from '../components/views/detail/DetailHeader';
+import {DetailDescription} from '../components/views/detail/DetailDescription';
+import {useSelector} from 'react-redux';
+import {State} from '../redux/store';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -12,20 +14,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
   },
 })));
 
-type Props = {
-  manga: MangaType,
-  setManga: Dispatch<any>,
-}
-
-export function DetailView(props: Props) {
+export default function Detail() {
   const classes = useStyles();
 
-  const {manga} = props;
+  const {manga} = useSelector((state: State) => state.manga);
 
+  console.log('Manga data', manga);
+  // TODO
   // Pass props as a preview to manga (if from search)
   // Then fetch the details and chapterList
-  // const {setManga} = props;
-  // const [chapterList, setChapterList] = useState({} as ChapterListType);
 
   return (
       <div className={classes.root}>

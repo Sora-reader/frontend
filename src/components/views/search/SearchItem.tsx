@@ -10,8 +10,10 @@ import {
 } from '@material-ui/core';
 import {MangaType} from '../../../catalogs/baseCatalog';
 import {SearchItemDesc} from './SearchItemDesc';
-import {useHistory} from 'react-router-dom';
+import {useRouter} from 'next/router';
 import {CustomAvatar} from '../../muiCustoms/CustomAvatar';
+import {useDispatch} from 'react-redux';
+import {setManga} from '../../../redux/manga/action';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -31,18 +33,17 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
 
 type Props = {
   data: MangaType,
-  setManga: Dispatch<any>
 }
 
 export function SearchItem(props: Props) {
   const classes = useStyles();
-  const history = useHistory();
-  const {data, setManga} = props;
-
+  const router = useRouter();
+  const {data} = props;
+  const dispatch = useDispatch();
   const passManga = useCallback(() => {
-    setManga(data);
-    history.push('/manga');
-  }, [history, data, setManga]);
+    dispatch(setManga(data));
+    router.push('/detail').then();
+  }, [router, data, setManga]);
 
   return (
       <ListItem button
