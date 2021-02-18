@@ -1,1 +1,1 @@
-export const CORSProxyUrl = 'http://localhost:30080/';
+export const CORSProxyUrl = process.env.CORS_Proxy;
