@@ -19,6 +19,7 @@ class MyDocument extends Document {
 
           <Head>
             <meta charSet="utf-8"/>
+            <meta name="referrer" content="no-referrer"/>
             <link rel="manifest" href="/manifest.json"/>
             <link rel="icon" href="/favicon.ico"/>
             <link rel="apple-touch-icon" href="/favicon.ico"/>
