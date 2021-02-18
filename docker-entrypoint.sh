@@ -1,2 +1,2 @@
 npm run build
-npm run start
+HOST=0.0.0.0 PORT=80 npm run start

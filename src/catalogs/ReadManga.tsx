@@ -19,6 +19,7 @@ const searchRequest = async (query: string) => {
     output = await response.text();
   } catch (e) {
     console.log('Request error\n' + e);
+    throw e;
   }
 
   return output;

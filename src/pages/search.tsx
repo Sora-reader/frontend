@@ -50,6 +50,9 @@ export default function Search() {
       ReadManga.search.run(query).then(data => {
         setListData(data);
         setLoading(false);
+      }).catch(reason => {
+        setListData({...initialState, results: -1});
+        setLoading(false);
       });
     }
   }, [query, setLoading]);
@@ -74,10 +77,17 @@ export default function Search() {
           </List>
         </div>;
       } else {
-        //  No results
-        content = <h1 className={classes.header}>
-          Результатов не найдено
-        </h1>;
+        if (listData.results >= 0) {
+          //  No results
+          content = <h1 className={classes.header}>
+            Результатов не найдено
+          </h1>;
+        } else {
+          // Request error
+          content = <h1 className={classes.header}>
+            Ошибка, проверьте подключение к интернету
+          </h1>;
+        }
       }
     }
   } else {

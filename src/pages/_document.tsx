@@ -6,7 +6,6 @@ import Document, {
   NextScript,
 } from 'next/document';
 import React from 'react';
-import GoogleFonts from 'next-google-fonts';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -15,22 +14,21 @@ class MyDocument extends Document {
   }
 
   render() {
-    const muiIcons = 'https://fonts.googleapis.com/icon?family=Material+Icons';
-
     return (
         <Html lang={'ru'}>
 
           <Head>
             <meta charSet="utf-8"/>
+            <link rel="manifest" href="/manifest.json"/>
+            <link rel="icon" href="/favicon.ico"/>
+            <link rel="apple-touch-icon" href="/favicon.ico"/>
           </Head>
 
           <body>
-          <noscript>You need to enable JavaScript to run this app.</noscript>
-
           <Main/>
           <NextScript/>
-
           </body>
+
         </Html>
     );
   }

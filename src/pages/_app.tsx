@@ -13,7 +13,6 @@ import {wrapper} from '../redux/store';
 import Head from 'next/head';
 import {Header} from '../components/Header';
 import GoogleFonts from 'next-google-fonts';
-import {Html} from 'next/document';
 
 function WrappedApp({Component, pageProps}: AppProps) {
   const [theme] = useCustomTheme('dark');
@@ -47,8 +46,9 @@ function WrappedApp({Component, pageProps}: AppProps) {
     <GoogleFonts href={roboto}/>
     <GoogleFonts href={montserrat}/>
     <Head>
-      <title>Manga Reader</title>
+      <title>Sora</title>
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <meta name="theme-color" content={theme.palette.primary.main}/>
     </Head>
 
     <ThemeProvider theme={theme}>
