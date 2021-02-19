@@ -42,21 +42,21 @@ export function useCustomTheme(defaultValue?: ThemeModeType): [Theme, Dispatch<a
     };
     switch (themeMode) {
       case 'dark': {
-        // @ts-ignore
-        themeData.palette.primary = {
-          main: teal['300'],
-          light: teal.A100,
-          dark: teal.A700,
-        };
+        if (themeData.palette)
+          themeData.palette.primary = {
+            main: teal['300'],
+            light: teal.A100,
+            dark: teal.A700,
+          };
         break;
       }
       case 'light': {
-        // @ts-ignore
-        themeData.palette.primary = {
-          main: green.A200,
-          light: green.A100,
-          dark: green.A700,
-        };
+        if (themeData.palette)
+          themeData.palette.primary = {
+            main: green.A200,
+            light: green.A100,
+            dark: green.A700,
+          };
         break;
       }
     }

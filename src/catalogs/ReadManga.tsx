@@ -63,9 +63,12 @@ const searchParser = (html: string): SearchResultsType => {
       return output;
     };
 
-    const description = descClass.find('.long-description-holder')[0]
-        // @ts-ignore
-        .children.filter(node => node.name !== 'h5');
+    const descriptionParent = descClass.find('.long-description-holder')[0];
+    let description: cheerio.Element[] = [];
+    if ('children' in descriptionParent) {
+      description = descriptionParent.
+          children.filter(node => 'name' in node && node.name !== 'h5');
+    }
 
     output.items.push({
       title: cleanText(descClass.find('h3').text()),
