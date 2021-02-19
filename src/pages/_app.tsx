@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {AppProps} from 'next/app';
 import {
   Box,
@@ -12,12 +12,7 @@ import {State, wrapper} from '../redux/store';
 import Head from 'next/head';
 import {Header} from '../components/Header';
 import GoogleFonts from 'next-google-fonts';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  setDarkPalette,
-  setLightPalette,
-  setThemeType,
-} from '../redux/theme/action';
+import {useSelector} from 'react-redux';
 
 function WrappedApp({Component, pageProps}: AppProps) {
   const theme = useSelector((state: State) => state.theme.theme);

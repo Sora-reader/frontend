@@ -1,12 +1,13 @@
 import {AnyAction} from 'redux';
 import {
-  SetDarkPaletteAction, SetLightPaletteAction,
+  SetDarkPaletteAction,
+  SetLightPaletteAction,
   SetThemeTypeAction,
   themeActionTypes,
 } from './action';
 import {createMuiTheme, Theme} from '@material-ui/core';
 import {green, teal} from '@material-ui/core/colors';
-import {Palette, PaletteOptions} from '@material-ui/core/styles/createPalette';
+import {PaletteOptions} from '@material-ui/core/styles/createPalette';
 
 type StateType = {
   theme: Theme,
