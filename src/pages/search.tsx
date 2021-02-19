@@ -38,11 +38,11 @@ export default function Search() {
   };
 
   const [listData, setListData] = useState(initialState);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const classes = useStyles();
   const router = useRouter();
-  const query = String(router.query.name);
+  const query = router.query.name ? String(router.query.name) : undefined;
 
   useEffect(() => {
     if (query) {

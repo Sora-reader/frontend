@@ -3,10 +3,13 @@ import * as React from 'react';
 import {FormEvent, useRef} from 'react';
 import {
   AppBar,
-  createStyles, FormControl,
+  createStyles,
   IconButton,
-  Input, InputLabel,
-  Link,
+  Input,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   makeStyles,
   SwipeableDrawer,
   Theme,
@@ -15,6 +18,10 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import {useRouter} from 'next/router';
 import {stringifyUrl} from 'query-string';
+import SettingsIcon from '@material-ui/icons/Settings';
+import HomeIcon from '@material-ui/icons/Home';
+import {NextLink} from './muiCustoms/CustomLink';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
       navbar: {
@@ -41,6 +48,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
           padding: theme.spacing(1, 3),
         },
       },
+      drawerWrapper: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
+      list: {
+        paddingTop: theme.spacing(2),
+        width: '250px',
+      },
     }),
 );
 
@@ -49,11 +66,11 @@ export function Header() {
   const router = useRouter();
   const nameInput = useRef<HTMLInputElement>();
 
-  const drawer = Boolean(router.query.drawer);
+  const drawer = Boolean(router.query.drawerWrapper);
   let nameInputCurrent = nameInput.current;
 
   const toggleDrawer = (value: boolean) => () => {
-    const drawerQuery = {drawer: value ? value : ''};
+    const drawerQuery = {drawerWrapper: value ? value : ''};
 
     const newPathname = stringifyUrl(
         {
@@ -88,7 +105,33 @@ export function Header() {
         <SwipeableDrawer onClose={toggleDrawer(false)}
                          onOpen={toggleDrawer(true)}
                          open={drawer}>
-          <h3>Drawer</h3>
+          <div className={classes.drawerWrapper}>
+            <List className={classes.list}>
+              <ListItem button href="/" component={NextLink}
+                        color="inherit" underline="none">
+                <ListItemIcon><HomeIcon/></ListItemIcon>
+                <ListItemText>
+                  Домой
+                </ListItemText>
+              </ListItem>
+              <ListItem button href="/settings" component={NextLink}
+                        color="inherit" underline="none">
+                <ListItemIcon><SettingsIcon/></ListItemIcon>
+                <ListItemText>
+                  Настройки
+                </ListItemText>
+              </ListItem>
+            </List>
+            <List className={classes.list}>
+              <ListItem button href="/login" component={NextLink}
+                        color="inherit" underline="none">
+                <ListItemIcon><AccountBoxIcon/></ListItemIcon>
+                <ListItemText>
+                  Вход
+                </ListItemText>
+              </ListItem>
+            </List>
+          </div>
         </SwipeableDrawer>
         <AppBar className={classes.navbar} position={'sticky'}>
           <Toolbar className={classes.toolbar}>
