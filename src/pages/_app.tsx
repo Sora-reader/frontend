@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AppProps} from 'next/app';
 import {
   Box,
@@ -8,14 +8,19 @@ import {
   makeStyles,
   ThemeProvider,
 } from '@material-ui/core';
-import {useCustomTheme} from '../utils/hooks';
-import {wrapper} from '../redux/store';
+import {State, wrapper} from '../redux/store';
 import Head from 'next/head';
 import {Header} from '../components/Header';
 import GoogleFonts from 'next-google-fonts';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  setDarkPalette,
+  setLightPalette,
+  setThemeType,
+} from '../redux/theme/action';
 
 function WrappedApp({Component, pageProps}: AppProps) {
-  const [theme] = useCustomTheme('dark');
+  const theme = useSelector((state: State) => state.theme.theme);
 
   const useStyles = makeStyles(() => createStyles({
         box: {

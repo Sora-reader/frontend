@@ -5,7 +5,7 @@ import {useRouter} from 'next/router';
 import {ParsedUrlQuery} from 'querystring';
 
 export function useStickyState(defaultValue: any, key: string) {
-  const [value, setValue] = React.useState(defaultValue );
+  const [value, setValue] = React.useState(defaultValue);
 
   React.useEffect(() => {
     const stickyValue = window.localStorage.getItem(key);

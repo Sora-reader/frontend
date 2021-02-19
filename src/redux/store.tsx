@@ -9,6 +9,7 @@ import {
 import {createWrapper, HYDRATE} from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
+import theme from './theme/reducer';
 
 const bindMiddleware = (middleware: Middleware[]) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -19,6 +20,7 @@ const bindMiddleware = (middleware: Middleware[]) => {
 };
 
 const combinedReducer = combineReducers({
+  theme,
   manga,
 });
 
