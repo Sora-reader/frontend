@@ -51,6 +51,7 @@ export default function Search() {
         setListData(data);
         setLoading(false);
       }).catch(reason => {
+        console.log('Request error', reason);
         setListData({...initialState, results: -1});
         setLoading(false);
       });

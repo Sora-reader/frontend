@@ -5,17 +5,20 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  lighten,
   makeStyles,
   Radio,
   RadioGroup,
   Theme,
   useTheme,
 } from '@material-ui/core';
-import {SketchPicker} from 'react-color';
 import {useDispatch, useSelector} from 'react-redux';
-import {setThemeType} from '../../../redux/theme/action';
+import {
+  setDarkPalette,
+  setLightPalette,
+  setThemeType,
+} from '../../../redux/theme/action';
 import {State} from '../../../redux/store';
+import {PaletteChanger} from './paletteChanger';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {},
@@ -30,9 +33,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
   },
   checked: {},
-  picker: {
-    backgroundColor: lighten(theme.palette.background.paper, 0.1) +
-        ' !important',
+  chipContainer: {
+    display: 'flex',
+    flexFlow: 'row wrap',
+    '& li': {
+      borderRadius: '1rem',
+      marginBottom: theme.spacing(1),
+      marginRight: theme.spacing(1),
+    },
   },
 }));
 
@@ -68,18 +76,18 @@ export function ChangeTheme() {
           </RadioGroup>
         </FormControl>
         <Divider/>
-        <h3>Палитра темной темы</h3>
-        <p>Главный цвет</p>
-        <SketchPicker className={classes.picker}
-            // @ts-ignore
-                      color={themeState.darkPalette.primary.main}/>
-        <Divider/>
-        <h3>Палитра светлой темы</h3>
-        <p>Главный цвет</p>
-
-        <SketchPicker className={classes.picker}
-            // @ts-ignore
-                      color={themeState.lightPalette.primary.main}/>
+        <div>
+          <h3>Палитра темной темы</h3>
+          <PaletteChanger statePalette={themeState.darkPalette}
+                          setStatePalette={setDarkPalette}/>
+          <Divider style={{width: '50%'}}/>
+        </div>
+        <div>
+          <h3>Палитра светлой темы</h3>
+          <PaletteChanger statePalette={themeState.lightPalette}
+                          setStatePalette={setLightPalette}/>
+          <Divider style={{width: '50%'}}/>
+        </div>
       </div>
   );
 }

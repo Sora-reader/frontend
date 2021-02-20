@@ -1,6 +1,5 @@
 import {AnyAction, Dispatch} from 'redux';
 import {ThemeModeType} from '../../utils/hooks';
-import {ThemeOptions} from '@material-ui/core';
 import {PaletteOptions} from '@material-ui/core/styles/createPalette';
 
 export const themeActionTypes = {

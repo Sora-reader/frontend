@@ -18,6 +18,12 @@ function WrappedApp({Component, pageProps}: AppProps) {
   const theme = useSelector((state: State) => state.theme.theme);
 
   const useStyles = makeStyles(() => createStyles({
+        appBarWrapper: {
+          marginBottom: '72px',
+          '& header': {
+            height: '72px',
+          },
+        },
         box: {
           minHeight: '100vh',
           padding: theme.spacing(0),
@@ -53,9 +59,9 @@ function WrappedApp({Component, pageProps}: AppProps) {
 
     <ThemeProvider theme={theme}>
       <Box className={classes.box}>
-        <header>
+        <div className={classes.appBarWrapper}>
           <Header/>
-        </header>
+        </div>
         <Container maxWidth={'md'}
                    component={'main'}
                    className={classes.main}

@@ -16,25 +16,21 @@ type StateType = {
 }
 
 const defaultDark: PaletteOptions = {
-  // palette: {
   type: 'dark',
   primary: {
     main: teal['300'],
     light: teal.A100,
     dark: teal.A700,
   },
-  // },
 };
 
 const defaultLight: PaletteOptions = {
-  // palette: {
   type: 'light',
   primary: {
     main: green.A200,
     light: green.A100,
     dark: green.A700,
   },
-  // },
 };
 
 const defaultTheme = createMuiTheme({palette: defaultDark});

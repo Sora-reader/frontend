@@ -14,13 +14,8 @@ const searchRequest = async (query: string) => {
     },
   });
 
-  try {
-    const response = await request;
-    output = await response.text();
-  } catch (e) {
-    console.log('Request error\n' + e);
-    throw e;
-  }
+  const response = await request;
+  output = await response.text();
 
   return output;
 };
