@@ -1,11 +1,14 @@
 // @flow
 import * as React from 'react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {CustomChip} from '../../muiCustoms/CustomChip';
 import {Color, ColorPicker} from 'material-ui-color';
 import {Button, createStyles, makeStyles, Theme} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 import createPalette, {PaletteOptions} from '@material-ui/core/styles/createPalette';
+import {Dispatch} from 'redux';
+import {setDarkPalette, setLightPalette} from '../../../redux/theme/action';
+import {defaultDark} from '../../../redux/theme/reducer';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -35,17 +38,17 @@ type PickerType = {
 }
 type Props = {
   statePalette: PaletteOptions,
+  defaultPalette: PaletteOptions,
+  // TODO: thunk types
   setStatePalette: Function,
 };
 
 export function PaletteChanger(props: Props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [palette, setPalette] = useState(
-      createPalette(props.statePalette),
-  );
-  const {statePalette, setStatePalette} = props;
 
+  const {statePalette, defaultPalette, setStatePalette} = props;
+  const [palette, setPalette] = useState(createPalette(statePalette));
   const [picker, setPicker] = useState({
     primary: 'main',
     secondary: 'main',
@@ -73,15 +76,23 @@ export function PaletteChanger(props: Props) {
       return newState;
     });
   };
+
   const reset = () => {
-    setPalette(createPalette(props.statePalette));
+    dispatch(setStatePalette(defaultPalette));
   };
   const submit = () => {
+    console.log('Dispatching', palette.primary, 'with', setStatePalette.name);
     dispatch(setStatePalette({
       primary: palette.primary,
       secondary: palette.secondary,
     } as PaletteOptions));
   };
+
+  useEffect(() => {
+    // Reset if the palette changes (loads from localStorage)
+    setPalette(createPalette(statePalette));
+  }, [statePalette]);
+
   return (
       <div className={classes.root}>
         <p>Главный цвет, оттенки</p>

@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AppProps} from 'next/app';
 import {
   Box,
@@ -12,10 +12,13 @@ import {State, wrapper} from '../redux/store';
 import Head from 'next/head';
 import {Header} from '../components/Header';
 import GoogleFonts from 'next-google-fonts';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {setDarkPalette, setLightPalette} from '../redux/theme/action';
 
 function WrappedApp({Component, pageProps}: AppProps) {
-  const theme = useSelector((state: State) => state.theme.theme);
+  const {theme, darkPalette, lightPalette} = useSelector(
+      (state: State) => state.theme);
+  const dispatch = useDispatch();
 
   const useStyles = makeStyles(() => createStyles({
         appBarWrapper: {
@@ -40,6 +43,32 @@ function WrappedApp({Component, pageProps}: AppProps) {
   );
 
   const classes = useStyles();
+
+  useEffect(() => {
+    const data = window.localStorage.getItem('sora-theme');
+    let cachedState = JSON.parse(String(data));
+    if (cachedState) {
+      const darkP = cachedState.darkPalette;
+      const lightP = cachedState.lightPalette;
+
+      let darkDiff = JSON.stringify(darkP) !== JSON.stringify(darkPalette);
+      let lightDiff = JSON.stringify(lightP) !== JSON.stringify(lightPalette);
+
+      if (darkDiff) {
+        console.log('Dark palettes differ, dispatching');
+        dispatch(setDarkPalette(darkP));
+      } else {
+        console.log('Dark palettes are equal');
+      }
+
+      if (lightDiff) {
+        console.log('Light palettes differ, dispatching');
+        dispatch(setLightPalette(lightP));
+      } else {
+        console.log('Light palettes are equal');
+      }
+    }
+  }, [theme]);
 
   const roboto = 'https://fonts.googleapis.com/css?' +
       'family=Roboto:300,400,500,700&display=swap';

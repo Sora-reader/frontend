@@ -15,7 +15,7 @@ type StateType = {
   lightPalette: PaletteOptions,
 }
 
-const defaultDark: PaletteOptions = {
+export const defaultDark: PaletteOptions = {
   type: 'dark',
   primary: {
     main: teal['300'],
@@ -24,7 +24,7 @@ const defaultDark: PaletteOptions = {
   },
 };
 
-const defaultLight: PaletteOptions = {
+export const defaultLight: PaletteOptions = {
   type: 'light',
   primary: {
     main: green.A200,
@@ -80,6 +80,15 @@ export default function reducer(
       break;
     default:
       newState = state;
+  }
+
+  if (typeof window !== 'undefined') {
+    if (newState !== state) {
+      console.log('Reducer got new data, persisting state...');
+      window.localStorage.setItem('sora-theme', JSON.stringify(newState));
+    }
+  } else {
+    console.warn('Window is undefined on change theme');
   }
 
   return newState;

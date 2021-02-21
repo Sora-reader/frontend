@@ -19,6 +19,7 @@ import {
 } from '../../../redux/theme/action';
 import {State} from '../../../redux/store';
 import {PaletteChanger} from './paletteChanger';
+import {defaultDark, defaultLight} from '../../../redux/theme/reducer';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {},
@@ -79,12 +80,14 @@ export function ChangeTheme() {
         <div>
           <h3>Палитра темной темы</h3>
           <PaletteChanger statePalette={themeState.darkPalette}
+                          defaultPalette={defaultDark}
                           setStatePalette={setDarkPalette}/>
           <Divider style={{width: '50%'}}/>
         </div>
         <div>
           <h3>Палитра светлой темы</h3>
           <PaletteChanger statePalette={themeState.lightPalette}
+                          defaultPalette={defaultLight}
                           setStatePalette={setLightPalette}/>
           <Divider style={{width: '50%'}}/>
         </div>

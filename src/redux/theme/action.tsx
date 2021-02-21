@@ -21,6 +21,7 @@ export interface SetDarkPaletteAction extends AnyAction {
 }
 
 export const setDarkPalette = (options: PaletteOptions) => (dispatch: Dispatch): SetDarkPaletteAction => {
+  console.log("set dark", options);
   return dispatch({type: themeActionTypes.SET_DARK_PALETTE, options: options});
 };
 
