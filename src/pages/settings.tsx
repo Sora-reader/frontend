@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     [`@media (max-width:${mediaPx}px)`]: {
       padding: theme.spacing(1),
     },
-    width: '100%',
   },
 }));
 

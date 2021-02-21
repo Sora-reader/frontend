@@ -98,20 +98,6 @@ export function PaletteChanger(props: Props) {
         </div>
         <ColorPicker onChange={updatePalette('primary', picker.primary)}
                      value={palette.primary[picker.primary]}/>
-        <p>Второстепенный цвет, оттенки</p>
-        <div className={classes.chipContainer}>
-          <CustomChip onClick={updatePicker('secondary', 'main')}
-                      style={{backgroundColor: palette.secondary.main}}
-                      label="основной"/>
-          <CustomChip onClick={updatePicker('secondary', 'light')}
-                      style={{backgroundColor: palette.secondary.light}}
-                      label="светлый"/>
-          <CustomChip onClick={updatePicker('secondary', 'dark')}
-                      style={{backgroundColor: palette.secondary.dark}}
-                      label="тёмный"/>
-        </div>
-        <ColorPicker onChange={updatePalette('secondary', picker.secondary)}
-                     value={palette.secondary[picker.secondary]}/>
         <div className={classes.buttons}>
           <Button onClick={reset}>Сбросить</Button>
           <Button onClick={submit}>Сохранить</Button>
