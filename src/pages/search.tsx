@@ -12,6 +12,9 @@ import {SearchResultsType} from '../catalogs/baseCatalog';
 import {ReadManga} from '../catalogs/ReadManga';
 import {SearchItem} from '../components/views/search/SearchItem';
 import {useRouter} from 'next/router';
+import {useDispatch, useSelector} from 'react-redux';
+import {State} from '../redux/store';
+import {searchManga} from '../redux/search/action';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -31,35 +34,38 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
 })));
 
 export default function Search() {
-  const initialState: SearchResultsType = {
-    results: 0,
-    invalidResults: 0,
-    items: [],
-  };
-
-  const [listData, setListData] = useState(initialState);
-  const [loading, setLoading] = useState(false);
-
   const classes = useStyles();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const searchState = useSelector((state: State) => state.search);
+  const searchResults = searchState.results;
+  const cachedQuery = searchState.query;
   const query = router.query.name ? String(router.query.name) : undefined;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (query) {
       setLoading(true);
-      ReadManga.search.run(query).then(data => {
-        setListData(data);
-        setLoading(false);
-      }).catch(reason => {
-        console.log('Request error', reason);
-        setListData({...initialState, results: -1});
-        setLoading(false);
-      });
+      dispatch(searchManga(query));
+      setLoading(false);
     }
-  }, [query, setLoading]);
+  }, [query]);
 
   let rootStyle = classes.root;
   let content: JSX.Element;
+
+  const contentLoaded = (cached = false) => {
+    return <div>
+      <h1 className={classes.header}>Итог поиска по запросу: "{
+        cached ? cachedQuery : query}"</h1>
+      <List className={classes.list}> {
+        searchResults.items.map(item => {
+          return <SearchItem key={item.link} data={item}/>;
+        })
+      }
+      </List>
+    </div>;
+  };
 
   if (query) {
     if (loading) {
@@ -67,18 +73,10 @@ export default function Search() {
       content = <LinearProgress className={classes.progress}/>;
     } else {
       // Content loaded
-      if (listData.items.length) {
-        content = <div>
-          <h1 className={classes.header}>Итог поиска по запросу: "{query}"</h1>
-          <List className={classes.list}> {
-            listData.items.map(item => {
-              return <SearchItem key={item.link} data={item}/>;
-            })
-          }
-          </List>
-        </div>;
+      if (searchResults.items.length) {
+        content = contentLoaded();
       } else {
-        if (listData.results >= 0) {
+        if (searchResults.results >= 0) {
           //  No results
           content = <h1 className={classes.header}>
             Результатов не найдено
@@ -91,6 +89,8 @@ export default function Search() {
         }
       }
     }
+  } else if (cachedQuery) {
+    content = contentLoaded(true);
   } else {
     // No query
     content = <h1 className={classes.header}>

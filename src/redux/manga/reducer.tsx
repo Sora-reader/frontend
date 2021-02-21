@@ -15,7 +15,7 @@ export default function reducer(
     state = initialState,
     action: SetMangaAction | AnyAction) {
   switch (action.type) {
-    case mangaActionTypes.SET:
+    case mangaActionTypes.SET_MANGA:
       return {
         ...state,
         manga: action.manga,
