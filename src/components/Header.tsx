@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import {FormEvent, useRef} from 'react';
+import {FormEvent, useRef, useState} from 'react';
 import {
   AppBar,
   createStyles,
@@ -66,26 +66,11 @@ export function Header() {
   const router = useRouter();
   const nameInput = useRef<HTMLInputElement>();
 
-  const drawer = Boolean(router.query.drawerWrapper);
   let nameInputCurrent = nameInput.current;
+  const [drawer, setDrawer] = useState(false);
 
   const toggleDrawer = (value: boolean) => () => {
-    const drawerQuery = {drawerWrapper: value ? value : ''};
-
-    const newPathname = stringifyUrl(
-        {
-          url: router.pathname,
-          query: {...router.query, ...drawerQuery},
-        });
-    const newAsPath = stringifyUrl({
-      url: router.asPath,
-      query: drawerQuery,
-    });
-
-    if (value)
-      router.push(newPathname, newAsPath).then(null);
-    else
-      router.back();
+    setDrawer(value);
   };
 
   function submitSearch(e: FormEvent) {
@@ -102,20 +87,22 @@ export function Header() {
 
   return (
       <div>
-        <SwipeableDrawer onClose={toggleDrawer(false)}
-                         onOpen={toggleDrawer(true)}
-                         open={drawer}>
+        <SwipeableDrawer
+            onClose={toggleDrawer(false)}
+            onOpen={toggleDrawer(true)}
+            open={drawer}>
           <div className={classes.drawerWrapper}>
             <List className={classes.list}>
               <ListItem button href="/" component={NextLink}
-                        color="inherit" underline="none">
+                        color="inherit" underline="none"
+                        onClick={toggleDrawer(false)}>
                 <ListItemIcon><HomeIcon/></ListItemIcon>
                 <ListItemText>
                   Домой
                 </ListItemText>
               </ListItem>
               <ListItem button href="/settings" component={NextLink}
-                        color="inherit" underline="none">
+                        color="inherit" underline="none" onClick={toggleDrawer(false)}>
                 <ListItemIcon><SettingsIcon/></ListItemIcon>
                 <ListItemText>
                   Настройки
@@ -133,10 +120,11 @@ export function Header() {
             </List>
           </div>
         </SwipeableDrawer>
-        <AppBar className={classes.navbar} position={'sticky'}>
+        <AppBar className={classes.navbar} position={'fixed'}>
           <Toolbar className={classes.toolbar}>
-            <IconButton onClick={toggleDrawer(true)}
-                        className={classes.toolbarIcon}>
+            <IconButton
+                onClick={toggleDrawer(true)}
+                className={classes.toolbarIcon}>
               <MenuIcon/>
             </IconButton>
             <form onSubmit={submitSearch}>

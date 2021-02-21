@@ -1,12 +1,13 @@
 import {AnyAction} from 'redux';
 import {
-  SetDarkPaletteAction, SetLightPaletteAction,
+  SetDarkPaletteAction,
+  SetLightPaletteAction,
   SetThemeTypeAction,
   themeActionTypes,
 } from './action';
 import {createMuiTheme, Theme} from '@material-ui/core';
 import {green, teal} from '@material-ui/core/colors';
-import {Palette, PaletteOptions} from '@material-ui/core/styles/createPalette';
+import {PaletteOptions} from '@material-ui/core/styles/createPalette';
 
 type StateType = {
   theme: Theme,
@@ -14,26 +15,22 @@ type StateType = {
   lightPalette: PaletteOptions,
 }
 
-const defaultDark: PaletteOptions = {
-  // palette: {
+export const defaultDark: PaletteOptions = {
   type: 'dark',
   primary: {
     main: teal['300'],
     light: teal.A100,
     dark: teal.A700,
   },
-  // },
 };
 
-const defaultLight: PaletteOptions = {
-  // palette: {
+export const defaultLight: PaletteOptions = {
   type: 'light',
   primary: {
     main: green.A200,
     light: green.A100,
     dark: green.A700,
   },
-  // },
 };
 
 const defaultTheme = createMuiTheme({palette: defaultDark});
@@ -83,6 +80,15 @@ export default function reducer(
       break;
     default:
       newState = state;
+  }
+
+  if (typeof window !== 'undefined') {
+    if (newState !== state) {
+      console.log('Reducer got new data, persisting state...');
+      window.localStorage.setItem('sora-theme', JSON.stringify(newState));
+    }
+  } else {
+    console.warn('Window is undefined on change theme');
   }
 
   return newState;

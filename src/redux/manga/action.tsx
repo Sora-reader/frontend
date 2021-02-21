@@ -2,7 +2,7 @@ import {Action, AnyAction, Dispatch} from 'redux';
 import {MangaType} from '../../catalogs/baseCatalog';
 
 export const mangaActionTypes = {
-  SET: 'SET',
+  SET_MANGA: 'SET_MANGA',
 };
 
 export interface SetMangaAction extends AnyAction {
@@ -10,5 +10,5 @@ export interface SetMangaAction extends AnyAction {
 }
 
 export const setManga = (manga: MangaType) => (dispatch: Dispatch): SetMangaAction => {
-  return dispatch({type: mangaActionTypes.SET, manga: manga});
+  return dispatch({type: mangaActionTypes.SET_MANGA, manga: manga});
 };
