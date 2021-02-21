@@ -57,11 +57,15 @@ export function PaletteChanger(props: Props) {
   const updatePalette = (
       key: 'primary' | 'secondary',
       value: ToneType,
-  ) => (color: Color) => {
+  ) => (color: Color | string) => {
     setPalette(prevState => {
       let newState = {...prevState};
-      if (key && value)
-        newState[key][value] = '#' + color.hex;
+      if (key && value) {
+        if (typeof color === 'string')
+          newState[key][value] = color;
+        else
+          newState[key][value] = '#' + color.hex;
+      }
       return newState;
     });
   };
@@ -98,13 +102,22 @@ export function PaletteChanger(props: Props) {
         <p>Главный цвет, оттенки</p>
         <div className={classes.chipContainer}>
           <CustomChip onClick={updatePicker('primary', 'main')}
-                      style={{backgroundColor: palette.primary.main}}
+                      style={{
+                        backgroundColor: palette.primary.main,
+                        color: palette.text.primary,
+                      }}
                       label="основной"/>
           <CustomChip onClick={updatePicker('primary', 'light')}
-                      style={{backgroundColor: palette.primary.light}}
+                      style={{
+                        backgroundColor: palette.primary.light,
+                        color: palette.text.primary,
+                      }}
                       label="светлый"/>
           <CustomChip onClick={updatePicker('primary', 'dark')}
-                      style={{backgroundColor: palette.primary.dark}}
+                      style={{
+                        backgroundColor: palette.primary.dark,
+                        color: palette.text.primary,
+                      }}
                       label="тёмный"/>
         </div>
         <ColorPicker onChange={updatePalette('primary', picker.primary)}
