@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {useEffect} from 'react';
 import {
+  Box,
   createStyles,
   Divider,
-  IconButton,
   makeStyles,
   Theme,
 } from '@material-ui/core';
@@ -13,12 +13,10 @@ import {DetailDescription} from '../components/views/detail/DetailDescription';
 import {useSelector} from 'react-redux';
 import {State} from '../redux/store';
 import {useRouter} from 'next/router';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import {SwipeableTabs} from '../components/SwipableTabs';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
-  root: {
-    paddingTop: theme.spacing(1),
-  },
+  root: {},
 })));
 
 export default function Detail() {
@@ -40,12 +38,17 @@ export default function Detail() {
 
   return (
       <div className={classes.root}>
-        <IconButton onClick={() => router.push('/search')}>
-          <ArrowBackIcon/>
-        </IconButton>
-        <DetailHeader {...manga}/>
-        <Divider/>
-        <DetailDescription text={String(manga.description)}/>
+        <SwipeableTabs
+            panels={{
+              'Описание': <Box p={2}>
+                <DetailHeader {...manga}/>
+                <Divider/>
+                <DetailDescription text={String(manga.description)}/>
+              </Box>,
+              'Главы': <Box p={2}>
+                Список глав
+              </Box>,
+            }}/>
       </div>
   );
 }

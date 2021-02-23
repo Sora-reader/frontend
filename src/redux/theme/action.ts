@@ -1,5 +1,6 @@
-import {ThemeModeType} from '../../utils/hooks';
 import {PaletteOptions} from '@material-ui/core/styles/createPalette';
+
+export type ThemeModeType = 'dark' | 'light';
 
 export const SET_TYPE = 'SET_TYPE';
 export const SET_DARK_PALETTE = 'SET_DARK_PALETTE';
