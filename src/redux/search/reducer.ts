@@ -1,5 +1,5 @@
 import {SearchResultsType} from '../../catalogs/baseCatalog';
-import {searchActionTypes, SearchMangaAction} from './action';
+import {SEARCH_MANGA, SearchActionTypes} from './action';
 
 type StateType = {
   query: string,
@@ -17,9 +17,9 @@ const initialState: StateType = {
 
 export default function reducer(
     state = initialState,
-    action: SearchMangaAction): StateType {
+    action: SearchActionTypes): StateType {
   switch (action.type) {
-    case searchActionTypes.SEARCH_MANGA:
+    case SEARCH_MANGA:
       return {
         ...state,
         query: action.searchQuery,

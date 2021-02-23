@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core';
 import {MangaType} from '../../../catalogs/baseCatalog';

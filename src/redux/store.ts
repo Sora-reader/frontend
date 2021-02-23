@@ -11,6 +11,7 @@ import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
 import search from './search/reducer';
+import user from './user/reducer';
 
 const bindMiddleware = (middleware: Middleware[]) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -24,6 +25,7 @@ const combinedReducer = combineReducers({
   theme,
   manga,
   search,
+  user,
 });
 
 export type State = ReturnType<typeof combinedReducer>

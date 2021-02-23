@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {FormEvent, useRef, useState} from 'react';
 import {
@@ -17,11 +16,13 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import {useRouter} from 'next/router';
-import {stringifyUrl} from 'query-string';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
 import {NextLink} from './muiCustoms/CustomLink';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import {useSelector} from 'react-redux';
+import {State} from '../redux/store';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
       navbar: {
@@ -65,7 +66,7 @@ export function Header() {
   const classes = useStyles();
   const router = useRouter();
   const nameInput = useRef<HTMLInputElement>();
-
+  const user = useSelector((state: State) => state.user);
   let nameInputCurrent = nameInput.current;
   const [drawer, setDrawer] = useState(false);
 
@@ -85,6 +86,32 @@ export function Header() {
     }
   }
 
+  const drawerFooter = user.token ? <React.Fragment>
+    <ListItem button href="/profile" component={NextLink}
+              color="inherit" underline="none"
+              onClick={toggleDrawer(false)}>
+      <ListItemIcon><AccountBoxIcon/></ListItemIcon>
+      <ListItemText>
+        {user.username}
+      </ListItemText>
+    </ListItem>
+    <ListItem button href="/sign-out" component={NextLink}
+              color="inherit" underline="none"
+              onClick={toggleDrawer(false)}>
+      <ListItemIcon><ExitToAppIcon/></ListItemIcon>
+      <ListItemText>
+        Выйти
+      </ListItemText>
+    </ListItem>
+  </React.Fragment> : (<ListItem button href="/sign-in" component={NextLink}
+                                 color="inherit" underline="none"
+                                 onClick={toggleDrawer(false)}>
+    <ListItemIcon><AccountBoxIcon/></ListItemIcon>
+    <ListItemText>
+      Вход
+    </ListItemText>
+  </ListItem>);
+
   return (
       <div>
         <SwipeableDrawer
@@ -102,7 +129,8 @@ export function Header() {
                 </ListItemText>
               </ListItem>
               <ListItem button href="/settings" component={NextLink}
-                        color="inherit" underline="none" onClick={toggleDrawer(false)}>
+                        color="inherit" underline="none"
+                        onClick={toggleDrawer(false)}>
                 <ListItemIcon><SettingsIcon/></ListItemIcon>
                 <ListItemText>
                   Настройки
@@ -110,13 +138,7 @@ export function Header() {
               </ListItem>
             </List>
             <List className={classes.list}>
-              <ListItem button href="/login" component={NextLink}
-                        color="inherit" underline="none">
-                <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                <ListItemText>
-                  Вход
-                </ListItemText>
-              </ListItem>
+              {drawerFooter}
             </List>
           </div>
         </SwipeableDrawer>
@@ -127,7 +149,7 @@ export function Header() {
                 className={classes.toolbarIcon}>
               <MenuIcon/>
             </IconButton>
-            <form onSubmit={submitSearch}>
+            <form onSubmit={submitSearch} autoComplete="off">
               <Input name={'name'}
                      id={'search-input'}
                      inputRef={nameInput}

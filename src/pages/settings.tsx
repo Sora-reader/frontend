@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {useState} from 'react';
 import {
@@ -7,7 +6,8 @@ import {
   List,
   makeStyles,
   MenuItem,
-  Theme, useMediaQuery,
+  Theme,
+  useMediaQuery,
 } from '@material-ui/core';
 import {ChangeTheme} from '../components/views/settings/changeTheme';
 

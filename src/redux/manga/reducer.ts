@@ -1,7 +1,5 @@
 import {MangaType} from '../../catalogs/baseCatalog';
-import {State} from '../store';
-import {AnyAction} from 'redux';
-import {mangaActionTypes, SetMangaAction} from './action';
+import {MangaActionTypes, SET_MANGA} from './action';
 
 type StateType = {
   manga: MangaType
@@ -13,9 +11,9 @@ const initialState: StateType = {
 
 export default function reducer(
     state = initialState,
-    action: SetMangaAction | AnyAction) {
+    action: MangaActionTypes): StateType {
   switch (action.type) {
-    case mangaActionTypes.SET_MANGA:
+    case SET_MANGA:
       return {
         ...state,
         manga: action.manga,

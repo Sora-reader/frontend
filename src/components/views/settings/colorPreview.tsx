@@ -1,6 +1,5 @@
-// @flow
 import * as React from 'react';
-import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core';
+import {useTheme} from '@material-ui/core';
 
 type Props = {
   color: string,

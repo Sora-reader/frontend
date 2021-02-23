@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {createStyles, makeStyles, Theme, Typography} from '@material-ui/core';
 

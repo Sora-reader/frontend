@@ -1,11 +1,12 @@
-// @flow
 import * as React from 'react';
 import {
   Chip,
   ChipProps,
   createStyles,
   makeStyles,
-  Theme, useMediaQuery, useTheme,
+  Theme,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import {OverridableComponentMock} from './index';
 

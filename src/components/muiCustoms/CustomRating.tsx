@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core';
 import {Rating, RatingProps} from '@material-ui/lab';

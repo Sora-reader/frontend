@@ -1,8 +1,6 @@
 import React, {Dispatch, useEffect, useState} from 'react';
 import {createMuiTheme, Theme, ThemeOptions} from '@material-ui/core';
 import {green, teal} from '@material-ui/core/colors';
-import {useRouter} from 'next/router';
-import {ParsedUrlQuery} from 'querystring';
 
 export function useStickyState(defaultValue: any, key: string) {
   const [value, setValue] = React.useState(defaultValue);

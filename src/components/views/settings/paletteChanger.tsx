@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {CustomChip} from '../../muiCustoms/CustomChip';
@@ -6,9 +5,6 @@ import {Color, ColorPicker} from 'material-ui-color';
 import {Button, createStyles, makeStyles, Theme} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 import createPalette, {PaletteOptions} from '@material-ui/core/styles/createPalette';
-import {Dispatch} from 'redux';
-import {setDarkPalette, setLightPalette} from '../../../redux/theme/action';
-import {defaultDark} from '../../../redux/theme/reducer';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {

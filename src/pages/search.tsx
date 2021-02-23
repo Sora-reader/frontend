@@ -1,6 +1,5 @@
-// @flow
 import * as React from 'react';
-import {Dispatch, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   createStyles,
   LinearProgress,
@@ -8,8 +7,6 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import {SearchResultsType} from '../catalogs/baseCatalog';
-import {ReadManga} from '../catalogs/ReadManga';
 import {SearchItem} from '../components/views/search/SearchItem';
 import {useRouter} from 'next/router';
 import {useDispatch, useSelector} from 'react-redux';

@@ -1,9 +1,8 @@
-import {AnyAction} from 'redux';
 import {
-  SetDarkPaletteAction,
-  SetLightPaletteAction,
-  SetThemeTypeAction,
-  themeActionTypes,
+  SET_DARK_PALETTE,
+  SET_LIGHT_PALETTE,
+  SET_TYPE,
+  ThemeActionTypes,
 } from './action';
 import {createMuiTheme, Theme} from '@material-ui/core';
 import {green, teal} from '@material-ui/core/colors';
@@ -33,7 +32,9 @@ export const defaultLight: PaletteOptions = {
   },
 };
 
-const defaultTheme = createMuiTheme({palette: defaultDark});
+const defaultTheme = createMuiTheme({
+  palette: defaultDark,
+});
 
 const initialState: StateType = {
   theme: defaultTheme,
@@ -43,12 +44,12 @@ const initialState: StateType = {
 
 export default function reducer(
     state: StateType = initialState,
-    action: SetThemeTypeAction | SetDarkPaletteAction | SetLightPaletteAction | AnyAction,
+    action: ThemeActionTypes,
 ) {
   let newState = {...state};
 
   switch (action.type) {
-    case themeActionTypes.SET_TYPE:
+    case SET_TYPE:
       console.log('Setting theme to', action.theme_type);
       if (action.theme_type === 'dark') {
         newState.theme = createMuiTheme({palette: state.darkPalette});
@@ -56,7 +57,7 @@ export default function reducer(
         newState.theme = createMuiTheme({palette: state.lightPalette});
       }
       break;
-    case themeActionTypes.SET_DARK_PALETTE:
+    case SET_DARK_PALETTE:
       newState.darkPalette = {
         ...newState.darkPalette,
         ...action.options,
@@ -67,7 +68,7 @@ export default function reducer(
         newState.theme = createMuiTheme({palette: newState.darkPalette});
       }
       break;
-    case themeActionTypes.SET_LIGHT_PALETTE:
+    case SET_LIGHT_PALETTE:
       newState.lightPalette = {
         ...newState.lightPalette,
         ...action.options,
@@ -87,8 +88,6 @@ export default function reducer(
       console.log('Reducer got new data, persisting state...');
       window.localStorage.setItem('sora-theme', JSON.stringify(newState));
     }
-  } else {
-    console.warn('Window is undefined on change theme');
   }
 
   return newState;

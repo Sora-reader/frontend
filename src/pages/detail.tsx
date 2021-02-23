@@ -1,6 +1,5 @@
-// @flow
 import * as React from 'react';
-import {Dispatch, useEffect} from 'react';
+import {useEffect} from 'react';
 import {
   createStyles,
   Divider,
