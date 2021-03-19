@@ -113,7 +113,7 @@ export function Header() {
   </ListItem>);
 
   return (
-      <div>
+      <React.Fragment>
         <SwipeableDrawer
             onClose={toggleDrawer(false)}
             onOpen={toggleDrawer(true)}
@@ -142,7 +142,7 @@ export function Header() {
             </List>
           </div>
         </SwipeableDrawer>
-        <AppBar className={classes.navbar} position={'fixed'}>
+        <AppBar className={classes.navbar} position={'sticky'}>
           <Toolbar className={classes.toolbar}>
             <IconButton
                 onClick={toggleDrawer(true)}
@@ -159,6 +159,6 @@ export function Header() {
             </form>
           </Toolbar>
         </AppBar>
-      </div>
+      </React.Fragment>
   );
 }
