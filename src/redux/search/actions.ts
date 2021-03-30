@@ -1,16 +1,11 @@
+import { MutableRefObject } from 'react';
 import {Dispatch} from 'redux';
 import {SearchResultsType} from '../../catalogs/baseCatalog';
 import {ReadManga} from '../../catalogs/ReadManga';
+import SearchMangaAction, { SetSearchInputRefAction } from './types';
 
 export const SEARCH_MANGA = 'SEARCH_MANGA';
-
-interface SearchMangaAction {
-  type: typeof SEARCH_MANGA,
-  searchQuery: string,
-  searchResults: SearchResultsType
-}
-
-export type SearchActionTypes = SearchMangaAction
+export const SET_SEARCH_INPUT_REF = 'SET_SEARCH_INPUT_REF';
 
 export const searchManga = (query: string) => {
   return async (dispatch: Dispatch<SearchMangaAction>): Promise<SearchMangaAction> => {
@@ -30,3 +25,8 @@ export const searchManga = (query: string) => {
     });
   };
 };
+
+export const setSearchInputRef = (ref: MutableRefObject<HTMLInputElement | undefined>) => (dispatch: Dispatch): SetSearchInputRefAction => dispatch({
+  type: SET_SEARCH_INPUT_REF,
+  ref: ref
+});

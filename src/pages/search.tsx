@@ -11,7 +11,7 @@ import { SearchItem } from '../components/views/search/SearchItem';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../redux/store';
-import { searchManga } from '../redux/search/action';
+import { searchManga } from '../redux/search/actions';
 import { SearchResultsType } from '../catalogs/baseCatalog';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
@@ -59,7 +59,7 @@ export default function Search() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { results: searchResults, query: cachedQuery } = useSelector((state: State) => state.search);
+  const { results: searchResults, query: cachedQuery, searchInputRef } = useSelector((state: State) => state.search);
   const [loading, setLoading] = useState(false);
   // To determine if loading false after completing search or it's initial value
   const [didSearchStart, setDidSearchStart] = useState(false);
@@ -82,6 +82,21 @@ export default function Search() {
       }
     }
   }, [searchResults]);
+
+  useEffect(() => {
+    if (searchInputRef) {
+      const current = searchInputRef.current;
+      if (current) {
+        if (query && current.value !== query) {
+          // Sync query value from url to input
+          current.value = query;
+        } else if (!query) {
+          // If the query is empty then focus query input
+          current.focus();
+        }
+      }
+    }
+  }, [query, searchInputRef]);
 
   useEffect(() => {
     if (query && query !== cachedQuery) {
