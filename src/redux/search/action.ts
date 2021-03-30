@@ -15,12 +15,12 @@ export type SearchActionTypes = SearchMangaAction
 export const searchManga = (query: string) => {
   return async (dispatch: Dispatch<SearchMangaAction>): Promise<SearchMangaAction> => {
     let results: SearchResultsType;
-
     try {
       results = await ReadManga.search.run(query);
     } catch (reason) {
       results = {items: [], results: -1, invalidResults: 0};
-      console.log('Request error', reason);
+      console.log('Request error');
+      console.log(reason);
     }
 
     return dispatch({
