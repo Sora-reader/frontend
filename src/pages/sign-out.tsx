@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {useEffect} from 'react';
-import {useRouter} from 'next/router';
-import {useDispatch} from 'react-redux';
-import {signOut} from '../redux/user/action';
-import {LinearProgress} from '@material-ui/core';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { LinearProgress } from '@material-ui/core';
+import { signOut } from '../redux/user/action';
 
 function SignOut() {
   // Store in getServerSideProps in undefined
@@ -13,7 +13,7 @@ function SignOut() {
     dispatch(signOut());
     router.push('/').then();
   }, []);
-  return <LinearProgress/>;
+  return <LinearProgress />;
 }
 
 export default SignOut;

@@ -6,7 +6,7 @@ import {
   Middleware,
   Reducer,
 } from 'redux';
-import {createWrapper, HYDRATE} from 'next-redux-wrapper';
+import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
@@ -15,7 +15,7 @@ import user from './user/reducer';
 
 const bindMiddleware = (middleware: Middleware[]) => {
   if (process.env.NODE_ENV !== 'production') {
-    const {composeWithDevTools} = require('redux-devtools-extension');
+    const { composeWithDevTools } = require('redux-devtools-extension');
     return composeWithDevTools(applyMiddleware(...middleware));
   }
   return applyMiddleware(...middleware);
@@ -28,7 +28,7 @@ const combinedReducer = combineReducers({
   user,
 });
 
-export type State = ReturnType<typeof combinedReducer>
+export type State = ReturnType<typeof combinedReducer>;
 
 const reducer: Reducer = (state: State, action: AnyAction) => {
   if (action.type === HYDRATE) {
@@ -38,13 +38,10 @@ const reducer: Reducer = (state: State, action: AnyAction) => {
     };
     if (state.manga.manga) nextState.manga.manga = state.manga.manga; // preserve manga value on client side navigation
     return nextState;
-  } else {
-    return combinedReducer(state, action);
   }
+  return combinedReducer(state, action);
 };
 
-const initStore = () => {
-  return createStore(reducer, bindMiddleware([thunkMiddleware]));
-};
+const initStore = () => createStore(reducer, bindMiddleware([thunkMiddleware]));
 
 export const wrapper = createWrapper(initStore);

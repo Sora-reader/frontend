@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useCallback} from 'react';
+import { useCallback } from 'react';
 import {
   createStyles,
   ListItem,
@@ -7,12 +7,12 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import {MangaType} from '../../../catalogs/baseCatalog';
-import {SearchItemDesc} from './SearchItemDesc';
-import {useRouter} from 'next/router';
-import {CustomAvatar} from '../../muiCustoms/CustomAvatar';
-import {useDispatch} from 'react-redux';
-import {setManga} from '../../../redux/manga/action';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { MangaType } from '../../../catalogs/baseCatalog';
+import { SearchItemDesc } from './SearchItemDesc';
+import { CustomAvatar } from '../../muiCustoms/CustomAvatar';
+import { setManga } from '../../../redux/manga/action';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
 
 type Props = {
   data: MangaType,
-}
+};
 
 export function SearchItem(props: Props) {
   const classes = useStyles();
   const router = useRouter();
-  const {data} = props;
+  const { data } = props;
   const dispatch = useDispatch();
   const passManga = useCallback(() => {
     dispatch(setManga(data));
@@ -45,17 +45,20 @@ export function SearchItem(props: Props) {
   }, [router, data, setManga]);
 
   return (
-      <ListItem button
-                onClick={passManga}
-                key={data.link}
-                alignItems={'flex-start'}
-                className={classes.root}
-      >
-        <ListItemAvatar className={classes.avatarWrapper}>
-          <CustomAvatar src={data.imageUrl}
-                        className={classes.avatar}/>
-        </ListItemAvatar>
-        <SearchItemDesc {...data}/>
-      </ListItem>
+    <ListItem
+      button
+      onClick={passManga}
+      key={data.link}
+      alignItems="flex-start"
+      className={classes.root}
+    >
+      <ListItemAvatar className={classes.avatarWrapper}>
+        <CustomAvatar
+          src={data.imageUrl}
+          className={classes.avatar}
+        />
+      </ListItemAvatar>
+      <SearchItemDesc {...data} />
+    </ListItem>
   );
 }

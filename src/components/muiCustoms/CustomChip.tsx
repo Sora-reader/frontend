@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
-import {OverridableComponentMock} from './index';
+import { OverridableComponentMock } from './index';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -24,14 +24,16 @@ type Props = ChipProps | OverridableComponentMock;
 
 export function CustomChip(props: Props) {
   const propClasses = props.classes ? props.classes : {};
-  const classes = {...useStyles(), ...propClasses};
+  const classes = { ...useStyles(), ...propClasses };
 
   const theme = useTheme();
   const smallMedia = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-      <Chip {...props} size={smallMedia ? 'small' : 'medium'}
-            className={classes.root}/>
+    <Chip
+      {...props}
+      size={smallMedia ? 'small' : 'medium'}
+      className={classes.root}
+    />
   );
 }
-

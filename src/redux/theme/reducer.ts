@@ -1,18 +1,18 @@
+import { createMuiTheme, Theme } from '@material-ui/core';
+import { green, teal } from '@material-ui/core/colors';
+import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 import {
   SET_DARK_PALETTE,
   SET_LIGHT_PALETTE,
   SET_TYPE,
   ThemeActionTypes,
 } from './action';
-import {createMuiTheme, Theme} from '@material-ui/core';
-import {green, teal} from '@material-ui/core/colors';
-import {PaletteOptions} from '@material-ui/core/styles/createPalette';
 
 type StateType = {
-  theme: Theme,
-  darkPalette: PaletteOptions,
-  lightPalette: PaletteOptions,
-}
+  theme: Theme;
+  darkPalette: PaletteOptions;
+  lightPalette: PaletteOptions;
+};
 
 export const defaultDark: PaletteOptions = {
   type: 'dark',
@@ -43,18 +43,18 @@ const initialState: StateType = {
 };
 
 export default function reducer(
-    state: StateType = initialState,
-    action: ThemeActionTypes,
+  state: StateType = initialState,
+  action: ThemeActionTypes,
 ) {
-  let newState = {...state};
+  let newState = { ...state };
 
   switch (action.type) {
     case SET_TYPE:
       console.log('Setting theme to', action.theme_type);
       if (action.theme_type === 'dark') {
-        newState.theme = createMuiTheme({palette: state.darkPalette});
+        newState.theme = createMuiTheme({ palette: state.darkPalette });
       } else {
-        newState.theme = createMuiTheme({palette: state.lightPalette});
+        newState.theme = createMuiTheme({ palette: state.lightPalette });
       }
       break;
     case SET_DARK_PALETTE:
@@ -63,9 +63,11 @@ export default function reducer(
         ...action.options,
       };
       if (newState.theme.palette.type === 'dark') {
-        console.log('Reloading dark theme with new palette',
-            newState.darkPalette);
-        newState.theme = createMuiTheme({palette: newState.darkPalette});
+        console.log(
+          'Reloading dark theme with new palette',
+          newState.darkPalette,
+        );
+        newState.theme = createMuiTheme({ palette: newState.darkPalette });
       }
       break;
     case SET_LIGHT_PALETTE:
@@ -74,9 +76,11 @@ export default function reducer(
         ...action.options,
       };
       if (newState.theme.palette.type === 'light') {
-        console.log('Reloading light theme with new palette',
-            newState.lightPalette);
-        newState.theme = createMuiTheme({palette: newState.lightPalette});
+        console.log(
+          'Reloading light theme with new palette',
+          newState.lightPalette,
+        );
+        newState.theme = createMuiTheme({ palette: newState.lightPalette });
       }
       break;
     default:

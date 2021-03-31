@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Button,
   createStyles,
@@ -9,10 +9,10 @@ import {
   Theme,
   Typography,
 } from '@material-ui/core';
-import {useDispatch, useSelector} from 'react-redux';
-import {signIn} from '../redux/user/action';
-import {State} from '../redux/store';
-import {useRouter} from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { signIn } from '../redux/user/action';
+import { State } from '../redux/store';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {},
@@ -57,7 +57,7 @@ export default function SignIn() {
     inputRef.current?.focus();
   }, [inputRef]);
 
-  const progress = loading ? <LinearProgress/> : '';
+  const progress = loading ? <LinearProgress /> : '';
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -73,21 +73,34 @@ export default function SignIn() {
   };
 
   return (
-      <div className={classes.root}>
-        {progress}
-        <div className={classes.formWrapper}>
-          <form onSubmit={handleSubmit} className={classes.form}>
-            <Typography className={classes.formHeader} align="center"
-                        component="h3" variant="h3">
-              Вход
-            </Typography>
-            <TextField label="Имя пользователя" name="username" type="username"
-                       variant="standard" inputRef={inputRef}/>
-            <TextField name="password" type="password" label="Пароль"
-                       variant="standard"/>
-            <Button type="submit" className={classes.formSubmit}>Войти</Button>
-          </form>
-        </div>
+    <div className={classes.root}>
+      {progress}
+      <div className={classes.formWrapper}>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <Typography
+            className={classes.formHeader}
+            align="center"
+            component="h3"
+            variant="h3"
+          >
+            Вход
+          </Typography>
+          <TextField
+            label="Имя пользователя"
+            name="username"
+            type="username"
+            variant="standard"
+            inputRef={inputRef}
+          />
+          <TextField
+            name="password"
+            type="password"
+            label="Пароль"
+            variant="standard"
+          />
+          <Button type="submit" className={classes.formSubmit}>Войти</Button>
+        </form>
       </div>
+    </div>
   );
 }

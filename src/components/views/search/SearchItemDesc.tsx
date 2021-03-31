@@ -5,9 +5,9 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import {MangaType} from '../../../catalogs/baseCatalog';
-import {CustomChip} from '../../muiCustoms/CustomChip';
-import {CustomRating} from '../../muiCustoms/CustomRating';
+import { MangaType } from '../../../catalogs/baseCatalog';
+import { CustomChip } from '../../muiCustoms/CustomChip';
+import { CustomRating } from '../../muiCustoms/CustomRating';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -47,25 +47,22 @@ export function SearchItemDesc(props: Props) {
   const classes = useStyles();
 
   return (
-      <div className={classes.root}>
-        <div className={classes.header}>
-          <ListItemText className={classes.title}>
-            {props.title}
-          </ListItemText>
-          <CustomRating value={props.starRate}
-          />
-        </div>
-
-        <div className={classes.footer}>
-          <ListItemText className={classes.author}>
-            {props.author}
-          </ListItemText>
-          <ul className={classes.genres}>
-            {props.genres?.map((genre) => {
-              return <CustomChip component={'li'} label={genre} key={genre}/>;
-            })}
-          </ul>
-        </div>
+    <div className={classes.root}>
+      <div className={classes.header}>
+        <ListItemText className={classes.title}>
+          {props.title}
+        </ListItemText>
+        <CustomRating value={props.starRate} />
       </div>
+
+      <div className={classes.footer}>
+        <ListItemText className={classes.author}>
+          {props.author}
+        </ListItemText>
+        <ul className={classes.genres}>
+          {props.genres?.map((genre) => <CustomChip component="li" label={genre} key={genre} />)}
+        </ul>
+      </div>
+    </div>
   );
 }

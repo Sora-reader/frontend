@@ -7,7 +7,7 @@ type StateType = {
   searchInputRef?: MutableRefObject<HTMLInputElement | undefined>
   query: string,
   results: SearchResultsType,
-}
+};
 
 const initialState: StateType = {
   searchInputRef: undefined,
@@ -20,8 +20,9 @@ const initialState: StateType = {
 };
 
 export default function reducer(
-    state = initialState,
-    action: SearchActionTypes): StateType {
+  state = initialState,
+  action: SearchActionTypes,
+): StateType {
   switch (action.type) {
     case SEARCH_MANGA:
       return {
@@ -29,11 +30,11 @@ export default function reducer(
         query: action.searchQuery,
         results: action.searchResults,
       };
-      case SET_SEARCH_INPUT_REF:
-        return {
-          ...state,
-          searchInputRef: action.ref,
-        }
+    case SET_SEARCH_INPUT_REF:
+      return {
+        ...state,
+        searchInputRef: action.ref,
+      };
     default:
       return state;
   }

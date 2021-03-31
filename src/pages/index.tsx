@@ -1,4 +1,4 @@
-import {createStyles, makeStyles} from '@material-ui/core';
+import React, { createStyles, makeStyles, Accordion } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -13,10 +13,11 @@ const useStyles = makeStyles((theme) => createStyles({
 
 export default function IndexView() {
   const classes = useStyles();
+  console.log('qwe');
 
   return (
-      <div className={classes.root}>
-        <h1 className={classes.header}>Главная страница</h1>
-      </div>
+    <div className={classes.root}>
+      <h1 className={classes.header}>Главная страница</h1>
+    </div>
   );
 }

@@ -1,0 +1,56 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:@next/next/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": [
+            "./tsconfig.json"
+        ],
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "src/**/*.ts",
+                "src/**/*.tsx"
+            ]
+        }
+    ],
+    "rules": {
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "implicit-arrow-linebreak": "off",
+        "max-len": [
+            "error",
+            {
+                "code": 120
+            }
+        ],
+        "react/no-unescaped-entities": "off",
+        "@typescript-eslint/indent": "off",
+        "import/prefer-default-export": "off",
+        "no-use-before-define": "off",
+        "no-console": "off"
+    },
+    "settings": {
+        "react": {
+            "version": "17.0.1"
+        }
+    }
+}
