@@ -1,19 +1,20 @@
 import React, { createStyles, makeStyles, Accordion } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => createStyles({
-  root: {
-    paddingTop: theme.spacing(1),
-    minHeight: '100vh',
-  },
-  header: {
-    padding: theme.spacing(0, 1),
-    textAlign: 'center',
-  },
-}));
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    root: {
+      paddingTop: theme.spacing(1),
+      minHeight: '100vh',
+    },
+    header: {
+      padding: theme.spacing(0, 1),
+      textAlign: 'center',
+    },
+  })
+);
 
 export default function IndexView() {
   const classes = useStyles();
-  console.log('qwe');
 
   return (
     <div className={classes.root}>
