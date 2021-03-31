@@ -11,33 +11,35 @@ import {
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { signIn } from '../redux/user/action';
+import { signIn } from '../redux/user/actions';
 import { State } from '../redux/store';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {},
-  formWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    paddingTop: theme.spacing(3),
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingTop: theme.spacing(2),
-    width: '40%',
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {},
+    formWrapper: {
+      display: 'flex',
+      justifyContent: 'center',
+      paddingTop: theme.spacing(3),
     },
-  },
-  formInputs: {},
-  formHeader: {
-    marginBottom: theme.spacing(3),
-  },
-  formSubmit: {
-    marginTop: theme.spacing(3),
-  },
-}));
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+      paddingTop: theme.spacing(2),
+      width: '40%',
+      [theme.breakpoints.down('sm')]: {
+        width: '90%',
+      },
+    },
+    formInputs: {},
+    formHeader: {
+      marginBottom: theme.spacing(3),
+    },
+    formSubmit: {
+      marginTop: theme.spacing(3),
+    },
+  })
+);
 
 export default function SignIn() {
   const classes = useStyles();
@@ -98,7 +100,9 @@ export default function SignIn() {
             label="Пароль"
             variant="standard"
           />
-          <Button type="submit" className={classes.formSubmit}>Войти</Button>
+          <Button type="submit" className={classes.formSubmit}>
+            Войти
+          </Button>
         </form>
       </div>
     </div>

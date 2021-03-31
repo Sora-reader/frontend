@@ -12,38 +12,37 @@ import {
   useTheme,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setDarkPalette,
-  setLightPalette,
-  setThemeType,
-} from '../../../redux/theme/action';
+import { setPalette, setThemeType } from '../../../redux/theme/actions';
 import { State } from '../../../redux/store';
 import { PaletteChanger } from './paletteChanger';
 import { defaultDark, defaultLight } from '../../../redux/theme/reducer';
+import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {},
-  label: { color: `${theme.palette.text.primary} !important` },
-  focusedLabel: { color: `${theme.palette.text.primary} !important` },
-  radio: {
-    '&$checked': {
-      color: theme.palette.primary.main,
-      '&:hover': {
-        backgroundColor: 'transparent',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {},
+    label: { color: `${theme.palette.text.primary} !important` },
+    focusedLabel: { color: `${theme.palette.text.primary} !important` },
+    radio: {
+      '&$checked': {
+        color: theme.palette.primary.main,
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
       },
     },
-  },
-  checked: {},
-  chipContainer: {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    '& li': {
-      borderRadius: '1rem',
-      marginBottom: theme.spacing(1),
-      marginRight: theme.spacing(1),
+    checked: {},
+    chipContainer: {
+      display: 'flex',
+      flexFlow: 'row wrap',
+      '& li': {
+        borderRadius: '1rem',
+        marginBottom: theme.spacing(1),
+        marginRight: theme.spacing(1),
+      },
     },
-  },
-}));
+  })
+);
 
 export function ChangeTheme() {
   const theme = useTheme();
@@ -67,7 +66,9 @@ export function ChangeTheme() {
           <FormControlLabel
             value="dark"
             control={
-              <Radio classes={{ root: classes.radio, checked: classes.checked }} />
+              <Radio
+                classes={{ root: classes.radio, checked: classes.checked }}
+              />
             }
             checked={theme.palette.type === 'dark'}
             onChange={() => dispatch(setThemeType('dark'))}
@@ -75,7 +76,9 @@ export function ChangeTheme() {
           />
           <FormControlLabel
             control={
-              <Radio classes={{ root: classes.radio, checked: classes.checked }} />
+              <Radio
+                classes={{ root: classes.radio, checked: classes.checked }}
+              />
             }
             checked={theme.palette.type === 'light'}
             onChange={() => dispatch(setThemeType('light'))}
@@ -90,7 +93,9 @@ export function ChangeTheme() {
         <PaletteChanger
           statePalette={themeState.darkPalette}
           defaultPalette={defaultDark}
-          setStatePalette={setDarkPalette}
+          setStatePalette={(options: PaletteOptions) =>
+            setPalette(options, 'dark')
+          }
         />
         <Divider style={{ width: '50%' }} />
       </div>
@@ -99,7 +104,9 @@ export function ChangeTheme() {
         <PaletteChanger
           statePalette={themeState.lightPalette}
           defaultPalette={defaultLight}
-          setStatePalette={setLightPalette}
+          setStatePalette={(options: PaletteOptions) =>
+            setPalette(options, 'light')
+          }
         />
         <Divider style={{ width: '50%' }} />
       </div>

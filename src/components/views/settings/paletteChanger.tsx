@@ -1,44 +1,46 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Color, ColorPicker } from 'material-ui-color';
-import {
-  Button, createStyles, makeStyles, Theme,
-} from '@material-ui/core';
+import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import createPalette, { PaletteOptions } from '@material-ui/core/styles/createPalette';
+import createPalette, {
+  PaletteOptions,
+} from '@material-ui/core/styles/createPalette';
 import { CustomChip } from '../../muiCustoms/CustomChip';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    marginBottom: theme.spacing(1),
-  },
-  chipContainer: {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    '& li': {
-      borderRadius: '1rem',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
       marginBottom: theme.spacing(1),
-      marginRight: theme.spacing(1),
     },
-  },
-  buttons: {
-    padding: theme.spacing(1),
-    '& button': {
-      marginRight: theme.spacing(1),
+    chipContainer: {
+      display: 'flex',
+      flexFlow: 'row wrap',
+      '& li': {
+        borderRadius: '1rem',
+        marginBottom: theme.spacing(1),
+        marginRight: theme.spacing(1),
+      },
     },
-  },
-}));
+    buttons: {
+      padding: theme.spacing(1),
+      '& button': {
+        marginRight: theme.spacing(1),
+      },
+    },
+  })
+);
 
 type ToneType = 'main' | 'light' | 'dark';
 type PickerType = {
-  primary: ToneType,
-  secondary: ToneType,
+  primary: ToneType;
+  secondary: ToneType;
 };
 type Props = {
-  statePalette: PaletteOptions,
-  defaultPalette: PaletteOptions,
+  statePalette: PaletteOptions;
+  defaultPalette: PaletteOptions;
   // TODO: thunk types
-  setStatePalette: Function,
+  setStatePalette: Function;
 };
 
 export function PaletteChanger(props: Props) {
@@ -52,10 +54,9 @@ export function PaletteChanger(props: Props) {
     secondary: 'main',
   } as PickerType);
 
-  const updatePalette = (
-    key: 'primary' | 'secondary',
-    value: ToneType,
-  ) => (color: Color | string) => {
+  const updatePalette = (key: 'primary' | 'secondary', value: ToneType) => (
+    color: Color | string
+  ) => {
     setPalette((prevState) => {
       const newState = { ...prevState };
       if (key && value) {
@@ -65,9 +66,10 @@ export function PaletteChanger(props: Props) {
       return newState;
     });
   };
+
   const updatePicker = (
     key: 'primary' | 'secondary',
-    value: ToneType,
+    value: ToneType
   ) => () => {
     setPicker((prevState: PickerType) => {
       const newState = { ...prevState };
@@ -81,10 +83,12 @@ export function PaletteChanger(props: Props) {
   };
   const submit = () => {
     console.log('Dispatching', palette.primary, 'with', setStatePalette.name);
-    dispatch(setStatePalette({
-      primary: palette.primary,
-      secondary: palette.secondary,
-    } as PaletteOptions));
+    dispatch(
+      setStatePalette({
+        primary: palette.primary,
+        secondary: palette.secondary,
+      } as PaletteOptions)
+    );
   };
 
   useEffect(() => {

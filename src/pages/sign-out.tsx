@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { LinearProgress } from '@material-ui/core';
-import { signOut } from '../redux/user/action';
+import { signOut } from '../redux/user/actions';
 
 function SignOut() {
   // Store in getServerSideProps in undefined

@@ -1,4 +1,5 @@
-import { SIGN_IN, SIGN_OUT, UserAction } from './action';
+import { SIGN_IN, SIGN_OUT } from './actions';
+import { UserAction } from './types';
 
 type StateType = {
   username: string,

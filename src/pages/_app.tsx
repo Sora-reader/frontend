@@ -13,28 +13,30 @@ import GoogleFonts from 'next-google-fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { Header } from '../components/Header';
 import { State, wrapper } from '../redux/store';
-import { setDarkPalette, setLightPalette } from '../redux/theme/action';
+import { setPalette } from '../redux/theme/actions';
 
 function WrappedApp({ Component, pageProps }: AppProps) {
   const { theme, darkPalette, lightPalette } = useSelector(
-    (state: State) => state.theme,
+    (state: State) => state.theme
   );
   const dispatch = useDispatch();
 
-  const useStyles = makeStyles(() => createStyles({
-    box: {
-      minHeight: '100vh',
-      padding: theme.spacing(0),
-      backgroundColor: theme.palette.background.default,
-      color: theme.palette.text.primary,
-    },
-    main: {
-      padding: 0,
-      backgroundColor: theme.palette.background.paper,
-      color: theme.palette.text.primary,
-      minHeight: '100vh',
-    },
-  }));
+  const useStyles = makeStyles(() =>
+    createStyles({
+      box: {
+        minHeight: '100vh',
+        padding: theme.spacing(0),
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+      },
+      main: {
+        padding: 0,
+        backgroundColor: theme.palette.background.paper,
+        color: theme.palette.text.primary,
+        minHeight: '100vh',
+      },
+    })
+  );
 
   const classes = useStyles();
 
@@ -50,26 +52,28 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
       if (darkDiff) {
         console.log('Dark palettes differ, dispatching');
-        dispatch(setDarkPalette(darkP));
+        dispatch(setPalette(darkP, 'dark'));
       } else {
         console.log('Dark palettes are equal');
       }
 
       if (lightDiff) {
         console.log('Light palettes differ, dispatching');
-        dispatch(setLightPalette(lightP));
+        dispatch(setPalette(lightP, 'light'));
       } else {
         console.log('Light palettes are equal');
       }
     }
   }, [theme]);
 
-  const roboto = 'https://fonts.googleapis.com/css?'
-      + 'family=Roboto:300,400,500,700&display=swap';
-  const montserrat = 'https://fonts.googleapis.com/css2?'
-      + 'family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600'
-      + ';0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,'
-      + '800;1,900&display=swap';
+  const roboto =
+    'https://fonts.googleapis.com/css?' +
+    'family=Roboto:300,400,500,700&display=swap';
+  const montserrat =
+    'https://fonts.googleapis.com/css2?' +
+    'family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600' +
+    ';0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,' +
+    '800;1,900&display=swap';
 
   return (
     <>
@@ -87,11 +91,7 @@ function WrappedApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <Box className={classes.box}>
           <Header />
-          <Container
-            maxWidth="md"
-            component="main"
-            className={classes.main}
-          >
+          <Container maxWidth="md" component="main" className={classes.main}>
             <Component {...pageProps} />
           </Container>
         </Box>
