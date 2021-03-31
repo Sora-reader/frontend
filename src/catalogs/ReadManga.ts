@@ -1,14 +1,14 @@
-import {load} from 'cheerio';
-import {BaseCatalog, SearchResultsType} from './baseCatalog';
-import {CORSProxyUrl} from '../config';
+import { load } from 'cheerio';
+import { BaseCatalog, SearchResultsType } from './baseCatalog';
+import { CORSProxyUrl } from '../config';
 
 const searchRequest = async (query: string) => {
-  const body = 'q=' + query;
+  const body = `q=${query}`;
   let output = '';
 
   const request = fetch(CORSProxyUrl + ReadManga.getSearchUrl(), {
     method: 'POST',
-    body: body,
+    body,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
@@ -22,8 +22,8 @@ const searchRequest = async (query: string) => {
 
 const searchParser = (html: string): SearchResultsType => {
   const $ = load(html);
-  let tiles = $('.tiles .tile');
-  let output: SearchResultsType = {
+  const tiles = $('.tiles .tile');
+  const output: SearchResultsType = {
     results: tiles.length,
     invalidResults: 0,
     items: [],
@@ -42,15 +42,12 @@ const searchParser = (html: string): SearchResultsType => {
       return true;
     }
 
-    const cleanText = (data?: string): string => {
-      return data?.trim() || '';
-    };
-    const cleanRating = (data?: string): number => {
+    const cleanText = (data?: string): string => data?.trim() || '';
+    const cleanRating = (data?: string): number =>
       // Js...
-      return Number(Number(data?.split(' ')[0]).toFixed(2));
-    };
+      Number(Number(data?.split(' ')[0]).toFixed(2));
     const cleanGenres = (data?: cheerio.Cheerio): Array<string> => {
-      let output: Array<string> = [];
+      const output: Array<string> = [];
       data?.each(((i, e) => {
         const element = $(e);
         output.push(cleanText(element.text()));
@@ -61,8 +58,8 @@ const searchParser = (html: string): SearchResultsType => {
     const descriptionParent = descClass.find('.long-description-holder')[0];
     let description: cheerio.Element[] = [];
     if ('children' in descriptionParent) {
-      description = descriptionParent.
-          children.filter(node => 'name' in node && node.name !== 'h5');
+      description = descriptionParent
+        .children.filter((node) => 'name' in node && node.name !== 'h5');
     }
 
     output.items.push({
@@ -85,22 +82,22 @@ const searchParser = (html: string): SearchResultsType => {
 export const ReadManga: BaseCatalog = {
   url: 'https://readmanga.live/',
 
-  getSearchUrl: function() {
-    return this.url + 'search';
+  getSearchUrl() {
+    return `${this.url}search`;
   },
-  getDetailsUrl: function(link: string) {
+  getDetailsUrl(link: string) {
     return this.url + link;
   },
-  getChapterUrl: function(link: string) {
+  getChapterUrl(link: string) {
     return this.url + link;
   },
 
   search: {
-    run: async function(query: string) {
+    async run(query: string) {
       const html = await this.searchRequest(query);
       return this.searchParser(html);
     },
-    searchRequest: searchRequest,
-    searchParser: searchParser,
+    searchRequest,
+    searchParser,
   },
 };

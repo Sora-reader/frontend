@@ -1,9 +1,9 @@
-import {SIGN_IN, SIGN_OUT, UserAction} from './action';
+import { SIGN_IN, SIGN_OUT, UserAction } from './action';
 
 type StateType = {
   username: string,
   token: string,
-}
+};
 const initialState: StateType = {
   username: '',
   token: '',

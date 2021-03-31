@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {CustomChip} from '../../muiCustoms/CustomChip';
-import {Color, ColorPicker} from 'material-ui-color';
-import {Button, createStyles, makeStyles, Theme} from '@material-ui/core';
-import {useDispatch} from 'react-redux';
-import createPalette, {PaletteOptions} from '@material-ui/core/styles/createPalette';
+import { useEffect, useState } from 'react';
+import { Color, ColorPicker } from 'material-ui-color';
+import {
+  Button, createStyles, makeStyles, Theme,
+} from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import createPalette, { PaletteOptions } from '@material-ui/core/styles/createPalette';
+import { CustomChip } from '../../muiCustoms/CustomChip';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -27,11 +29,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-type ToneType = 'main' | 'light' | 'dark'
+type ToneType = 'main' | 'light' | 'dark';
 type PickerType = {
   primary: ToneType,
   secondary: ToneType,
-}
+};
 type Props = {
   statePalette: PaletteOptions,
   defaultPalette: PaletteOptions,
@@ -43,7 +45,7 @@ export function PaletteChanger(props: Props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const {statePalette, defaultPalette, setStatePalette} = props;
+  const { statePalette, defaultPalette, setStatePalette } = props;
   const [palette, setPalette] = useState(createPalette(statePalette));
   const [picker, setPicker] = useState({
     primary: 'main',
@@ -51,28 +53,25 @@ export function PaletteChanger(props: Props) {
   } as PickerType);
 
   const updatePalette = (
-      key: 'primary' | 'secondary',
-      value: ToneType,
+    key: 'primary' | 'secondary',
+    value: ToneType,
   ) => (color: Color | string) => {
-    setPalette(prevState => {
-      let newState = {...prevState};
+    setPalette((prevState) => {
+      const newState = { ...prevState };
       if (key && value) {
-        if (typeof color === 'string')
-          newState[key][value] = color;
-        else
-          newState[key][value] = '#' + color.hex;
+        if (typeof color === 'string') newState[key][value] = color;
+        else newState[key][value] = `#${color.hex}`;
       }
       return newState;
     });
   };
   const updatePicker = (
-      key: 'primary' | 'secondary',
-      value: ToneType,
+    key: 'primary' | 'secondary',
+    value: ToneType,
   ) => () => {
     setPicker((prevState: PickerType) => {
-      let newState = {...prevState};
-      if (key && value)
-        newState[key] = value;
+      const newState = { ...prevState };
+      if (key && value) newState[key] = value;
       return newState;
     });
   };
@@ -94,34 +93,42 @@ export function PaletteChanger(props: Props) {
   }, [statePalette]);
 
   return (
-      <div className={classes.root}>
-        <p>Главный цвет, оттенки</p>
-        <div className={classes.chipContainer}>
-          <CustomChip onClick={updatePicker('primary', 'main')}
-                      style={{
-                        backgroundColor: palette.primary.main,
-                        color: palette.text.primary,
-                      }}
-                      label="основной"/>
-          <CustomChip onClick={updatePicker('primary', 'light')}
-                      style={{
-                        backgroundColor: palette.primary.light,
-                        color: palette.text.primary,
-                      }}
-                      label="светлый"/>
-          <CustomChip onClick={updatePicker('primary', 'dark')}
-                      style={{
-                        backgroundColor: palette.primary.dark,
-                        color: palette.text.primary,
-                      }}
-                      label="тёмный"/>
-        </div>
-        <ColorPicker onChange={updatePalette('primary', picker.primary)}
-                     value={palette.primary[picker.primary]}/>
-        <div className={classes.buttons}>
-          <Button onClick={reset}>Сбросить</Button>
-          <Button onClick={submit}>Сохранить</Button>
-        </div>
+    <div className={classes.root}>
+      <p>Главный цвет, оттенки</p>
+      <div className={classes.chipContainer}>
+        <CustomChip
+          onClick={updatePicker('primary', 'main')}
+          style={{
+            backgroundColor: palette.primary.main,
+            color: palette.text.primary,
+          }}
+          label="основной"
+        />
+        <CustomChip
+          onClick={updatePicker('primary', 'light')}
+          style={{
+            backgroundColor: palette.primary.light,
+            color: palette.text.primary,
+          }}
+          label="светлый"
+        />
+        <CustomChip
+          onClick={updatePicker('primary', 'dark')}
+          style={{
+            backgroundColor: palette.primary.dark,
+            color: palette.text.primary,
+          }}
+          label="тёмный"
+        />
       </div>
+      <ColorPicker
+        onChange={updatePalette('primary', picker.primary)}
+        value={palette.primary[picker.primary]}
+      />
+      <div className={classes.buttons}>
+        <Button onClick={reset}>Сбросить</Button>
+        <Button onClick={submit}>Сохранить</Button>
+      </div>
+    </div>
   );
 }

@@ -1,26 +1,28 @@
-import Document, {Head, Html, Main, NextScript} from 'next/document';
+import Document, {
+  Head, Html, Main, NextScript,
+} from 'next/document';
 import React from 'react';
-import {ServerStyleSheets} from '@material-ui/styles';
+import { ServerStyleSheets } from '@material-ui/styles';
 
 class MyDocument extends Document {
   render() {
     return (
-        <Html lang={'ru'}>
+      <Html lang="ru">
 
-          <Head>
-            <meta charSet="utf-8"/>
-            <meta name="referrer" content="no-referrer"/>
-            <link rel="manifest" href="/manifest.json"/>
-            <link rel="icon" href="/favicon.ico"/>
-            <link rel="apple-touch-icon" href="/favicon.ico"/>
-          </Head>
+        <Head>
+          <meta charSet="utf-8" />
+          <meta name="referrer" content="no-referrer" />
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/favicon.ico" />
+        </Head>
 
-          <body>
-          <Main/>
-          <NextScript/>
-          </body>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
 
-        </Html>
+      </Html>
     );
   }
 }
@@ -30,10 +32,9 @@ MyDocument.getInitialProps = async (ctx) => {
   const sheets = new ServerStyleSheets();
   const originalRenderPage = ctx.renderPage;
 
-  ctx.renderPage = () =>
-      originalRenderPage({
-        enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
-      });
+  ctx.renderPage = () => originalRenderPage({
+    enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+  });
 
   const initialProps = await Document.getInitialProps(ctx);
 

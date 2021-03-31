@@ -10,23 +10,23 @@ export type MangaType = {
   starRate?: number,
   author?: string,
   genres?: Array<string>,
-}
+};
 
 export type SearchResultsType<TSearchItem = MangaType> = {
   results: number,
   invalidResults: number,
   items: Array<TSearchItem>,
-}
+};
 
 export type ChapterType = {
   title: string,
   link: string,
   date?: string,
-}
+};
 
 export type ChapterListType = {
   chapters: Array<ChapterType>,
-}
+};
 
 export interface BaseCatalog {
   url: string,

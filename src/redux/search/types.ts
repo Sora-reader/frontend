@@ -1,6 +1,6 @@
-import { MutableRefObject, Ref } from "react";
-import { SearchResultsType } from "../../catalogs/baseCatalog";
-import { SEARCH_MANGA, SET_SEARCH_INPUT_REF } from "./actions";
+import { MutableRefObject, Ref } from 'react';
+import { SearchResultsType } from '../../catalogs/baseCatalog';
+import { SEARCH_MANGA, SET_SEARCH_INPUT_REF } from './actions';
 
 export interface SearchMangaAction {
     type: typeof SEARCH_MANGA,
@@ -12,6 +12,6 @@ export interface SetSearchInputRefAction {
     ref: MutableRefObject<HTMLInputElement | undefined>,
 }
 
-type SearchActionTypes = SearchMangaAction | SetSearchInputRefAction
+type SearchActionTypes = SearchMangaAction | SetSearchInputRefAction;
 
 export default SearchActionTypes;

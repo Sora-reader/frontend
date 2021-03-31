@@ -1,5 +1,7 @@
 import * as React from 'react';
-import {createStyles, makeStyles, Theme, Typography} from '@material-ui/core';
+import {
+  createStyles, makeStyles, Theme, Typography,
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -15,10 +17,10 @@ export function DetailDescription(props: Props) {
   const classes = useStyles();
 
   return (
-      <div className={classes.root}>
-        <Typography>
-          {props.text}
-        </Typography>
-      </div>
+    <div className={classes.root}>
+      <Typography>
+        {props.text}
+      </Typography>
+    </div>
   );
 }

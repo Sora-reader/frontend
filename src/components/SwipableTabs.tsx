@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ComponentPropsWithoutRef, HTMLAttributes} from 'react';
+import { ComponentPropsWithoutRef, HTMLAttributes } from 'react';
 import {
   AppBar,
   createStyles,
@@ -18,16 +18,20 @@ interface TabPanelProps extends HTMLAttributes<any> {
 }
 
 function TabPanel(props: TabPanelProps) {
-  const {children, value, index, ...other} = props;
+  const {
+    children, value, index, ...other
+  } = props;
 
   return (
-      <div role="tabpanel"
-           hidden={value !== index}
-           id={`full-width-tabpanel-${index}`}
-           aria-labelledby={`full-width-tab-${index}`}
-           {...other}>
-        {value === index ? children : ''}
-      </div>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index ? children : ''}
+    </div>
   );
 }
 
@@ -39,14 +43,14 @@ function a11yProps(index: number) {
 }
 
 type Props = {
-  panels: { [key: string]: JSX.Element },
-  panelWrapper?: JSX.Element,
+  panels: { [key: string]: JSX.Element };
+  panelWrapper?: JSX.Element;
   classes?: {
-    appBar?: string,
-    tab?: string,
-    tabPanel?: string,
-  },
-}
+    appBar?: string;
+    tab?: string;
+    tabPanel?: string;
+  };
+};
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   appBar: {
@@ -61,8 +65,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 export function SwipeableTabs(props: Props) {
-  const {panels} = props;
-  const classes = {...useStyles(), ...props.classes};
+  const { panels } = props;
+  const classes = { ...useStyles(), ...props.classes };
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -75,30 +79,42 @@ export function SwipeableTabs(props: Props) {
   };
 
   return (
-      <div>
-        <AppBar position="static" color="default" className={classes.appBar}>
-          <Tabs value={value}
-                onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="fullWidth">
-            {Object.keys(panels).map((label, index) => (
-                <Tab className={classes.tab}
-                     key={index}
-                     label={label} {...a11yProps(index)} />
-            ))}
-          </Tabs>
-        </AppBar>
-        <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                        index={value}
-                        onChangeIndex={handleChangeIndex}>
-          {Object.entries(panels).map((panel, index) => (
-              <TabPanel className={classes.tabPanel} value={value} index={index}
-                        dir={theme.direction}>
-                {panel[1]}
-              </TabPanel>
+    <div>
+      <AppBar position="static" color="default" className={classes.appBar}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+        >
+          {Object.keys(panels).map((label, index) => (
+            <Tab
+              className={classes.tab}
+              key={index}
+              label={label}
+              {...a11yProps(index)}
+            />
           ))}
-        </SwipeableViews>
-      </div>
+        </Tabs>
+      </AppBar>
+      <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={value}
+        onChangeIndex={handleChangeIndex}
+      >
+        {Object.entries(panels).map((panel, index) => (
+          <TabPanel
+            key={index}
+            className={classes.tabPanel}
+            value={value}
+            index={index}
+            dir={theme.direction}
+          >
+            {panel[1]}
+          </TabPanel>
+        ))}
+      </SwipeableViews>
+    </div>
   );
 }

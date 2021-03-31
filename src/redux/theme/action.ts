@@ -1,4 +1,4 @@
-import {PaletteOptions} from '@material-ui/core/styles/createPalette';
+import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
 export type ThemeModeType = 'dark' | 'light';
 
@@ -24,14 +24,10 @@ interface SetLightPaletteAction {
 export type ThemeActionTypes =
     SetThemeTypeAction
     | SetDarkPaletteAction
-    | SetLightPaletteAction
+    | SetLightPaletteAction;
 
-export const setThemeType = (theme_type: ThemeModeType): SetThemeTypeAction => {
-  return {type: SET_TYPE, theme_type: theme_type};
-};
-export const setDarkPalette = (options: PaletteOptions): SetDarkPaletteAction => {
-  return {type: SET_DARK_PALETTE, options: options};
-};
-export const setLightPalette = (options: PaletteOptions): SetLightPaletteAction => {
-  return {type: SET_LIGHT_PALETTE, options: options};
-};
+export const setThemeType = (theme_type: ThemeModeType): SetThemeTypeAction => ({ type: SET_TYPE, theme_type });
+export const setDarkPalette = (options: PaletteOptions): SetDarkPaletteAction => ({ type: SET_DARK_PALETTE, options });
+export const setLightPalette = (options: PaletteOptions): SetLightPaletteAction => (
+  { type: SET_LIGHT_PALETTE, options }
+);

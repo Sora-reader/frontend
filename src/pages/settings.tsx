@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import { useState } from 'react';
 import {
   createStyles,
   Divider,
@@ -9,7 +9,7 @@ import {
   Theme,
   useMediaQuery,
 } from '@material-ui/core';
-import {ChangeTheme} from '../components/views/settings/changeTheme';
+import { ChangeTheme } from '../components/views/settings/changeTheme';
 
 const mediaPx = 500;
 
@@ -50,10 +50,10 @@ export default function Settings() {
   let component: JSX.Element;
   switch (menuItem) {
     case 'theme':
-      component = <ChangeTheme/>;
+      component = <ChangeTheme />;
       break;
     default:
-      component = <ChangeTheme/>;
+      component = <ChangeTheme />;
       break;
   }
 
@@ -65,22 +65,26 @@ export default function Settings() {
   };
 
   return (
-      <div className={classes.root}>
-        <div className={classes.sidebar}>
-          <List>
-            <MenuItem data-item="theme" onClick={handleClick}
-                      selected={menuItem === 'theme'}>
-              Тема
-            </MenuItem>
-          </List>
-        </div>
-        <Divider className={classes.divider}
-                 orientation={bp ? 'horizontal' : 'vertical'}
-                 flexItem={!bp}
-        />
-        <div className={classes.content}>
-          {component}
-        </div>
+    <div className={classes.root}>
+      <div className={classes.sidebar}>
+        <List>
+          <MenuItem
+            data-item="theme"
+            onClick={handleClick}
+            selected={menuItem === 'theme'}
+          >
+            Тема
+          </MenuItem>
+        </List>
       </div>
+      <Divider
+        className={classes.divider}
+        orientation={bp ? 'horizontal' : 'vertical'}
+        flexItem={!bp}
+      />
+      <div className={classes.content}>
+        {component}
+      </div>
+    </div>
   );
 }

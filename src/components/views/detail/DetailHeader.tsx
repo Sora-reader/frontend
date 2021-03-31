@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {createStyles, makeStyles, Theme} from '@material-ui/core';
-import {MangaType} from '../../../catalogs/baseCatalog';
-import {CustomAvatar} from '../../muiCustoms/CustomAvatar';
-import {CustomRating} from '../../muiCustoms/CustomRating';
-import {CustomChip} from '../../muiCustoms/CustomChip';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { MangaType } from '../../../catalogs/baseCatalog';
+import { CustomAvatar } from '../../muiCustoms/CustomAvatar';
+import { CustomRating } from '../../muiCustoms/CustomRating';
+import { CustomChip } from '../../muiCustoms/CustomChip';
 
 const useStyles = makeStyles((theme: Theme) => createStyles(({
   root: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles(({
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(2),
-    }
+    },
   },
   avatar: {
     [theme.breakpoints.down('sm')]: {
@@ -77,22 +77,26 @@ export function DetailHeader(props: Props) {
   const classes = useStyles();
 
   return (
-      <div className={classes.root}>
-        <CustomAvatar src={props.imageUrl} variant={'rounded'}
-                      className={classes.avatar}/>
-        <div className={classes.details}>
-          <h1 className={classes.title}>{props.title}</h1>
-          <p className={classes.author}>{props.author}</p>
-          <ul className={classes.genres}>
-            {props.genres?.map((genre) => {
-              return <CustomChip component={'li'} label={genre} key={genre}/>;
-            })}
-          </ul>
-          <div className={classes.ratingContainer}>
-            <CustomRating value={props.starRate}/>
-            <p>{props.starRate}/10</p>
-          </div>
+    <div className={classes.root}>
+      <CustomAvatar
+        src={props.imageUrl}
+        variant="rounded"
+        className={classes.avatar}
+      />
+      <div className={classes.details}>
+        <h1 className={classes.title}>{props.title}</h1>
+        <p className={classes.author}>{props.author}</p>
+        <ul className={classes.genres}>
+          {props.genres?.map((genre) => <CustomChip component="li" label={genre} key={genre} />)}
+        </ul>
+        <div className={classes.ratingContainer}>
+          <CustomRating value={props.starRate} />
+          <p>
+            {props.starRate}
+            /10
+          </p>
         </div>
       </div>
+    </div>
   );
 }
