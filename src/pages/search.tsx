@@ -84,7 +84,7 @@ export default function Search() {
     <h1 className={classes.header}>Введите название манги для поиска</h1>
   );
 
-  const match = router.asPath.match(new RegExp(`[&?]${queryKey}=(.*)(&|$)`));
+  const match = decodeURI(router.asPath).match(new RegExp(`[&?]${queryKey}=(.*)(&|$)`));
   const query = match ? match[1] || '' : '';
 
   useEffect(() => {
