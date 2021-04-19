@@ -1,24 +1,30 @@
-import { SIGN_IN, SIGN_OUT } from './actions';
+import axios from 'axios';
+import { REFRESH_USER, SET_USER, RESET_USER_ACTION } from './actions';
 import { UserAction } from './types';
 
 type StateType = {
-  username: string,
-  token: string,
+  username: string;
+  access: string;
 };
 const initialState: StateType = {
   username: '',
-  token: '',
+  access: '',
 };
 
 const reducer = (state = initialState, action: UserAction): StateType => {
   switch (action.type) {
-    case SIGN_IN:
+    case REFRESH_USER:
+      return {
+        ...state,
+        access: action.access ? action.access : state.access,
+      };
+    case SET_USER:
       return {
         ...state,
         username: action.username,
-        token: action.token,
+        access: action.access,
       };
-    case SIGN_OUT:
+    case RESET_USER_ACTION:
       return {
         ...state,
         ...initialState,

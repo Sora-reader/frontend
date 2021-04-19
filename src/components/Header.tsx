@@ -93,7 +93,7 @@ export function Header() {
     }
   }
 
-  const drawerFooter = user.token ? (
+  const drawerFooter = user.access ? (
     <>
       <ListItem
         button

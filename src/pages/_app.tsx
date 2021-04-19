@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Header } from '../components/Header';
 import { State, wrapper } from '../redux/store';
 import { setPalette } from '../redux/theme/actions';
+import '../utils/axiosConfig';
 
 function WrappedApp({ Component, pageProps }: AppProps) {
   const { theme, darkPalette, lightPalette } = useSelector(

@@ -11,6 +11,7 @@ module.exports = withPWA({
     skipWaiting: true,
   },
   env: {
+    API_URL: process.env.API_URL,
     CORS_Proxy: process.env.CORS_Proxy,
   },
 });

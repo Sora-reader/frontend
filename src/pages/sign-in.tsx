@@ -51,7 +51,7 @@ export default function SignIn() {
   const router = useRouter();
   const currentUser = useSelector((state: State) => state.user);
 
-  if (currentUser.token) {
+  if (currentUser.access) {
     router.push('/').then(null);
   }
 
@@ -65,8 +65,7 @@ export default function SignIn() {
     const data = new FormData(e.currentTarget);
     setLoading(true);
     setTimeout(() => setLoading(false), 1000);
-    console.log(e.currentTarget);
-    console.log(data);
+
     const username = String(data.get('username'));
     const password = String(data.get('password'));
 
