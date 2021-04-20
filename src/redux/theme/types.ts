@@ -12,4 +12,4 @@ export interface SetPaletteAction {
   options: PaletteOptions;
 }
 
-export type ThemeActionTypes = SetThemeTypeAction | SetPaletteAction;
+export type ThemeAction = SetThemeTypeAction | SetPaletteAction;

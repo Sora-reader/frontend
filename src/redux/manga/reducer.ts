@@ -1,18 +1,16 @@
 import { MangaType } from '../../catalogs/baseCatalog';
-import { MangaActionTypes, SET_MANGA } from './action';
+import { SET_MANGA } from './actions';
+import { MangaAction } from './types';
 
 type StateType = {
-  manga: MangaType
+  manga: MangaType;
 };
 
 const initialState: StateType = {
   manga: { title: '', link: '', imageUrl: '' },
 };
 
-export default function reducer(
-  state = initialState,
-  action: MangaActionTypes,
-): StateType {
+export default function reducer(state = initialState, action: MangaAction): StateType {
   switch (action.type) {
     case SET_MANGA:
       return {

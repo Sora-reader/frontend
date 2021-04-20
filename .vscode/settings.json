@@ -8,7 +8,7 @@
         120
     ],
     "[typescriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
     },
     "[typescript]": {
         "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
