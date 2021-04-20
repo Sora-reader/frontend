@@ -1,9 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { Dispatch } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { RefreshUserAction, SignInAction, ResetUserAction, SignUpAction, UserAction } from './types';
+import { RefreshUserAction, SignInAction, ResetUserAction, SignUpAction } from './types';
 import cookie from 'cookie';
-import { State } from '../store';
 import { TDispatch } from '../types';
 
 export const SIGN_UP = 'SIGN_UP';

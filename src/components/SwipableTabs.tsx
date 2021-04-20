@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ComponentPropsWithoutRef, HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 import {
   AppBar,
   createStyles,

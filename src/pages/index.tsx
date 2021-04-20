@@ -1,7 +1,4 @@
-import React, { createStyles, makeStyles, Accordion } from '@material-ui/core';
-import { useState } from 'react';
-import { useSelector, useStore } from 'react-redux';
-import { State } from '../redux/store';
+import React, { createStyles, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -18,7 +15,6 @@ const useStyles = makeStyles((theme) =>
 
 export default function IndexView() {
   const classes = useStyles();
-  const store = useSelector((state: State)=> state.user.access);
   return (
     <div className={classes.root}>
       <h1 className={classes.header}>Главная страница</h1>

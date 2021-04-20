@@ -1,11 +1,10 @@
-import { AnyAction, applyMiddleware, combineReducers, createStore, Middleware, Reducer, Action } from 'redux';
+import { AnyAction, applyMiddleware, combineReducers, createStore, Middleware, Reducer } from 'redux';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
 import search from './search/reducer';
 import user from './user/reducer';
-import { ThunkDispatch } from 'redux-thunk';
 
 const bindMiddleware = (middleware: Middleware[]) => {
   if (process.env.NODE_ENV !== 'production') {

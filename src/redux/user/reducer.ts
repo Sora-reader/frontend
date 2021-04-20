@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { REFRESH_USER, SET_USER, RESET_USER_ACTION } from './actions';
 import { UserAction } from './types';
 

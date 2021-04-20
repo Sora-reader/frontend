@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { State } from '../redux/store';
-import { RefreshUser, REFRESH_USER } from '../redux/user/actions';
+import { RefreshUser } from '../redux/user/actions';
 import { RefreshUserAction } from '../redux/user/types';
 
 axios.defaults.baseURL = process.env.API_URL;
