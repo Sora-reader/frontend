@@ -1,12 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import {
-  Box,
-  createStyles,
-  Divider,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { Box, createStyles, Divider, makeStyles } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { MangaType } from '../catalogs/baseCatalog';
@@ -15,9 +9,11 @@ import { DetailDescription } from '../components/views/detail/DetailDescription'
 import { State } from '../redux/store';
 import { SwipeableTabs } from '../components/SwipableTabs';
 
-const useStyles = makeStyles((theme: Theme) => createStyles(({
-  root: {},
-})));
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {},
+  })
+);
 
 export default function Detail() {
   const classes = useStyles();
@@ -40,14 +36,14 @@ export default function Detail() {
     <div className={classes.root}>
       <SwipeableTabs
         panels={{
-          Описание: <Box p={2}>
-            <DetailHeader {...manga} />
-            <Divider />
-            <DetailDescription text={String(manga.description)} />
-          </Box>,
-          Главы: <Box p={2}>
-            Список глав
-                 </Box>,
+          Описание: (
+            <Box p={2}>
+              <DetailHeader {...manga} />
+              <Divider />
+              <DetailDescription text={String(manga.description)} />
+            </Box>
+          ),
+          Главы: <Box p={2}>Список глав</Box>,
         }}
       />
     </div>

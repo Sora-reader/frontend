@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import {
-  Button,
-  createStyles,
-  LinearProgress,
-  makeStyles,
-  TextField,
-  Theme,
-  Typography,
-} from '@material-ui/core';
+import { Button, createStyles, LinearProgress, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
+import { AnyAction } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { signIn } from '../redux/user/actions';
 import { State } from '../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function SignIn() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as ThunkDispatch<State, any, AnyAction>;
 
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>();
@@ -51,7 +45,7 @@ export default function SignIn() {
   const router = useRouter();
   const currentUser = useSelector((state: State) => state.user);
 
-  if (currentUser.token) {
+  if (currentUser.access) {
     router.push('/').then(null);
   }
 
@@ -65,13 +59,14 @@ export default function SignIn() {
     const data = new FormData(e.currentTarget);
     setLoading(true);
     setTimeout(() => setLoading(false), 1000);
-    console.log(e.currentTarget);
-    console.log(data);
+
     const username = String(data.get('username'));
     const password = String(data.get('password'));
 
     // Success
-    dispatch(signIn(username, password));
+    dispatch(signIn(username, password)).then(() => {
+      console.log;
+    });
   };
 
   return (
@@ -79,27 +74,11 @@ export default function SignIn() {
       {progress}
       <div className={classes.formWrapper}>
         <form onSubmit={handleSubmit} className={classes.form}>
-          <Typography
-            className={classes.formHeader}
-            align="center"
-            component="h3"
-            variant="h3"
-          >
+          <Typography className={classes.formHeader} align="center" component="h3" variant="h3">
             Вход
           </Typography>
-          <TextField
-            label="Имя пользователя"
-            name="username"
-            type="username"
-            variant="standard"
-            inputRef={inputRef}
-          />
-          <TextField
-            name="password"
-            type="password"
-            label="Пароль"
-            variant="standard"
-          />
+          <TextField label="Имя пользователя" name="username" type="username" variant="standard" inputRef={inputRef} />
+          <TextField name="password" type="password" label="Пароль" variant="standard" />
           <Button type="submit" className={classes.formSubmit}>
             Войти
           </Button>

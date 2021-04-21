@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {
-  FormEvent, useEffect, useRef, useState,
-} from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
   AppBar,
   createStyles,
@@ -25,44 +23,44 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector } from 'react-redux';
 import { NextLink } from './muiCustoms/CustomLink';
 import { State } from '../redux/store';
-import { setSearchInputRef, SET_SEARCH_INPUT_REF } from '../redux/search/actions';
+import { setSearchInputRef } from '../redux/search/actions';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  navbar: {
-    backgroundColor: theme.palette.type === 'dark'
-      ? theme.palette.grey['800']
-      : theme.palette.primary.main,
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(0.5, 1),
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    navbar: {
+      backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey['800'] : theme.palette.primary.main,
+      [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(0.5, 1),
+      },
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(1, 1),
+      },
     },
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(1, 1),
+    toolbar: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
-  },
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  toolbarIcon: {},
-  search: {
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    padding: theme.spacing(1),
-    '& input': {
-      padding: theme.spacing(1, 3),
+    toolbarIcon: {},
+    search: {
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5,
+      padding: theme.spacing(1),
+      '& input': {
+        padding: theme.spacing(1, 3),
+      },
     },
-  },
-  drawerWrapper: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  list: {
-    paddingTop: theme.spacing(2),
-    width: '250px',
-  },
-}));
+    drawerWrapper: {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    },
+    list: {
+      paddingTop: theme.spacing(2),
+      width: '250px',
+    },
+  })
+);
 
 export function Header() {
   const classes = useStyles();
@@ -86,14 +84,16 @@ export function Header() {
     nameInputCurrent = nameInput.current;
     if (nameInputCurrent) {
       const name = encodeURI(nameInputCurrent.value);
-      router.push({
-        pathname: '/search',
-        search: `?name=${name}`,
-      }).then();
+      router
+        .push({
+          pathname: '/search',
+          search: `?name=${name}`,
+        })
+        .then();
     }
   }
 
-  const drawerFooter = user.token ? (
+  const drawerFooter = user.access ? (
     <>
       <ListItem
         button
@@ -103,10 +103,10 @@ export function Header() {
         underline="none"
         onClick={toggleDrawer(false)}
       >
-        <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-        <ListItemText>
-          {user.username}
-        </ListItemText>
+        <ListItemIcon>
+          <AccountBoxIcon />
+        </ListItemIcon>
+        <ListItemText>{user.username}</ListItemText>
       </ListItem>
       <ListItem
         button
@@ -116,10 +116,10 @@ export function Header() {
         underline="none"
         onClick={toggleDrawer(false)}
       >
-        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-        <ListItemText>
-          Выйти
-        </ListItemText>
+        <ListItemIcon>
+          <ExitToAppIcon />
+        </ListItemIcon>
+        <ListItemText>Выйти</ListItemText>
       </ListItem>
     </>
   ) : (
@@ -131,20 +131,16 @@ export function Header() {
       underline="none"
       onClick={toggleDrawer(false)}
     >
-      <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-      <ListItemText>
-        Вход
-      </ListItemText>
+      <ListItemIcon>
+        <AccountBoxIcon />
+      </ListItemIcon>
+      <ListItemText>Вход</ListItemText>
     </ListItem>
   );
 
   return (
     <>
-      <SwipeableDrawer
-        onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
-        open={drawer}
-      >
+      <SwipeableDrawer onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)} open={drawer}>
         <div className={classes.drawerWrapper}>
           <List className={classes.list}>
             <ListItem
@@ -155,10 +151,10 @@ export function Header() {
               underline="none"
               onClick={toggleDrawer(false)}
             >
-              <ListItemIcon><HomeIcon /></ListItemIcon>
-              <ListItemText>
-                Домой
-              </ListItemText>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText>Домой</ListItemText>
             </ListItem>
             <ListItem
               button
@@ -168,33 +164,22 @@ export function Header() {
               underline="none"
               onClick={toggleDrawer(false)}
             >
-              <ListItemIcon><SettingsIcon /></ListItemIcon>
-              <ListItemText>
-                Настройки
-              </ListItemText>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText>Настройки</ListItemText>
             </ListItem>
           </List>
-          <List className={classes.list}>
-            {drawerFooter}
-          </List>
+          <List className={classes.list}>{drawerFooter}</List>
         </div>
       </SwipeableDrawer>
       <AppBar className={classes.navbar} position="sticky">
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            onClick={toggleDrawer(true)}
-            className={classes.toolbarIcon}
-          >
+          <IconButton onClick={toggleDrawer(true)} className={classes.toolbarIcon}>
             <MenuIcon />
           </IconButton>
           <form onSubmit={submitSearch} autoComplete="off">
-            <Input
-              name="name"
-              id="search-input"
-              inputRef={nameInput}
-              className={classes.search}
-              placeholder="Поиск"
-            />
+            <Input name="name" id="search-input" inputRef={nameInput} className={classes.search} placeholder="Поиск" />
           </form>
         </Toolbar>
       </AppBar>

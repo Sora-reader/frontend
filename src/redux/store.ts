@@ -1,11 +1,4 @@
-import {
-  AnyAction,
-  applyMiddleware,
-  combineReducers,
-  createStore,
-  Middleware,
-  Reducer,
-} from 'redux';
+import { AnyAction, applyMiddleware, combineReducers, createStore, Middleware, Reducer } from 'redux';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
@@ -36,7 +29,7 @@ const reducer: Reducer = (state: State, action: AnyAction) => {
       ...state, // use previous state
       ...action.payload, // apply delta from hydration
     };
-    if (state.manga.manga) nextState.manga.manga = state.manga.manga; // preserve manga value on client side navigation
+    if (state.manga.manga) nextState.manga.manga = state.manga.manga; // TODO: remove?
     return nextState;
   }
   return combinedReducer(state, action);

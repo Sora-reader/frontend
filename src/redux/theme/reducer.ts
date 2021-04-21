@@ -2,7 +2,7 @@ import { createMuiTheme, Theme } from '@material-ui/core';
 import { green, teal } from '@material-ui/core/colors';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 import { SET_PALETTE, SET_TYPE } from './actions';
-import { ThemeActionTypes } from './types';
+import { ThemeAction } from './types';
 
 type StateType = {
   theme: Theme;
@@ -38,10 +38,7 @@ const initialState: StateType = {
   lightPalette: defaultLight,
 };
 
-export default function reducer(
-  state: StateType = initialState,
-  action: ThemeActionTypes
-) {
+export default function reducer(state: StateType = initialState, action: ThemeAction) {
   let newState = { ...state };
 
   switch (action.type) {
@@ -61,10 +58,7 @@ export default function reducer(
             ...action.options,
           };
           if (newState.theme.palette.type === 'light') {
-            console.log(
-              'Reloading light theme with new palette',
-              newState.lightPalette
-            );
+            console.log('Reloading light theme with new palette', newState.lightPalette);
             newState.theme = createMuiTheme({ palette: newState.lightPalette });
           }
           break;
@@ -74,10 +68,7 @@ export default function reducer(
             ...action.options,
           };
           if (newState.theme.palette.type === 'dark') {
-            console.log(
-              'Reloading dark theme with new palette',
-              newState.darkPalette
-            );
+            console.log('Reloading dark theme with new palette', newState.darkPalette);
             newState.theme = createMuiTheme({ palette: newState.darkPalette });
           }
           break;

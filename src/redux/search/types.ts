@@ -1,4 +1,4 @@
-import { MutableRefObject, Ref } from 'react';
+import { MutableRefObject } from 'react';
 import { SearchResultsType } from '../../catalogs/baseCatalog';
 import { SEARCH_MANGA, SET_SEARCH_INPUT_REF } from './actions';
 

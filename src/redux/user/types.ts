@@ -1,18 +1,18 @@
-import { SIGN_IN, SIGN_IN_ERROR, SIGN_OUT, SIGN_UP } from './actions';
+import { REFRESH_USER, SET_USER, RESET_USER_ACTION, SIGN_UP } from './actions';
+
+export interface RefreshUserAction {
+  type: typeof REFRESH_USER | typeof RESET_USER_ACTION;
+  access?: string;
+}
 
 export interface SignInAction {
-  type: typeof SIGN_IN;
+  type: typeof SET_USER | typeof RESET_USER_ACTION;
   username: string;
-  token: string;
+  access: string;
 }
 
-export interface SignInErrorAction {
-  type: typeof SIGN_IN_ERROR;
-  error: string;
-}
-
-export interface SignOutAction {
-  type: typeof SIGN_OUT;
+export interface ResetUserAction {
+  type: typeof RESET_USER_ACTION;
 }
 
 export interface SignUpAction {
@@ -21,8 +21,4 @@ export interface SignUpAction {
   password: string;
 }
 
-export type UserAction =
-  | SignInAction
-  | SignInErrorAction
-  | SignOutAction
-  | SignUpAction;
+export type UserAction = RefreshUserAction | SignInAction | ResetUserAction | SignUpAction;
