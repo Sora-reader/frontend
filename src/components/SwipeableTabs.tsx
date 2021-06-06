@@ -43,7 +43,7 @@ function a11yProps(index: number) {
 }
 
 type Props = {
-  panels: { [key: string]: JSX.Element };
+  panels: Array<[String, JSX.Element]>;
   panelWrapper?: JSX.Element;
   classes?: {
     appBar?: string;
@@ -88,7 +88,7 @@ export function SwipeableTabs(props: Props) {
           textColor="primary"
           variant="fullWidth"
         >
-          {Object.keys(panels).map((label, index) => (
+          {panels.map(([label], index) => (
             <Tab
               className={classes.tab}
               key={index}
@@ -103,7 +103,7 @@ export function SwipeableTabs(props: Props) {
         index={value}
         onChangeIndex={handleChangeIndex}
       >
-        {Object.entries(panels).map((panel, index) => (
+        {panels.map(([_, jsx], index) => (
           <TabPanel
             key={index}
             className={classes.tabPanel}
@@ -111,7 +111,7 @@ export function SwipeableTabs(props: Props) {
             index={index}
             dir={theme.direction}
           >
-            {panel[1]}
+            {jsx}
           </TabPanel>
         ))}
       </SwipeableViews>
