@@ -26,7 +26,7 @@
     "cookie": "^0.4.1",
     "dotenv": "^8.2.0",
     "material-ui-color": "^0.4.10",
-    "next": "^10.0.5",
+    "next": "^10.2.3",
     "next-google-fonts": "^1.2.1",
     "next-pwa": "^5.0.5",
     "next-redux-wrapper": "^6.0.2",
