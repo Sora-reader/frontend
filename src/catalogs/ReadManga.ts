@@ -55,7 +55,7 @@ const searchParser = (html: string): SearchResultsType => {
       return output;
     };
 
-    const descriptionParent = descClass.find('.long-description-holder')[0];
+    const descriptionParent = descClass.find('.long-description')[0];
     let description: cheerio.Element[] = [];
     if ('children' in descriptionParent) {
       description = descriptionParent
