@@ -21,7 +21,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector } from 'react-redux';
-import { NextLink } from './muiCustoms/CustomLink';
+import { NextLink } from './NextLink';
 import { State } from '../redux/store';
 import { setSearchInputRef } from '../redux/search/actions';
 

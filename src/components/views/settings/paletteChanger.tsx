@@ -3,10 +3,8 @@ import { useEffect, useState } from 'react';
 import { Color, ColorPicker } from 'material-ui-color';
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import createPalette, {
-  PaletteOptions,
-} from '@material-ui/core/styles/createPalette';
-import { CustomChip } from '../../muiCustoms/CustomChip';
+import createPalette, { PaletteOptions } from '@material-ui/core/styles/createPalette';
+import { GenreChip } from '../../GenreChip';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,9 +52,7 @@ export function PaletteChanger(props: Props) {
     secondary: 'main',
   } as PickerType);
 
-  const updatePalette = (key: 'primary' | 'secondary', value: ToneType) => (
-    color: Color | string
-  ) => {
+  const updatePalette = (key: 'primary' | 'secondary', value: ToneType) => (color: Color | string) => {
     setPalette((prevState) => {
       const newState = { ...prevState };
       if (key && value) {
@@ -67,10 +63,7 @@ export function PaletteChanger(props: Props) {
     });
   };
 
-  const updatePicker = (
-    key: 'primary' | 'secondary',
-    value: ToneType
-  ) => () => {
+  const updatePicker = (key: 'primary' | 'secondary', value: ToneType) => () => {
     setPicker((prevState: PickerType) => {
       const newState = { ...prevState };
       if (key && value) newState[key] = value;
@@ -100,7 +93,7 @@ export function PaletteChanger(props: Props) {
     <div className={classes.root}>
       <p>Главный цвет, оттенки</p>
       <div className={classes.chipContainer}>
-        <CustomChip
+        <GenreChip
           onClick={updatePicker('primary', 'main')}
           style={{
             backgroundColor: palette.primary.main,
@@ -108,7 +101,7 @@ export function PaletteChanger(props: Props) {
           }}
           label="основной"
         />
-        <CustomChip
+        <GenreChip
           onClick={updatePicker('primary', 'light')}
           style={{
             backgroundColor: palette.primary.light,
@@ -116,7 +109,7 @@ export function PaletteChanger(props: Props) {
           }}
           label="светлый"
         />
-        <CustomChip
+        <GenreChip
           onClick={updatePicker('primary', 'dark')}
           style={{
             backgroundColor: palette.primary.dark,
@@ -125,10 +118,7 @@ export function PaletteChanger(props: Props) {
           label="тёмный"
         />
       </div>
-      <ColorPicker
-        onChange={updatePalette('primary', picker.primary)}
-        value={palette.primary[picker.primary]}
-      />
+      <ColorPicker onChange={updatePalette('primary', picker.primary)} value={palette.primary[picker.primary]} />
       <div className={classes.buttons}>
         <Button onClick={reset}>Сбросить</Button>
         <Button onClick={submit}>Сохранить</Button>

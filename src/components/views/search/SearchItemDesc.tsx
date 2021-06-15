@@ -1,45 +1,42 @@
 import * as React from 'react';
-import {
-  createStyles,
-  ListItemText,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { createStyles, ListItemText, makeStyles, Theme } from '@material-ui/core';
 import { MangaType } from '../../../catalogs/baseCatalog';
-import { CustomChip } from '../../muiCustoms/CustomChip';
-import { CustomRating } from '../../muiCustoms/CustomRating';
+import { GenreChip } from '../../GenreChip';
+import { MangaRating } from '../../MangaRating';
 
-const useStyles = makeStyles((theme: Theme) => createStyles(({
-  root: {
-    width: '100%',
-    padding: theme.spacing(1),
-  },
-  header: {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    justifyContent: 'space-between',
-  },
-  footer: {},
-  title: {
-    marginTop: 0,
-    '& span': {
-      fontSize: 'xx-large',
-      lineHeight: '2rem',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100%',
+      padding: theme.spacing(1),
     },
-  },
-  author: {
-    marginBottom: theme.spacing(2),
-    color: theme.palette.text.secondary,
-  },
-  genres: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap',
-    listStyle: 'none',
-    padding: theme.spacing(0.5),
-    margin: 0,
-  },
-})));
+    header: {
+      display: 'flex',
+      flexFlow: 'row wrap',
+      justifyContent: 'space-between',
+    },
+    footer: {},
+    title: {
+      marginTop: 0,
+      '& span': {
+        fontSize: 'xx-large',
+        lineHeight: '2rem',
+      },
+    },
+    author: {
+      marginBottom: theme.spacing(2),
+      color: theme.palette.text.secondary,
+    },
+    genres: {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      flexWrap: 'wrap',
+      listStyle: 'none',
+      padding: theme.spacing(0.5),
+      margin: 0,
+    },
+  })
+);
 
 type Props = MangaType;
 
@@ -49,18 +46,16 @@ export function SearchItemDesc(props: Props) {
   return (
     <div className={classes.root}>
       <div className={classes.header}>
-        <ListItemText className={classes.title}>
-          {props.title}
-        </ListItemText>
-        <CustomRating value={props.starRate} />
+        <ListItemText className={classes.title}>{props.title}</ListItemText>
+        <MangaRating value={props.starRate} />
       </div>
 
       <div className={classes.footer}>
-        <ListItemText className={classes.author}>
-          {props.author}
-        </ListItemText>
+        <ListItemText className={classes.author}>{props.author}</ListItemText>
         <ul className={classes.genres}>
-          {props.genres?.map((genre) => <CustomChip component="li" label={genre} key={genre} />)}
+          {props.genres?.map((genre) => (
+            <GenreChip component="li" label={genre} key={genre} />
+          ))}
         </ul>
       </div>
     </div>

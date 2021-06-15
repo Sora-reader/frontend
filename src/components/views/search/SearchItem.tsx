@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { MangaType } from '../../../catalogs/baseCatalog';
 import { SearchItemDesc } from './SearchItemDesc';
-import { CustomAvatar } from '../../muiCustoms/CustomAvatar';
+import { MangaImage } from '../../MangaImage';
 import { setManga } from '../../../redux/manga/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,7 +43,7 @@ export function SearchItem(props: Props) {
   return (
     <ListItem button onClick={passManga} key={data.link} alignItems="flex-start" className={classes.root}>
       <ListItemAvatar className={classes.avatarWrapper}>
-        <CustomAvatar src={data.imageUrl} className={classes.avatar} />
+        <MangaImage src={data.imageUrl} className={classes.avatar} />
       </ListItemAvatar>
       <SearchItemDesc {...data} />
     </ListItem>
