@@ -1,41 +1,19 @@
 import { createMuiTheme, Theme } from '@material-ui/core';
-import { green, teal } from '@material-ui/core/colors';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 import { SET_PALETTE, SET_TYPE } from './actions';
 import { ThemeAction } from './types';
-
-type StateType = {
-  theme: Theme;
-  darkPalette: PaletteOptions;
-  lightPalette: PaletteOptions;
-};
-
-export const defaultDark: PaletteOptions = {
-  type: 'dark',
-  primary: {
-    main: teal['300'],
-    light: teal.A100,
-    dark: teal.A700,
-  },
-};
-
-export const defaultLight: PaletteOptions = {
-  type: 'light',
-  primary: {
-    main: green.A200,
-    light: green.A100,
-    dark: green.A700,
-  },
-};
-
-const defaultTheme = createMuiTheme({
-  palette: defaultDark,
-});
+import { defaultDark, defaultLight, defaultTheme } from './defaults';
 
 const initialState: StateType = {
   theme: defaultTheme,
   darkPalette: defaultDark,
   lightPalette: defaultLight,
+};
+
+type StateType = {
+  theme: Theme;
+  darkPalette: PaletteOptions;
+  lightPalette: PaletteOptions;
 };
 
 export default function reducer(state: StateType = initialState, action: ThemeAction) {

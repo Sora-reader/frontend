@@ -24,17 +24,22 @@ const combinedReducer = combineReducers({
 export type State = ReturnType<typeof combinedReducer>;
 
 const reducer: Reducer = (state: State, action: AnyAction) => {
-  if (action.type === HYDRATE) {
-    const nextState = {
-      ...state, // use previous state
-      ...action.payload, // apply delta from hydration
-    };
-    if (state.manga.manga) nextState.manga.manga = state.manga.manga; // TODO: remove?
-    return nextState;
+  switch (action.type) {
+    case HYDRATE: {
+      // Hydrate action payload contains server state
+      // So we merge the previous state with the server one
+      return {
+        ...state, // use previous state
+        ...action.payload, // apply delta from hydration
+      };
+      // We are also able to persist some client state as described here
+      // https://github.com/vercel/next.js/blob/canary/examples/with-redux-wrapper/README.md
+    }
+    default:
+      return combinedReducer(state, action);
   }
-  return combinedReducer(state, action);
 };
 
-export const initStore = () => createStore(reducer, bindMiddleware([thunkMiddleware]));
+const createStoreWrapped = () => createStore(reducer, bindMiddleware([thunkMiddleware]));
 
-export const wrapper = createWrapper(initStore);
+export const wrapper = createWrapper(createStoreWrapped);
