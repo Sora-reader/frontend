@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPalette, setThemeType } from '../../../redux/theme/actions';
 import { State } from '../../../redux/store';
 import { PaletteChanger } from './paletteChanger';
-import { defaultDark, defaultLight } from '../../../redux/theme/reducer';
+import { defaultDark, defaultLight } from '../../../redux/theme/defaults';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,6 +44,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+// TODO: reset does not reset input colors
+
 export function ChangeTheme() {
   const theme = useTheme();
   const themeState = useSelector((state: State) => state.theme);
@@ -65,21 +67,13 @@ export function ChangeTheme() {
         <RadioGroup name="theme" value={theme.palette.type}>
           <FormControlLabel
             value="dark"
-            control={
-              <Radio
-                classes={{ root: classes.radio, checked: classes.checked }}
-              />
-            }
+            control={<Radio classes={{ root: classes.radio, checked: classes.checked }} />}
             checked={theme.palette.type === 'dark'}
             onChange={() => dispatch(setThemeType('dark'))}
             label="Темная"
           />
           <FormControlLabel
-            control={
-              <Radio
-                classes={{ root: classes.radio, checked: classes.checked }}
-              />
-            }
+            control={<Radio classes={{ root: classes.radio, checked: classes.checked }} />}
             checked={theme.palette.type === 'light'}
             onChange={() => dispatch(setThemeType('light'))}
             label="Светлая"
@@ -93,9 +87,7 @@ export function ChangeTheme() {
         <PaletteChanger
           statePalette={themeState.darkPalette}
           defaultPalette={defaultDark}
-          setStatePalette={(options: PaletteOptions) =>
-            setPalette(options, 'dark')
-          }
+          setStatePalette={(options: PaletteOptions) => setPalette(options, 'dark')}
         />
         <Divider style={{ width: '50%' }} />
       </div>
@@ -104,9 +96,7 @@ export function ChangeTheme() {
         <PaletteChanger
           statePalette={themeState.lightPalette}
           defaultPalette={defaultLight}
-          setStatePalette={(options: PaletteOptions) =>
-            setPalette(options, 'light')
-          }
+          setStatePalette={(options: PaletteOptions) => setPalette(options, 'light')}
         />
         <Divider style={{ width: '50%' }} />
       </div>

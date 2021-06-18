@@ -54,6 +54,7 @@ export function SearchItemDesc(props: Props) {
         <ListItemText className={classes.author}>{props.author}</ListItemText>
         <ul className={classes.genres}>
           {props.genres?.map((genre) => (
+            // @ts-ignore
             <GenreChip component="li" label={genre} key={genre} />
           ))}
         </ul>

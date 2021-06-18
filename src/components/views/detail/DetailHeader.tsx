@@ -86,6 +86,7 @@ export function DetailHeader(props: Props) {
         <p className={classes.author}>{props.author}</p>
         <ul className={classes.genres}>
           {props.genres?.map((genre) => (
+            // @ts-ignore
             <GenreChip component="li" label={genre} key={genre} />
           ))}
         </ul>

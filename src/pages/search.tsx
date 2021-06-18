@@ -1,59 +1,43 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import {
-  createStyles,
-  LinearProgress,
-  List,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { createStyles, LinearProgress, List, makeStyles, Theme } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchItem } from '../components/views/search/SearchItem';
 import { State } from '../redux/store';
 import { searchManga } from '../redux/search/actions';
-import { SearchResultsType } from '../catalogs/baseCatalog';
+import { SearchResults } from '../catalogs/baseCatalog';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    paddingTop: theme.spacing(1),
-  },
-  header: {
-    padding: theme.spacing(0, 1),
-    textAlign: 'center',
-  },
-  progressRoot: {
-    paddingTop: 0,
-  },
-  progress: {},
-  list: {
-    padding: theme.spacing(3, 1),
-  },
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      paddingTop: theme.spacing(1),
+    },
+    header: {
+      padding: theme.spacing(0, 1),
+      textAlign: 'center',
+    },
+    progressRoot: {
+      paddingTop: 0,
+    },
+    progress: {},
+    list: {
+      padding: theme.spacing(3, 1),
+    },
+  })
+);
 
-const getResultList = (
-  searchResults: SearchResultsType,
-  classes: ReturnType<typeof useStyles>,
-  query: String,
-) => {
+const getResultList = (searchResults: SearchResults, classes: ReturnType<typeof useStyles>, query: String) => {
   console.log('Search results', searchResults);
   if (!searchResults.results) {
     return <h1 className={classes.header}>Результатов не найдено</h1>;
   }
   if (!~searchResults.results) {
-    return (
-      <h1 className={classes.header}>
-        Ошибка, проверьте подключение к интернету
-      </h1>
-    );
+    return <h1 className={classes.header}>Ошибка, проверьте подключение к интернету</h1>;
   }
   return (
     <div>
-      <h1 className={classes.header}>
-        Итог поиска по запросу: "
-        {query}
-        "
-      </h1>
+      <h1 className={classes.header}>Итог поиска по запросу: "{query}"</h1>
       <List className={classes.list}>
         {' '}
         {searchResults.items.map((item) => (
@@ -69,20 +53,14 @@ export default function Search() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const {
-    results: searchResults,
-    query: cachedQuery,
-    searchInputRef,
-  } = useSelector((state: State) => state.search);
+  const { results: searchResults, query: cachedQuery, searchInputRef } = useSelector((state: State) => state.search);
   const [loading, setLoading] = useState(false);
   // To determine if loading false after completing search or it's initial value
   const [didSearchStart, setDidSearchStart] = useState(false);
 
   const queryKey = 'name';
   let rootStyle = classes.root;
-  let content: JSX.Element = (
-    <h1 className={classes.header}>Введите название манги для поиска</h1>
-  );
+  let content: JSX.Element = <h1 className={classes.header}>Введите название манги для поиска</h1>;
 
   const match = decodeURI(router.asPath).match(new RegExp(`[&?]${queryKey}=(.*)(&|$)`));
   const query = match ? match[1] || '' : '';

@@ -1,18 +1,11 @@
-import { AnyAction, applyMiddleware, combineReducers, createStore, Middleware, Reducer } from 'redux';
+import { AnyAction, combineReducers, Reducer } from 'redux';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
 import search from './search/reducer';
 import user from './user/reducer';
-
-const bindMiddleware = (middleware: Middleware[]) => {
-  if (process.env.NODE_ENV !== 'production') {
-    const { composeWithDevTools } = require('redux-devtools-extension');
-    return composeWithDevTools(applyMiddleware(...middleware));
-  }
-  return applyMiddleware(...middleware);
-};
+import { configureStore } from '@reduxjs/toolkit';
 
 const combinedReducer = combineReducers({
   theme,
@@ -40,6 +33,12 @@ const reducer: Reducer = (state: State, action: AnyAction) => {
   }
 };
 
-const createStoreWrapped = () => createStore(reducer, bindMiddleware([thunkMiddleware]));
+const createStoreWrapped = () =>
+  configureStore({
+    reducer,
+    devTools: process.env.NODE_ENV !== 'production',
+    middleware: [thunkMiddleware],
+  });
 
+export type RootState = ReturnType<typeof combineReducers>;
 export const wrapper = createWrapper(createStoreWrapped);

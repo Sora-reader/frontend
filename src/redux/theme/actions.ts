@@ -1,16 +1,11 @@
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
-import { SetPaletteAction, SetThemeTypeAction, ThemeModeType } from './types';
+import { createAction } from '@reduxjs/toolkit';
+import { ThemeModeType } from './types';
 
-export const SET_TYPE = 'SET_TYPE';
+export const SET_TYPE = 'SET_THEME_TYPE';
 export const SET_PALETTE = 'SET_PALETTE';
 
-export const setThemeType = (
-  theme_type: ThemeModeType
-): SetThemeTypeAction => ({ type: SET_TYPE, theme_type });
-
-export const setPalette = (
-  options: PaletteOptions,
-  palette: 'light' | 'dark'
-): SetPaletteAction => {
-  return { type: SET_PALETTE, palette, options };
-};
+export const setThemeType = createAction<ThemeModeType>(SET_TYPE);
+export const setPalette = createAction(SET_PALETTE, (options: PaletteOptions, paletteType: ThemeModeType) => {
+  return { payload: { paletteType, options } };
+});

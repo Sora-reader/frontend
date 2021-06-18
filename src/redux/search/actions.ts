@@ -1,6 +1,6 @@
 import { MutableRefObject } from 'react';
 import { Dispatch } from 'redux';
-import { SearchResultsType } from '../../catalogs/baseCatalog';
+import { SearchResults } from '../../catalogs/baseCatalog';
 import { ReadManga } from '../../catalogs/ReadManga';
 import { TDispatch } from '../types';
 import SearchMangaAction, { SetSearchInputRefAction } from './types';
@@ -10,7 +10,7 @@ export const SET_SEARCH_INPUT_REF = 'SET_SEARCH_INPUT_REF';
 
 export const searchManga = (query: string) => {
   return async (dispatch: TDispatch<SearchMangaAction>): Promise<SearchMangaAction> => {
-    let results: SearchResultsType;
+    let results: SearchResults;
     try {
       results = await ReadManga.search.run(query);
     } catch (reason) {

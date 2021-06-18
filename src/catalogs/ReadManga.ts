@@ -1,5 +1,5 @@
 import { load } from 'cheerio';
-import { BaseCatalog, SearchResultsType } from './baseCatalog';
+import { BaseCatalog, SearchResults } from './baseCatalog';
 import { CORSProxyUrl } from '../config';
 
 const searchRequest = async (query: string) => {
@@ -20,10 +20,10 @@ const searchRequest = async (query: string) => {
   return output;
 };
 
-const searchParser = (html: string): SearchResultsType => {
+const searchParser = (html: string): SearchResults => {
   const $ = load(html);
   const tiles = $('.tiles .tile');
-  const output: SearchResultsType = {
+  const output: SearchResults = {
     results: tiles.length,
     invalidResults: 0,
     items: [],
@@ -48,18 +48,17 @@ const searchParser = (html: string): SearchResultsType => {
       Number(Number(data?.split(' ')[0]).toFixed(2));
     const cleanGenres = (data?: cheerio.Cheerio): Array<string> => {
       const output: Array<string> = [];
-      data?.each(((i, e) => {
+      data?.each((i, e) => {
         const element = $(e);
         output.push(cleanText(element.text()));
-      }));
+      });
       return output;
     };
 
     const descriptionParent = descClass.find('.long-description')[0];
     let description: cheerio.Element[] = [];
     if ('children' in descriptionParent) {
-      description = descriptionParent
-        .children.filter((node) => 'name' in node && node.name !== 'h5');
+      description = descriptionParent.children.filter((node) => 'name' in node && node.name !== 'h5');
     }
 
     output.items.push({
