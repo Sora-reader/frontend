@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import { MangaType } from '../../../catalogs/baseCatalog';
-import { MangaImage } from '../../MangaImage';
-import { MangaRating } from '../../MangaRating';
-import { GenreChip } from '../../GenreChip';
+import { MangaImage } from '../MangaImage';
+import { MangaRating } from '../MangaRating';
+import { GenreChip } from '../GenreChip';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = MangaType;
 
-export function DetailHeader(props: Props) {
+export function MangaDetailHeader(props: Props) {
   const classes = useStyles();
 
   return (

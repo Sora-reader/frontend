@@ -1,8 +1,8 @@
 import { createMuiTheme, Theme } from '@material-ui/core';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
-import { setPalette, setThemeType, SET_PALETTE, SET_TYPE } from './actions';
+import { setPalette, setThemeType } from './actions';
 import { defaultDark, defaultLight, defaultTheme } from './defaults';
-import { AnyAction, createReducer, createSlice, current, Draft } from '@reduxjs/toolkit';
+import { AnyAction } from '@reduxjs/toolkit';
 
 const initialState: StateType = {
   theme: defaultTheme,
@@ -58,13 +58,13 @@ export default function reducer(state = initialState, action: AnyAction) {
     syncThemeToLocalStorage(newState);
     return newState;
   } else if (setPalette.match(action)) {
-    const paletteName = `${action.payload.paletteType}Palette` as keyof typeof state;
+    const paletteName = `${action.payload.mode}Palette` as keyof typeof state;
     let palette = state[paletteName] as PaletteOptions;
     palette = {
       ...palette,
       ...action.payload.options,
     };
-    if (action.payload.paletteType === state.theme.palette.type) {
+    if (action.payload.mode === state.theme.palette.type) {
       console.log(`Reloading ${state.theme.palette.type} theme with new palette`, palette);
       newState.theme = createMuiTheme({ palette });
     }

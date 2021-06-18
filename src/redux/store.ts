@@ -5,18 +5,21 @@ import manga from './manga/reducer';
 import theme from './theme/reducer';
 import search from './search/reducer';
 import user from './user/reducer';
-import { configureStore } from '@reduxjs/toolkit';
+import loader from './loader/reducer';
+import { configureStore, Store } from '@reduxjs/toolkit';
 
 const combinedReducer = combineReducers({
   theme,
   manga,
   search,
   user,
+  loader,
 });
 
-export type State = ReturnType<typeof combinedReducer>;
+export type RootState = ReturnType<typeof combinedReducer>;
+export type StoreType = Store<RootState>;
 
-const reducer: Reducer = (state: State, action: AnyAction) => {
+const reducer: Reducer = (state: RootState, action: AnyAction) => {
   switch (action.type) {
     case HYDRATE: {
       // Hydrate action payload contains server state
@@ -34,11 +37,10 @@ const reducer: Reducer = (state: State, action: AnyAction) => {
 };
 
 const createStoreWrapped = () =>
-  configureStore({
+  configureStore<RootState>({
     reducer,
     devTools: process.env.NODE_ENV !== 'production',
     middleware: [thunkMiddleware],
   });
 
-export type RootState = ReturnType<typeof combineReducers>;
 export const wrapper = createWrapper(createStoreWrapped);

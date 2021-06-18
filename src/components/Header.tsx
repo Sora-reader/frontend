@@ -22,7 +22,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector } from 'react-redux';
 import { NextLink } from './NextLink';
-import { State } from '../redux/store';
+import { RootState } from '../redux/store';
 import { setSearchInputRef } from '../redux/search/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,7 +67,7 @@ export function Header() {
   const router = useRouter();
   const nameInput = useRef<HTMLInputElement>();
   const dispatch = useDispatch();
-  const user = useSelector((state: State) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   let nameInputCurrent = nameInput.current;
   const [drawer, setDrawer] = useState(false);
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { createStyles, ListItemText, makeStyles, Theme } from '@material-ui/core';
 import { MangaType } from '../../../catalogs/baseCatalog';
-import { GenreChip } from '../../GenreChip';
-import { MangaRating } from '../../MangaRating';
+import { GenreChip } from '../GenreChip';
+import { MangaRating } from '../MangaRating';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = MangaType;
 
-export function SearchItemDesc(props: Props) {
+export function MangaListItemDesc(props: Props) {
   const classes = useStyles();
 
   return (

@@ -12,10 +12,10 @@ import {
   useTheme,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPalette, setThemeType } from '../../../redux/theme/actions';
-import { State } from '../../../redux/store';
-import { PaletteChanger } from './paletteChanger';
-import { defaultDark, defaultLight } from '../../../redux/theme/defaults';
+import { setPalette, setThemeType } from '../../redux/theme/actions';
+import { RootState } from '../../redux/store';
+import { PaletteChanger } from './PaletteChanger';
+import { defaultDark, defaultLight } from '../../redux/theme/defaults';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function ChangeTheme() {
   const theme = useTheme();
-  const themeState = useSelector((state: State) => state.theme);
+  const themeState = useSelector((state: RootState) => state.theme);
   const classes = useStyles();
   const dispatch = useDispatch();
 

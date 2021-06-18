@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { createStyles, LinearProgress, List, makeStyles, Theme } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { SearchItem } from '../components/views/search/SearchItem';
-import { State } from '../redux/store';
+import { MangaListItem } from '../components/manga/list/MangaListItem';
+import { RootState } from '../redux/store';
 import { searchManga } from '../redux/search/actions';
 import { SearchResults } from '../catalogs/baseCatalog';
 
@@ -41,7 +41,7 @@ const getResultList = (searchResults: SearchResults, classes: ReturnType<typeof 
       <List className={classes.list}>
         {' '}
         {searchResults.items.map((item) => (
-          <SearchItem key={item.link} data={item} />
+          <MangaListItem key={item.link} data={item} />
         ))}
       </List>
     </div>
@@ -53,7 +53,9 @@ export default function Search() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { results: searchResults, query: cachedQuery, searchInputRef } = useSelector((state: State) => state.search);
+  const { results: searchResults, query: cachedQuery, searchInputRef } = useSelector(
+    (state: RootState) => state.search
+  );
   const [loading, setLoading] = useState(false);
   // To determine if loading false after completing search or it's initial value
   const [didSearchStart, setDidSearchStart] = useState(false);

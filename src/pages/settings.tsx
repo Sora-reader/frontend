@@ -1,46 +1,40 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {
-  createStyles,
-  Divider,
-  List,
-  makeStyles,
-  MenuItem,
-  Theme,
-  useMediaQuery,
-} from '@material-ui/core';
-import { ChangeTheme } from '../components/views/settings/changeTheme';
+import { createStyles, Divider, List, makeStyles, MenuItem, Theme, useMediaQuery } from '@material-ui/core';
+import { ChangeTheme } from '../components/settings/ChangeTheme';
 
 const mediaPx = 500;
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    [`@media (max-width:${mediaPx}px)`]: {
-      flexDirection: 'column',
-    },
-    width: '100%',
-  },
-  sidebar: {
-    width: '200px',
-    [`@media (max-width:${mediaPx}px)`]: {
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+      flexFlow: 'row nowrap',
+      [`@media (max-width:${mediaPx}px)`]: {
+        flexDirection: 'column',
+      },
       width: '100%',
-      marginBottom: theme.spacing(1),
     },
-  },
-  divider: {
-    [`@media (min-width:${mediaPx}px)`]: {
-      minHeight: '100vh',
+    sidebar: {
+      width: '200px',
+      [`@media (max-width:${mediaPx}px)`]: {
+        width: '100%',
+        marginBottom: theme.spacing(1),
+      },
     },
-  },
-  content: {
-    padding: theme.spacing(3),
-    [`@media (max-width:${mediaPx}px)`]: {
-      padding: theme.spacing(1),
+    divider: {
+      [`@media (min-width:${mediaPx}px)`]: {
+        minHeight: '100vh',
+      },
     },
-  },
-}));
+    content: {
+      padding: theme.spacing(3),
+      [`@media (max-width:${mediaPx}px)`]: {
+        padding: theme.spacing(1),
+      },
+    },
+  })
+);
 
 export default function Settings() {
   const classes = useStyles();
@@ -68,23 +62,13 @@ export default function Settings() {
     <div className={classes.root}>
       <div className={classes.sidebar}>
         <List>
-          <MenuItem
-            data-item="theme"
-            onClick={handleClick}
-            selected={menuItem === 'theme'}
-          >
+          <MenuItem data-item="theme" onClick={handleClick} selected={menuItem === 'theme'}>
             Тема
           </MenuItem>
         </List>
       </div>
-      <Divider
-        className={classes.divider}
-        orientation={bp ? 'horizontal' : 'vertical'}
-        flexItem={!bp}
-      />
-      <div className={classes.content}>
-        {component}
-      </div>
+      <Divider className={classes.divider} orientation={bp ? 'horizontal' : 'vertical'} flexItem={!bp} />
+      <div className={classes.content}>{component}</div>
     </div>
   );
 }

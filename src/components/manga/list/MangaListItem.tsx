@@ -4,8 +4,8 @@ import { createStyles, ListItem, ListItemAvatar, makeStyles, Theme } from '@mate
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { MangaType } from '../../../catalogs/baseCatalog';
-import { SearchItemDesc } from './SearchItemDesc';
-import { MangaImage } from '../../MangaImage';
+import { MangaListItemDesc } from './MangaListItemDesc';
+import { MangaImage } from '../MangaImage';
 import { setManga } from '../../../redux/manga/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,14 +30,15 @@ type Props = {
   data: MangaType;
 };
 
-export function SearchItem(props: Props) {
+export function MangaListItem(props: Props) {
   const classes = useStyles();
   const router = useRouter();
   const { data } = props;
   const dispatch = useDispatch();
+
   const passManga = useCallback(() => {
     dispatch(setManga(data));
-    router.push('/detail').then();
+    router.push('/detail');
   }, [router, data, setManga]);
 
   return (
@@ -45,7 +46,7 @@ export function SearchItem(props: Props) {
       <ListItemAvatar className={classes.avatarWrapper}>
         <MangaImage src={data.imageUrl} className={classes.avatar} />
       </ListItemAvatar>
-      <SearchItemDesc {...data} />
+      <MangaListItemDesc {...data} />
     </ListItem>
   );
 }

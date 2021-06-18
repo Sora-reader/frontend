@@ -28,6 +28,7 @@
         "code": 120
       }
     ],
+    "react/display-name": "off",
     "react/no-unescaped-entities": "off",
     "@typescript-eslint/indent": "off",
     "import/prefer-default-export": "off",

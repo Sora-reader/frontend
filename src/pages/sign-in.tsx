@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { Button, createStyles, LinearProgress, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
+import { useEffect, useRef } from 'react';
+import { Button, createStyles, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import { AnyAction } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { signIn } from '../redux/user/actions';
-import { State } from '../redux/store';
+import { RootState } from '../redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,13 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function SignIn() {
   const classes = useStyles();
-  const dispatch = useDispatch() as ThunkDispatch<State, any, AnyAction>;
+  const dispatch = useDispatch() as ThunkDispatch<RootState, any, AnyAction>;
 
-  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>();
 
   const router = useRouter();
-  const currentUser = useSelector((state: State) => state.user);
+  const currentUser = useSelector((state: RootState) => state.user);
 
   if (currentUser.access) {
     router.push('/').then(null);
@@ -53,12 +52,9 @@ export default function SignIn() {
     inputRef.current?.focus();
   }, [inputRef]);
 
-  const progress = loading ? <LinearProgress /> : '';
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
 
     const username = String(data.get('username'));
     const password = String(data.get('password'));
@@ -71,7 +67,6 @@ export default function SignIn() {
 
   return (
     <div className={classes.root}>
-      {progress}
       <div className={classes.formWrapper}>
         <form onSubmit={handleSubmit} className={classes.form}>
           <Typography className={classes.formHeader} align="center" component="h3" variant="h3">

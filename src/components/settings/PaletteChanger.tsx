@@ -4,7 +4,7 @@ import { Color, ColorPicker } from 'material-ui-color';
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import createPalette, { PaletteOptions } from '@material-ui/core/styles/createPalette';
-import { GenreChip } from '../../GenreChip';
+import { GenreChip } from '../manga/GenreChip';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

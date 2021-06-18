@@ -4,9 +4,9 @@ import { Box, createStyles, Divider, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { MangaType } from '../catalogs/baseCatalog';
-import { DetailHeader } from '../components/views/detail/DetailHeader';
-import { DetailDescription } from '../components/views/detail/DetailDescription';
-import { State } from '../redux/store';
+import { MangaDetailHeader } from '../components/manga/detail/MangaDetailHeader';
+import { MangaDetailDescription } from '../components/manga/detail/MangaDetailDescription';
+import { RootState } from '../redux/store';
 import { SwipeableTabs } from '../components/SwipeableTabs';
 import { pushLastVisitedManga } from '../redux/manga/actions';
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles(() =>
 export default function Detail() {
   const classes = useStyles();
   const router = useRouter();
-  const manga: MangaType = useSelector((state: State) => state.manga.manga);
+  const manga: MangaType = useSelector((state: RootState) => state.manga.manga);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,9 +39,9 @@ export default function Detail() {
     [
       'Описание',
       <Box key={1} p={2}>
-        <DetailHeader {...manga} />
+        <MangaDetailHeader {...manga} />
         <Divider />
-        <DetailDescription text={String(manga.description)} />
+        <MangaDetailDescription text={String(manga.description)} />
       </Box>,
     ],
     [

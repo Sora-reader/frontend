@@ -8,10 +8,7 @@ const useStyles = makeStyles(() =>
 );
 
 export const MangaImage = forwardRef<any, AvatarProps>((props: AvatarProps, ref: Ref<any>) => {
-  const propClasses = props.classes ? props.classes : {};
-  const classes = { ...useStyles(), ...propClasses };
+  const classes = { ...useStyles(), ...props.classes };
 
   return <Avatar className={classes.root} variant="rounded" ref={ref} {...props} />;
 });
-
-MangaImage.displayName = 'MangaImage';

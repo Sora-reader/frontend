@@ -9,8 +9,7 @@ const useStyles = makeStyles(() =>
 );
 
 export const MangaRating = forwardRef<any, RatingProps>((props: RatingProps, ref: Ref<any>) => {
-  const { classes: propClasses } = props;
-  const classes = { ...useStyles(), ...propClasses };
+  const classes = { ...useStyles(), ...props.classes };
 
   return (
     <Rating
@@ -23,5 +22,3 @@ export const MangaRating = forwardRef<any, RatingProps>((props: RatingProps, ref
     />
   );
 });
-
-MangaRating.displayName = 'MangaRating';

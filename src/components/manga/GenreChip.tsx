@@ -22,5 +22,3 @@ export const GenreChip = forwardRef<any, ChipProps>((props: ChipProps, ref: Ref<
 
   return <Chip size={smallMedia ? 'small' : 'medium'} className={classes.root} ref={ref} {...props} />;
 });
-
-GenreChip.displayName = 'GenreChip';

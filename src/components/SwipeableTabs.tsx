@@ -1,14 +1,6 @@
 import * as React from 'react';
 import { HTMLAttributes } from 'react';
-import {
-  AppBar,
-  createStyles,
-  makeStyles,
-  Tab,
-  Tabs,
-  Theme,
-  useTheme,
-} from '@material-ui/core';
+import { AppBar, createStyles, makeStyles, Tab, Tabs, Theme, useTheme } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
 
 interface TabPanelProps extends HTMLAttributes<any> {
@@ -18,9 +10,7 @@ interface TabPanelProps extends HTMLAttributes<any> {
 }
 
 function TabPanel(props: TabPanelProps) {
-  const {
-    children, value, index, ...other
-  } = props;
+  const { children, value, index, ...other } = props;
 
   return (
     <div
@@ -52,17 +42,19 @@ type Props = {
   };
 };
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  appBar: {
-    boxShadow: 'none',
-  },
-  tab: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  tabPanel: {
-    minHeight: '100vh',
-  },
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    appBar: {
+      boxShadow: 'none',
+    },
+    tab: {
+      backgroundColor: theme.palette.background.paper,
+    },
+    tabPanel: {
+      minHeight: '100vh',
+    },
+  })
+);
 
 export function SwipeableTabs(props: Props) {
   const { panels } = props;
@@ -81,20 +73,9 @@ export function SwipeableTabs(props: Props) {
   return (
     <div>
       <AppBar position="static" color="default" className={classes.appBar}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-        >
+        <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
           {panels.map(([label], index) => (
-            <Tab
-              className={classes.tab}
-              key={index}
-              label={label}
-              {...a11yProps(index)}
-            />
+            <Tab className={classes.tab} key={index} label={label} {...a11yProps(index)} />
           ))}
         </Tabs>
       </AppBar>
@@ -104,13 +85,7 @@ export function SwipeableTabs(props: Props) {
         onChangeIndex={handleChangeIndex}
       >
         {panels.map(([_, jsx], index) => (
-          <TabPanel
-            key={index}
-            className={classes.tabPanel}
-            value={value}
-            index={index}
-            dir={theme.direction}
-          >
+          <TabPanel key={index} className={classes.tabPanel} value={value} index={index} dir={theme.direction}>
             {jsx}
           </TabPanel>
         ))}
