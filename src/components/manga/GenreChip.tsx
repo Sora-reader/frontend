@@ -4,6 +4,7 @@ import { Chip, ChipProps, createStyles, makeStyles, Theme, useMediaQuery, useThe
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      cursor: 'pointer',
       marginRight: theme.spacing(1),
       marginBottom: theme.spacing(1),
       backgroundColor: theme.palette.primary.main,
