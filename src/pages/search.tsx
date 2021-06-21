@@ -4,8 +4,8 @@ import { createStyles, List, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { MangaListItem } from '../components/manga/list/MangaListItem';
 import { RootState } from '../redux/store';
-import { searchManga } from '../redux/search/actions';
-import { MangaType, SearchResults } from '../catalogs/baseCatalog';
+import { startSearch } from '../redux/search/actions';
+import { SearchResults } from '../catalogs/baseCatalog';
 import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
 import { Dispatch } from 'react';
 import { TDispatch } from '../redux/types';
@@ -49,12 +49,10 @@ export default function Search() {
   const classes = useStyles();
   const dispatch = useDispatch() as TDispatch;
 
-  const { results: searchResults, query: cachedQuery, searchInputRef } = useSelector(
-    (state: RootState) => state.search
-  );
+  const { results: storedResults, searchInputRef } = useSelector((state: RootState) => state.search);
   const [searching, setSearching] = useState(false);
   const [message, setMessage] = useState('' as string);
-  const [content, setContent] = useState(undefined as SearchResults<MangaType> | undefined);
+  const [content, setContent] = useState(undefined as SearchResults | undefined);
 
   const query = useNonLazyQuery('name');
   useSyncQuery(searchInputRef, query);
@@ -64,8 +62,8 @@ export default function Search() {
       setMessage('Введите название манги для поиска');
       return;
     }
-    if (query === cachedQuery) {
-      parseSearchResults(searchResults, setMessage, setContent);
+    if (query === storedResults.query) {
+      parseSearchResults(storedResults, setMessage, setContent);
       return;
     }
     if (!searching) {
@@ -73,12 +71,14 @@ export default function Search() {
       setMessage('');
       setContent(undefined);
       setSearching(true);
-      dispatch(searchManga(query)).then((data: any) => {
-        setSearching(false);
-        parseSearchResults(data.searchResults, setMessage, setContent);
+      dispatch(startSearch(query)).then((data) => {
+        if (data.meta.requestStatus === 'fulfilled') {
+          setSearching(false);
+          parseSearchResults(data.payload as SearchResults, setMessage, setContent);
+        }
       });
     }
-  }, [query, searchResults]);
+  }, [query, storedResults]);
 
   return (
     <div className={classes.root}>

@@ -1,17 +1,15 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { MutableRefObject } from 'react';
 import { SearchResults } from '../../catalogs/baseCatalog';
-import { SEARCH_MANGA, SET_SEARCH_INPUT_REF } from './actions';
-import SearchActionTypes from './types';
+import { setSearchRef, startSearch } from './actions';
 
 type StateType = {
   searchInputRef?: MutableRefObject<HTMLInputElement | undefined>;
-  query: string;
   results: SearchResults;
 };
 
 const initialState: StateType = {
   searchInputRef: undefined,
-  query: '',
   results: {
     query: '',
     results: 0,
@@ -20,19 +18,13 @@ const initialState: StateType = {
   },
 };
 
-export default function reducer(state = initialState, action: SearchActionTypes): StateType {
-  switch (action.type) {
-    case SEARCH_MANGA:
-      return {
-        ...state,
-        results: action.searchResults,
-      };
-    case SET_SEARCH_INPUT_REF:
-      return {
-        ...state,
-        searchInputRef: action.ref,
-      };
-    default:
-      return state;
-  }
-}
+const reducer = createReducer(initialState, (builder) => {
+  builder.addCase(startSearch.fulfilled, (state, action) => {
+    state.results = action.payload;
+  });
+  builder.addCase(setSearchRef, (state, action) => {
+    return { ...state, searchInputRef: action.payload };
+  });
+});
+
+export default reducer;

@@ -4,16 +4,16 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { LinearProgress } from '@material-ui/core';
 import { signOut } from '../redux/user/actions';
+import { TDispatch } from '../redux/types';
 
 function SignOut() {
   // Store in getServerSideProps in undefined
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as TDispatch;
   useEffect(() => {
-    dispatch(signOut());
-    router.push('/').then();
+    dispatch(signOut()).then(() => router.push('/'));
   }, []);
-  return <LinearProgress />;
+  return '';
 }
 
 export default SignOut;

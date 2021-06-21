@@ -1,6 +1,6 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { MangaType } from '../../catalogs/baseCatalog';
-import { LOAD_LAST_VISITED_MANGA, PUSH_LAST_VISITED_MANGA, SET_MANGA } from './actions';
-import { MangaAction } from './types';
+import { setManga, loadLastVisitedManga, pushLastVisitedManga } from './actions';
 
 type StateType = {
   manga: MangaType;
@@ -12,34 +12,24 @@ const initialState: StateType = {
   lastVisited: [],
 };
 
-export default function reducer(state = initialState, action: MangaAction): StateType {
-  switch (action.type) {
-    case SET_MANGA:
-      return {
-        ...state,
-        manga: action.manga,
-      };
-    case PUSH_LAST_VISITED_MANGA:
-      let newLastVisited = state.lastVisited.filter((element) => element.link !== action.manga.link);
-      // const mangaDidntRepeat = newLastVisited.length === state.lastVisited.length;
+const reducer = createReducer(initialState, (builder) => {
+  builder.addCase(setManga, (state, action) => {
+    state.manga = action.payload;
+  });
+  builder.addCase(loadLastVisitedManga, (state, action) => {
+    state.lastVisited = action.payload;
+  });
+  builder.addCase(pushLastVisitedManga, (state, action) => {
+    let newLastVisited = state.lastVisited.filter((element) => element.link !== action.payload.link);
+    newLastVisited.unshift(action.payload);
+    // If some values were removed after filter
+    while (newLastVisited.length > 3) {
+      console.log('Popping');
+      newLastVisited.pop();
+    }
 
-      newLastVisited.unshift(action.manga);
-      // If some values were removed after filter
-      while (newLastVisited.length > 3) {
-        console.log('Popping');
-        newLastVisited.pop();
-      }
+    state.lastVisited = newLastVisited;
+  });
+});
 
-      return {
-        ...state,
-        lastVisited: newLastVisited,
-      };
-    case LOAD_LAST_VISITED_MANGA:
-      return {
-        ...state,
-        lastVisited: action.mangas,
-      };
-    default:
-      return state;
-  }
-}
+export default reducer;

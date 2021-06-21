@@ -23,7 +23,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector } from 'react-redux';
 import { NextLink } from './NextLink';
 import { RootState } from '../redux/store';
-import { setSearchInputRef } from '../redux/search/actions';
+import { setSearchRef } from '../redux/search/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,7 +72,7 @@ export function Header() {
   const [drawer, setDrawer] = useState(false);
 
   useEffect(() => {
-    dispatch(setSearchInputRef(nameInput));
+    dispatch(setSearchRef(nameInput));
   }, [nameInput]);
 
   const toggleDrawer = (value: boolean) => () => {

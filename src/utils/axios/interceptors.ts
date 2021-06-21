@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import * as loaderActions from '../../redux/loader/actions';
 import { StoreType } from '../../redux/store';
 import { TDispatch } from '../../redux/types';
-import { RefreshUser } from '../../redux/user/actions';
+import { refreshUser } from '../../redux/user/actions';
 import { CustomAxiosConfig } from './types';
 import { refreshAxiosDefaults, shouldRetry, taskNameFromConfig } from './utils';
 
@@ -46,7 +46,7 @@ export function initInterceptors(store: StoreType) {
         requestConfig.retry = true;
 
         // Wait for token to be refreshed and renew token
-        await (store.dispatch as TDispatch)(RefreshUser(requestConfig.retry));
+        await (store.dispatch as TDispatch)(refreshUser(requestConfig.retry));
         const accessToken = store.getState().user.access;
         refreshAxiosDefaults(accessToken);
 

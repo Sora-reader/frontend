@@ -1,5 +1,5 @@
-import { REFRESH_USER, SET_USER, RESET_USER_ACTION } from './actions';
-import { UserAction } from './types';
+import { createReducer } from '@reduxjs/toolkit';
+import { signIn, signOut, signUp, refreshUser } from './actions';
 
 type StateType = {
   username: string;
@@ -10,27 +10,19 @@ const initialState: StateType = {
   access: '',
 };
 
-const reducer = (state = initialState, action: UserAction): StateType => {
-  switch (action.type) {
-    case REFRESH_USER:
-      return {
-        ...state,
-        access: action.access ? action.access : state.access,
-      };
-    case SET_USER:
-      return {
-        ...state,
-        username: action.username,
-        access: action.access,
-      };
-    case RESET_USER_ACTION:
-      return {
-        ...state,
-        ...initialState,
-      };
-    default:
-      return state;
-  }
-};
+const reducer = createReducer(initialState, (builder) => {
+  builder.addCase(signOut.fulfilled, () => {
+    return initialState;
+  });
+  builder.addCase(refreshUser.fulfilled, (state, action) => {
+    state.access = action.payload;
+  });
+  builder.addMatcher(
+    (action) => signIn.fulfilled.match(action) || signUp.fulfilled.match(action),
+    (state, action) => {
+      return { ...state, ...action.payload };
+    }
+  );
+});
 
 export default reducer;

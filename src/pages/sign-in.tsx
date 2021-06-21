@@ -60,9 +60,7 @@ export default function SignIn() {
     const password = String(data.get('password'));
 
     // Success
-    dispatch(signIn(username, password)).then(() => {
-      console.log;
-    });
+    dispatch(signIn({ username, password }));
   };
 
   return (
