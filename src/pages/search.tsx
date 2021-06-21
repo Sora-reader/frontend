@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { createStyles, LinearProgress, List, makeStyles, Theme } from '@material-ui/core';
-import { useRouter } from 'next/router';
+import { createStyles, List, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { MangaListItem } from '../components/manga/list/MangaListItem';
 import { RootState } from '../redux/store';
 import { searchManga } from '../redux/search/actions';
-import { SearchResults } from '../catalogs/baseCatalog';
+import { MangaType, SearchResults } from '../catalogs/baseCatalog';
+import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
+import { Dispatch } from 'react';
+import { TDispatch } from '../redux/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,94 +29,67 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const getResultList = (searchResults: SearchResults, classes: ReturnType<typeof useStyles>, query: String) => {
-  console.log('Search results', searchResults);
-  if (!searchResults.results) {
-    return <h1 className={classes.header}>Результатов не найдено</h1>;
+const parseSearchResults = (searchResults: SearchResults, setMessage: Dispatch<any>, setContent: Dispatch<any>) => {
+  switch (searchResults.results) {
+    case 0:
+      setMessage('Результатов не найдено');
+      setContent(undefined);
+      break;
+    case -1:
+      setMessage('Ошибка, проверьте подключение к интернету');
+      break;
+    default:
+      setMessage(`Итог поиска по запросу: "${searchResults.query}"`);
+      setContent(searchResults);
+      break;
   }
-  if (!~searchResults.results) {
-    return <h1 className={classes.header}>Ошибка, проверьте подключение к интернету</h1>;
-  }
-  return (
-    <div>
-      <h1 className={classes.header}>Итог поиска по запросу: "{query}"</h1>
-      <List className={classes.list}>
-        {' '}
-        {searchResults.items.map((item) => (
-          <MangaListItem key={item.link} data={item} />
-        ))}
-      </List>
-    </div>
-  );
 };
 
 export default function Search() {
   const classes = useStyles();
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as TDispatch;
 
   const { results: searchResults, query: cachedQuery, searchInputRef } = useSelector(
     (state: RootState) => state.search
   );
-  const [loading, setLoading] = useState(false);
-  // To determine if loading false after completing search or it's initial value
-  const [didSearchStart, setDidSearchStart] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [message, setMessage] = useState('' as string);
+  const [content, setContent] = useState(undefined as SearchResults<MangaType> | undefined);
 
-  const queryKey = 'name';
-  let rootStyle = classes.root;
-  let content: JSX.Element = <h1 className={classes.header}>Введите название манги для поиска</h1>;
-
-  const match = decodeURI(router.asPath).match(new RegExp(`[&?]${queryKey}=(.*)(&|$)`));
-  const query = match ? match[1] || '' : '';
+  const query = useNonLazyQuery('name');
+  useSyncQuery(searchInputRef, query);
 
   useEffect(() => {
-    if (didSearchStart) {
-      console.log('Search results were updated', searchResults, loading);
-      if (loading) {
-        console.log('Set loading false');
-        setLoading(false);
-      }
+    if (!query) {
+      setMessage('Введите название манги для поиска');
+      return;
     }
-  }, [searchResults]);
-
-  useEffect(() => {
-    if (searchInputRef) {
-      const { current } = searchInputRef;
-      if (current) {
-        if (query && current.value !== query) {
-          // Sync query value from url to input
-          current.value = query;
-        } else if (!query) {
-          // If the query is empty then focus query input
-          current.focus();
-        }
-      }
+    if (query === cachedQuery) {
+      parseSearchResults(searchResults, setMessage, setContent);
+      return;
     }
-  }, [query, searchInputRef]);
-
-  useEffect(() => {
-    if (query && query !== cachedQuery) {
-      console.log('Starting search');
-      // Start search if we don't need cache and there is a query
-      setLoading(true);
-      setDidSearchStart(true);
-      dispatch(searchManga(query));
+    if (!searching) {
+      console.log('Started in progress');
+      setMessage('');
+      setContent(undefined);
+      setSearching(true);
+      dispatch(searchManga(query)).then((data: any) => {
+        setSearching(false);
+        parseSearchResults(data.searchResults, setMessage, setContent);
+      });
     }
-  }, [query]);
+  }, [query, searchResults]);
 
-  if (query && query === cachedQuery) {
-    // Use cache the query is the same as last search
-    console.log('Query is equal to the cached one');
-    content = getResultList(searchResults, classes, query);
-  } else if (didSearchStart) {
-    if (loading) {
-      rootStyle = classes.progressRoot;
-      content = <LinearProgress className={classes.progress} />;
-    } else {
-      console.log('Loading finished');
-      content = getResultList(searchResults, classes, query);
-    }
-  }
-
-  return <div className={rootStyle}>{content}</div>;
+  return (
+    <div className={classes.root}>
+      <h1 className={classes.header}>{message}</h1>
+      {content && (
+        <List className={classes.list}>
+          {content.items.map((item) => (
+            <MangaListItem key={item.link} data={item} />
+          ))}
+        </List>
+      )}
+    </div>
+  );
 }

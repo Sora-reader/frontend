@@ -4,7 +4,6 @@ import { SEARCH_MANGA, SET_SEARCH_INPUT_REF } from './actions';
 
 export interface SearchMangaAction {
   type: typeof SEARCH_MANGA;
-  searchQuery: string;
   searchResults: SearchResults;
 }
 export interface SetSearchInputRefAction {

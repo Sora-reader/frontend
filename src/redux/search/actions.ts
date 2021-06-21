@@ -14,14 +14,13 @@ export const searchManga = (query: string) => {
     try {
       results = await ReadManga.search.run(query);
     } catch (reason) {
-      results = { items: [], results: -1, invalidResults: 0 };
+      results = { query, items: [], results: -1, invalidResults: 0 };
       console.log('Request error');
       console.log(reason);
     }
 
     return dispatch({
       type: SEARCH_MANGA,
-      searchQuery: query,
       searchResults: results,
     });
   };

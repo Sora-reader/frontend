@@ -1,29 +1,29 @@
 import { load } from 'cheerio';
 import { BaseCatalog, SearchResults } from './baseCatalog';
 import { CORSProxyUrl } from '../config';
+import axios from 'axios';
 
 const searchRequest = async (query: string) => {
   const body = `q=${query}`;
   let output = '';
 
-  const request = fetch(CORSProxyUrl + ReadManga.getSearchUrl(), {
-    method: 'POST',
-    body,
+  const request = axios.post(CORSProxyUrl + ReadManga.getSearchUrl(), body, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
   });
 
   const response = await request;
-  output = await response.text();
+  output = response.data;
 
   return output;
 };
 
-const searchParser = (html: string): SearchResults => {
+const searchParser = (query: string, html: string): SearchResults => {
   const $ = load(html);
   const tiles = $('.tiles .tile');
   const output: SearchResults = {
+    query,
     results: tiles.length,
     invalidResults: 0,
     items: [],
@@ -94,7 +94,7 @@ export const ReadManga: BaseCatalog = {
   search: {
     async run(query: string) {
       const html = await this.searchRequest(query);
-      return this.searchParser(html);
+      return this.searchParser(query, html);
     },
     searchRequest,
     searchParser,

@@ -13,6 +13,7 @@ export type MangaType = {
 };
 
 export type SearchResults<TSearchItem = MangaType> = {
+  query: string;
   results: number;
   invalidResults: number;
   items: Array<TSearchItem>;
@@ -37,7 +38,7 @@ export interface BaseCatalog {
   search: {
     run: (query: string) => Promise<SearchResults>;
     searchRequest: (query: string) => Promise<string>;
-    searchParser: (html: string) => SearchResults;
+    searchParser: (query: string, html: string) => SearchResults;
   };
 
   // TODO

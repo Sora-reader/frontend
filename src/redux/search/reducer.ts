@@ -13,6 +13,7 @@ const initialState: StateType = {
   searchInputRef: undefined,
   query: '',
   results: {
+    query: '',
     results: 0,
     invalidResults: 0,
     items: [],
@@ -24,7 +25,6 @@ export default function reducer(state = initialState, action: SearchActionTypes)
     case SEARCH_MANGA:
       return {
         ...state,
-        query: action.searchQuery,
         results: action.searchResults,
       };
     case SET_SEARCH_INPUT_REF:
