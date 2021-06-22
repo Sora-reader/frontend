@@ -1,4 +1,3 @@
-import { createMuiTheme } from '@material-ui/core';
 import { green, teal } from '@material-ui/core/colors';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
@@ -19,7 +18,3 @@ export const defaultLight: PaletteOptions = {
     dark: green.A700,
   },
 };
-
-export const defaultTheme = createMuiTheme({
-  palette: defaultDark,
-});

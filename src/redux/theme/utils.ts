@@ -1,31 +1,31 @@
 import { Dispatch } from 'react';
-import _ from 'lodash';
 import { setPalette } from './actions';
+import { ThemeState } from './reducer';
 
-// TODO: not working lmao
-export const loadCachedPalettes = (dispatch: Dispatch<any>, clientDark: any, clientLight: any) => {
+export const loadCachedPalettes = (dispatch: Dispatch<any>, themeOptions: ThemeState) => {
+  console.log('loadCachedPalettes called!');
   // Load palettes from localStorage if needed
   // Client changes are synced TO localStorage in a different function
-  return () => {
-    const data = window.localStorage.getItem('sora-theme') || '{}';
-    const cachedState = JSON.parse(String(data));
+  const data = window.localStorage.getItem('sora-theme') || '{}';
+  const cachedState: ThemeState = JSON.parse(String(data));
+  const cachedDark = cachedState?.palettes?.dark;
+  const cachedLight = cachedState?.palettes?.light;
 
-    if (!_.isEmpty(cachedState)) {
-      const cachedDark = cachedState.darkPalette;
-      const cachedLight = cachedState.lightPalette;
+  console.log(cachedDark, cachedLight);
+  console.log(cachedState);
 
-      const darkDiff = JSON.stringify(cachedDark) !== JSON.stringify(clientDark);
-      const lightDiff = JSON.stringify(cachedLight) !== JSON.stringify(clientLight);
+  if (cachedDark && cachedLight) {
+    const darkDiff = JSON.stringify(cachedDark) !== JSON.stringify(themeOptions.palettes.dark);
+    const lightDiff = JSON.stringify(cachedLight) !== JSON.stringify(themeOptions.palettes.light);
 
-      if (darkDiff) {
-        console.log('Dark palettes differ, dispatching');
-        dispatch(setPalette(cachedDark, 'dark'));
-      }
-
-      if (lightDiff) {
-        console.log('Light palettes differ, dispatching');
-        dispatch(setPalette(cachedLight, 'light'));
-      }
+    if (darkDiff) {
+      console.log('Dark palettes differ, dispatching');
+      dispatch(setPalette('dark', cachedDark));
     }
-  };
+
+    if (lightDiff) {
+      console.log('Light palettes differ, dispatching');
+      dispatch(setPalette('light', cachedLight));
+    }
+  }
 };

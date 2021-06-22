@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { createStyles, Divider, List, makeStyles, MenuItem, Theme, useMediaQuery } from '@material-ui/core';
-import { ChangeTheme } from '../components/settings/ChangeTheme';
+import { ThemePage } from '../components/settings/theme/ThemePage';
 
 const mediaPx = 500;
 
@@ -44,10 +44,10 @@ export default function Settings() {
   let component: JSX.Element;
   switch (menuItem) {
     case 'theme':
-      component = <ChangeTheme />;
+      component = <ThemePage />;
       break;
     default:
-      component = <ChangeTheme />;
+      component = <ThemePage />;
       break;
   }
 

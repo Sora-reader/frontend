@@ -1,7 +1,16 @@
 import '../styles/globals.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
-import { Box, Container, createStyles, LinearProgress, makeStyles, Theme, ThemeProvider } from '@material-ui/core';
+import {
+  Box,
+  Container,
+  createMuiTheme,
+  createStyles,
+  LinearProgress,
+  makeStyles,
+  Theme,
+  ThemeProvider,
+} from '@material-ui/core';
 import Head from 'next/head';
 import GoogleFonts from 'next-google-fonts';
 import { useSelector, useStore } from 'react-redux';
@@ -35,13 +44,31 @@ const useStyles = (theme: Theme) =>
 
 function WrappedApp(props: AppProps) {
   const { Component, pageProps } = props;
-  const { theme, darkPalette, lightPalette } = useSelector((state: RootState) => state.theme);
+  const store = useStore() as StoreType;
+
+  const themeState = useSelector((state: RootState) => state.theme);
+  const generateTheme = () => createMuiTheme({ palette: themeState.palettes[themeState.mode] });
+  const [loadedCachedTheme, setLoadedCachedTheme] = useState(false);
+  const [theme, setTheme] = useState(generateTheme());
+
+  // Load palettes on first render
+  useEffect(() => {
+    loadCachedPalettes(store.dispatch, themeState);
+    setLoadedCachedTheme(true);
+  }, []);
+  useEffect(() => {
+    setTheme(generateTheme());
+    console.log('Written options to localStorage');
+    if (loadedCachedTheme) {
+      window.localStorage.setItem('sora-theme', JSON.stringify(themeState));
+    }
+  }, [themeState]);
+
   const { lastVisited } = useSelector((state: RootState) => state.manga);
   const classes = useStyles(theme)({
     minHeight: '100vh',
   });
 
-  const store = useStore() as StoreType;
   const loaderTasks = useSelector((state: RootState) => state.loader);
   const needSpinner = Boolean(loaderTasks.length);
 
@@ -49,13 +76,11 @@ function WrappedApp(props: AppProps) {
   useEffect(() => initInterceptors(store), []);
   // Load last visited from localstorage if needed
   useEffect(syncLastVisited(store.dispatch, lastVisited), [lastVisited]);
-  // Sync theme between localstorage and client state
-  useEffect(loadCachedPalettes(store.dispatch, darkPalette, lightPalette), [theme]);
 
   return (
     <>
       <GoogleFonts href={'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'} />
-      <GoogleFonts href={'https://fonts.googleapis.com/css2?family=Montserra&display=swap'} />
+      <GoogleFonts href={'https://fonts.googleapis.com/css2?family=Montserrat&display=swap'} />
       <Head>
         <title>
           Sora

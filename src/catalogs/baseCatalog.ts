@@ -1,6 +1,4 @@
 export type MangaType = {
-  // TODO: add moreResults which tells if more chapters are loadable
-  //
   title: string;
   link: string;
   imageUrl: string;
@@ -41,7 +39,6 @@ export interface BaseCatalog {
     searchParser: (query: string, html: string) => SearchResults;
   };
 
-  // TODO
   detail?: {
     getChapterList: (catalog: string, link: string) => Promise<ChapterListType>;
     requestChapterList: (catalog: string, link: string) => Promise<string>;

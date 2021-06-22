@@ -6,7 +6,6 @@ import { refreshUser } from '../../redux/user/actions';
 import { CustomAxiosConfig } from './types';
 import { refreshAxiosDefaults, shouldRetry, taskNameFromConfig } from './utils';
 
-// TODO: Connect with redux?
 export function initInterceptors(store: StoreType) {
   const loadingDispatch = (config: CustomAxiosConfig, type: 'start' | 'end' = 'end') => {
     if (!config.silent) {
