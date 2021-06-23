@@ -27,10 +27,6 @@ export const refreshUser = createAsyncThunk('user/refresh', async (retry: boolea
   );
   console.log('Refreshed token', response.data);
 
-  axios.defaults.headers.post.Authorization = `Bearer ${response.data.access}`;
-  axios.defaults.headers.put.Authorization = `Bearer ${response.data.access}`;
-  axios.defaults.headers.patch.Authorization = `Bearer ${response.data.access}`;
-
   return response.data.access;
 });
 
@@ -41,10 +37,6 @@ export const signIn = createAsyncThunk('user/signIn', async ({ username, passwor
   });
 
   document.cookie = `sora_refresh=${response.data.refresh}`;
-
-  axios.defaults.headers.post.Authorization = `Bearer ${response.data.access}`;
-  axios.defaults.headers.put.Authorization = `Bearer ${response.data.access}`;
-  axios.defaults.headers.patch.Authorization = `Bearer ${response.data.access}`;
 
   return {
     username,

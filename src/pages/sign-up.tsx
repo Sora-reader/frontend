@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import { useEffect, useRef } from 'react';
 import { Button, createStyles, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import { AnyAction } from 'redux';
 import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
-import { signIn } from '../redux/user/actions';
+import { signUp } from '../redux/user/actions';
 import { RootState } from '../redux/store';
 import { ThunkDispatch } from 'redux-thunk';
-import { NextLink } from '../components/NextLink';
+import { useRouter } from 'next/router';
 
+// TODO: refactor to use same form or even formik
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignIn() {
+export default function SignOut() {
   const classes = useStyles();
   const dispatch = useDispatch() as ThunkDispatch<RootState, any, AnyAction>;
   const inputRef = useRef<HTMLInputElement>();
@@ -54,7 +54,8 @@ export default function SignIn() {
     const password = String(data.get('password'));
 
     // Success
-    dispatch(signIn({ username, password })).then(()=>router.push('/'));
+    dispatch(signUp({ username, password })).then(()=>router.push('/'));
+
   };
 
   return (
@@ -62,21 +63,12 @@ export default function SignIn() {
       <div className={classes.formWrapper}>
         <form onSubmit={handleSubmit} className={classes.form}>
           <Typography className={classes.formHeader} align="center" component="h3" variant="h3">
-            Вход
+            Регистрация
           </Typography>
           <TextField label="Имя пользователя" name="username" type="username" variant="standard" inputRef={inputRef} />
           <TextField name="password" type="password" label="Пароль" variant="standard" />
-          <NextLink
-            underline="none" 
-            color="textPrimary" 
-            align="center" 
-            href="/sign-up"
-            style={{marginTop: '1rem', opacity: '50%'}}
-          >
-            Регистрация
-          </NextLink>
           <Button type="submit" className={classes.formSubmit}>
-            Войти
+            Зарегистрироваться
           </Button>
         </form>
       </div>
