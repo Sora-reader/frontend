@@ -1,14 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { MangaType } from '../../catalogs/baseCatalog';
+import { Manga, MangaList } from '../../api/types';
 import { setManga, loadLastVisitedManga, pushLastVisitedManga } from './actions';
 
 type StateType = {
-  manga: MangaType;
-  lastVisited: Array<MangaType>;
+  manga: Manga;
+  lastVisited: MangaList;
 };
 
 const initialState: StateType = {
-  manga: { title: '', link: '', imageUrl: '' },
+  manga: { id: -1, title: '', description: '' },
   lastVisited: [],
 };
 
@@ -20,7 +20,7 @@ const reducer = createReducer(initialState, (builder) => {
     state.lastVisited = action.payload;
   });
   builder.addCase(pushLastVisitedManga, (state, action) => {
-    let newLastVisited = state.lastVisited.filter((element) => element.link !== action.payload.link);
+    let newLastVisited = state.lastVisited.filter((element) => element.id !== action.payload.id);
     newLastVisited.unshift(action.payload);
     // If some values were removed after filter
     while (newLastVisited.length > 3) {

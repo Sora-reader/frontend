@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { createStyles, ListItemText, makeStyles, Theme } from '@material-ui/core';
-import { MangaType } from '../../../catalogs/baseCatalog';
 import { GenreChip } from '../GenreChip';
+import { Manga } from '../../../api/types';
 import { MangaRating } from '../MangaRating';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = MangaType;
+type Props = Manga;
 
 export function MangaListItemDesc(props: Props) {
   const classes = useStyles();
@@ -47,11 +47,11 @@ export function MangaListItemDesc(props: Props) {
     <div className={classes.root}>
       <div className={classes.header}>
         <ListItemText className={classes.title}>{props.title}</ListItemText>
-        <MangaRating value={props.starRate} />
+        <MangaRating value={props.rating} />
       </div>
 
       <div className={classes.footer}>
-        <ListItemText className={classes.author}>{props.author}</ListItemText>
+        <ListItemText className={classes.author}>{props.authors?.join(', ')}</ListItemText>
         <ul className={classes.genres}>
           {props.genres?.map((genre) => (
             // @ts-ignore

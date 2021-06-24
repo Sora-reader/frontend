@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { HTMLAttributes } from 'react';
 import { AppBar, createStyles, makeStyles, Tab, Tabs, Theme, useTheme } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';

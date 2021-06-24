@@ -5,7 +5,7 @@ import manga from './manga/reducer';
 import theme from './theme/reducer';
 import search from './search/reducer';
 import user from './user/reducer';
-import loader from './loader/reducer';
+import progressBar from './progressBar/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 
 const combinedReducer = combineReducers({
@@ -13,7 +13,7 @@ const combinedReducer = combineReducers({
   manga,
   search,
   user,
-  loader,
+  progressBar,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;

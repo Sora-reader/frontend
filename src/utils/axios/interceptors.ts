@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import * as loaderActions from '../../redux/loader/actions';
+import * as progressBarActions from '../../redux/progressBar/actions';
 import { StoreType } from '../../redux/store';
 import { TDispatch } from '../../redux/types';
 import { refreshUser } from '../../redux/user/actions';
@@ -9,13 +9,13 @@ import { refreshAxiosDefaults, shouldRetry, taskNameFromConfig } from './utils';
 export function initInterceptors(store: StoreType) {
   const loadingDispatch = (config: CustomAxiosConfig, type: 'start' | 'end' = 'end') => {
     if (!config.silent) {
-      const taskExists = store.getState().loader.includes(taskNameFromConfig(config));
+      const taskExists = store.getState().progressBar.includes(taskNameFromConfig(config));
       if (type === 'start' && taskExists) return;
       else if (type === 'end' && !taskExists) return;
 
-      const key = `${type}Loading` as keyof typeof loaderActions;
+      const key = `${type}Loading` as keyof typeof progressBarActions;
       console.log(`dispatching ${key} for ${taskNameFromConfig(config)}`);
-      store.dispatch(loaderActions[key](taskNameFromConfig(config)));
+      store.dispatch(progressBarActions[key](taskNameFromConfig(config)));
     }
   };
 

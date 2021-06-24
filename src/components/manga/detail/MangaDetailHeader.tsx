@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import { MangaType } from '../../../catalogs/baseCatalog';
 import { MangaImage } from '../MangaImage';
-import { MangaRating } from '../MangaRating';
 import { GenreChip } from '../GenreChip';
+import { Manga } from '../../../api/types';
+import { MangaRating } from '../MangaRating';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,17 +73,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = MangaType;
+type Props = Manga;
 
 export function MangaDetailHeader(props: Props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <MangaImage src={props.imageUrl} variant="rounded" className={classes.avatar} />
+      <MangaImage src={props.thumbnail} variant="rounded" className={classes.avatar} />
       <div className={classes.details}>
         <h1 className={classes.title}>{props.title}</h1>
-        <p className={classes.author}>{props.author}</p>
+        <p className={classes.author}>{props.authors?.join(', ')}</p>
         <ul className={classes.genres}>
           {props.genres?.map((genre) => (
             // @ts-ignore
@@ -91,9 +91,9 @@ export function MangaDetailHeader(props: Props) {
           ))}
         </ul>
         <div className={classes.ratingContainer}>
-          <MangaRating value={props.starRate} />
+          <MangaRating value={props.rating} />
           <p>
-            {props.starRate}
+            {props.rating}
             /10
           </p>
         </div>

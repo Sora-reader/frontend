@@ -1,15 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { createStyles, List, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { MangaListItem } from '../components/manga/list/MangaListItem';
 import { RootState } from '../redux/store';
 import { startSearch } from '../redux/search/actions';
-import { SearchResults } from '../catalogs/baseCatalog';
 import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
 import { Dispatch } from 'react';
 import { TDispatch } from '../redux/types';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { MangaList } from '../api/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,19 +30,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const parseSearchResults = (searchResults: SearchResults, setMessage: Dispatch<any>, setContent: Dispatch<any>) => {
-  switch (searchResults.results) {
-    case 0:
-      setMessage('Результатов не найдено');
-      setContent(undefined);
-      break;
-    case -1:
-      setMessage('Ошибка, проверьте подключение к интернету');
-      break;
-    default:
-      setMessage(`Итог поиска по запросу: "${searchResults.query}"`);
-      setContent(searchResults);
-      break;
+const parseSearchResults = (
+  searchResults: MangaList,
+  storedQuery: string,
+  setMessage: Dispatch<any>,
+  setContent: Dispatch<any>
+) => {
+  if (!searchResults.length) {
+    setMessage('Результатов не найдено');
+    setContent(undefined);
+  } else {
+    setMessage(`Итог поиска по запросу: "${storedQuery}"`);
+    setContent(searchResults);
   }
 };
 
@@ -50,10 +49,12 @@ export default function Search() {
   const classes = useStyles();
   const dispatch = useDispatch() as TDispatch;
 
-  const { results: storedResults, searchInputRef } = useSelector((state: RootState) => state.search);
+  const { results: storedResults, query: storedQuery, searchInputRef } = useSelector(
+    (state: RootState) => state.search
+  );
   const [searching, setSearching] = useState(false);
   const [message, setMessage] = useState('' as string);
-  const [content, setContent] = useState(undefined as SearchResults | undefined);
+  const [content, setContent] = useState([] as MangaList);
 
   const query = useNonLazyQuery('name');
   useSyncQuery(searchInputRef, query);
@@ -63,20 +64,23 @@ export default function Search() {
       setMessage('Введите название манги для поиска');
       return;
     }
-    if (query === storedResults.query) {
-      parseSearchResults(storedResults, setMessage, setContent);
+    if (query === storedQuery) {
+      parseSearchResults(storedResults, storedQuery, setMessage, setContent);
       return;
     }
     if (!searching) {
       console.log('Started in progress');
       setMessage('');
-      setContent(undefined);
+      setContent([]);
       setSearching(true);
       dispatch(startSearch(query))
         .then(unwrapResult)
-        .then((data) => {
+        .then(({ query, results }) => {
           setSearching(false);
-          parseSearchResults(data, setMessage, setContent);
+          parseSearchResults(results, query, setMessage, setContent);
+        })
+        .catch(() => {
+          setMessage('Ошибка, проверьте подключение к интернету');
         });
     }
   }, [query, storedResults]);
@@ -86,8 +90,8 @@ export default function Search() {
       <h1 className={classes.header}>{message}</h1>
       {content && (
         <List className={classes.list}>
-          {content.items.map((item) => (
-            <MangaListItem key={item.link} data={item} />
+          {content.map((item) => (
+            <MangaListItem key={item.id} data={item} />
           ))}
         </List>
       )}

@@ -25,7 +25,7 @@ export default function IndexView() {
       <h1 className={classes.lastVisited}>Недавно просмотренные</h1>
       <List>
         {lastVisited.map((element) => (
-          <MangaListItem key={element.link} data={element} />
+          <MangaListItem key={element.id} data={element} />
         ))}
       </List>
     </div>

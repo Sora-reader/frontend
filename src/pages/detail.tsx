@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import { useEffect } from 'react';
 import { Box, createStyles, Divider, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { MangaType } from '../catalogs/baseCatalog';
 import { MangaDetailHeader } from '../components/manga/detail/MangaDetailHeader';
 import { MangaDetailDescription } from '../components/manga/detail/MangaDetailDescription';
 import { RootState } from '../redux/store';
 import { SwipeableTabs } from '../components/SwipeableTabs';
 import { pushLastVisitedManga } from '../redux/manga/actions';
+import { Manga } from '../api/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,13 +19,13 @@ const useStyles = makeStyles(() =>
 export default function Detail() {
   const classes = useStyles();
   const router = useRouter();
-  const manga: MangaType = useSelector((state: RootState) => state.manga.manga);
+  const manga: Manga = useSelector((state: RootState) => state.manga.manga);
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('Manga data', manga);
     dispatch(pushLastVisitedManga(manga));
-    if (!manga.title && !manga.link) {
+    if (manga.id === -1) {
       console.log('No data');
       router.push('/search');
     }

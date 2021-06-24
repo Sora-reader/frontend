@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
-import { MangaType } from '../../catalogs/baseCatalog';
+import { Manga, MangaList } from '../../api/types';
 
-export const setManga = createAction<MangaType>('manga/set');
-export const loadLastVisitedManga = createAction<Array<MangaType>>('manga/loadLastVisited');
-export const pushLastVisitedManga = createAction<MangaType>('manga/pushLastVisited');
+export const setManga = createAction<Manga>('manga/set');
+export const loadLastVisitedManga = createAction<MangaList>('manga/loadLastVisited');
+export const pushLastVisitedManga = createAction<Manga>('manga/pushLastVisited');

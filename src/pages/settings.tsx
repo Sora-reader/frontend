@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { createStyles, Divider, List, makeStyles, MenuItem, Theme, useMediaQuery } from '@material-ui/core';
 import { ThemePage } from '../components/settings/theme/ThemePage';

@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import { useCallback } from 'react';
 import { createStyles, ListItem, ListItemAvatar, makeStyles, Theme } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { MangaType } from '../../../catalogs/baseCatalog';
 import { MangaListItemDesc } from './MangaListItemDesc';
 import { MangaImage } from '../MangaImage';
 import { setManga } from '../../../redux/manga/actions';
+import { Manga } from '../../../api/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
-  data: MangaType;
+  data: Manga;
 };
 
 export function MangaListItem(props: Props) {
@@ -42,9 +42,9 @@ export function MangaListItem(props: Props) {
   }, [router, data, setManga]);
 
   return (
-    <ListItem button onClick={passManga} key={data.link} alignItems="flex-start" className={classes.root}>
+    <ListItem button onClick={passManga} key={data.id} alignItems="flex-start" className={classes.root}>
       <ListItemAvatar className={classes.avatarWrapper}>
-        <MangaImage src={data.imageUrl} className={classes.avatar} />
+        <MangaImage src={data.thumbnail} className={classes.avatar} />
       </ListItemAvatar>
       <MangaListItemDesc {...data} />
     </ListItem>

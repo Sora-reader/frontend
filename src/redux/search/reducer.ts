@@ -1,26 +1,24 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { MutableRefObject } from 'react';
-import { SearchResults } from '../../catalogs/baseCatalog';
+import { MangaList } from '../../api/types';
 import { setSearchRef, startSearch } from './actions';
 
 type StateType = {
   searchInputRef?: MutableRefObject<HTMLInputElement | undefined>;
-  results: SearchResults;
+  query: string;
+  results: MangaList;
 };
 
 const initialState: StateType = {
   searchInputRef: undefined,
-  results: {
-    query: '',
-    results: 0,
-    invalidResults: 0,
-    items: [],
-  },
+  query: '',
+  results: [],
 };
 
 const reducer = createReducer(initialState, (builder) => {
   builder.addCase(startSearch.fulfilled, (state, action) => {
-    state.results = action.payload;
+    state.query = action.payload.query;
+    state.results = action.payload.results;
   });
   builder.addCase(setSearchRef, (state, action) => {
     return { ...state, searchInputRef: action.payload };

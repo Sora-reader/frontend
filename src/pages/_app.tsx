@@ -69,8 +69,8 @@ function WrappedApp(props: AppProps) {
     minHeight: '100vh',
   });
 
-  const loaderTasks = useSelector((state: RootState) => state.loader);
-  const needSpinner = Boolean(loaderTasks.length);
+  const progressBarTasks = useSelector((state: RootState) => state.progressBar);
+  const needSpinner = Boolean(progressBarTasks.length);
 
   // Initialize axios interceptors once for client and give it access to your wrapper store
   useEffect(() => initInterceptors(store), []);

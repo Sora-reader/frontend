@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { Color, ColorPicker } from 'material-ui-color';
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
