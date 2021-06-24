@@ -11,9 +11,6 @@ export const loadCachedPalettes = (dispatch: Dispatch<any>, themeOptions: ThemeS
   const cachedDark = cachedState?.palettes?.dark;
   const cachedLight = cachedState?.palettes?.light;
 
-  console.log(cachedDark, cachedLight);
-  console.log(cachedState);
-
   if (cachedDark && cachedLight) {
     const darkDiff = JSON.stringify(cachedDark) !== JSON.stringify(themeOptions.palettes.dark);
     const lightDiff = JSON.stringify(cachedLight) !== JSON.stringify(themeOptions.palettes.light);

@@ -7,14 +7,14 @@ type Props = {
   noDivier?: boolean;
 } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-export const SettingPart = ({ title, noDivier, children, ...props }: Props) => {
+export const SettingPart = ({ title, noDivier: noDivider, children, ...props }: Props) => {
   return (
     <>
       <div style={{ margin: '1rem 0 1rem 0' }} {...props}>
         <SettingHeader>{title}</SettingHeader>
         {children}
       </div>
-      {noDivier ? '' : <SettingDivider />}
+      {noDivider ? '' : <SettingDivider />}
     </>
   );
 };

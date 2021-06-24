@@ -84,12 +84,10 @@ export function Header() {
     nameInputCurrent = nameInput.current;
     if (nameInputCurrent) {
       const name = encodeURI(nameInputCurrent.value);
-      router
-        .push({
-          pathname: '/search',
-          search: `?name=${name}`,
-        })
-        .then();
+      router.push({
+        pathname: '/search',
+        search: `?name=${name}`,
+      });
     }
   }
 

@@ -9,6 +9,7 @@ import { SearchResults } from '../catalogs/baseCatalog';
 import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
 import { Dispatch } from 'react';
 import { TDispatch } from '../redux/types';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,12 +72,12 @@ export default function Search() {
       setMessage('');
       setContent(undefined);
       setSearching(true);
-      dispatch(startSearch(query)).then((data) => {
-        if (data.meta.requestStatus === 'fulfilled') {
+      dispatch(startSearch(query))
+        .then(unwrapResult)
+        .then((data) => {
           setSearching(false);
-          parseSearchResults(data.payload as SearchResults, setMessage, setContent);
-        }
-      });
+          parseSearchResults(data, setMessage, setContent);
+        });
     }
   }, [query, storedResults]);
 

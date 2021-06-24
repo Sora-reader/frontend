@@ -27,7 +27,7 @@ export default function Detail() {
     dispatch(pushLastVisitedManga(manga));
     if (!manga.title && !manga.link) {
       console.log('No data');
-      router.push('/search').then(null);
+      router.push('/search');
     }
   }, []);
 

@@ -1,4 +1,4 @@
-import { green, teal } from '@material-ui/core/colors';
+import { green, red, teal } from '@material-ui/core/colors';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
 export const defaultDark: PaletteOptions = {
@@ -7,6 +7,11 @@ export const defaultDark: PaletteOptions = {
     main: teal['300'],
     light: teal.A100,
     dark: teal.A700,
+  },
+  error: {
+    main: red['600'],
+    dark: red['700'],
+    light: red['400'],
   },
 };
 

@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import {refreshAxiosDefaults} from '../../utils/axios/utils';
+import { refreshAxiosDefaults } from '../../utils/axios/utils';
 import { signIn, signOut, signUp, refreshUser } from './actions';
 
 type StateType = {
@@ -26,8 +26,8 @@ const reducer = createReducer(initialState, (builder) => {
   );
   builder.addMatcher(
     () => true,
-    (state) => refreshAxiosDefaults(state.access),
-  )
+    (state) => refreshAxiosDefaults(state.access)
+  );
 });
 
 export default reducer;

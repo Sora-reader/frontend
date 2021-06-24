@@ -95,6 +95,7 @@ function WrappedApp(props: AppProps) {
           <Header />
           <Container maxWidth="md" component="main" className={classes.main}>
             {needSpinner && <LinearProgress />}
+            <br style={{ paddingBottom: '1rem' }} />
             <Component {...pageProps} />
           </Container>
         </Box>
