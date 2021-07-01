@@ -1,6 +1,4 @@
-import Document, {
-  Head, Html, Main, NextScript,
-} from 'next/document';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/styles';
 import { Children } from 'react';
 
@@ -8,7 +6,6 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="ru">
-
         <Head>
           <meta charSet="utf-8" />
           <meta name="referrer" content="no-referrer" />
@@ -16,14 +13,13 @@ class MyDocument extends Document {
           <link rel="icon" href="/favicon.ico" />
           <link rel="apple-touch-icon" href="/favicon.ico" />
           <link rel="stylesheet" href={'https://fonts.googleapis.com/css?family=Roboto&display=swap'} />
-        <link rel="stylesheet" href={'https://fonts.googleapis.com/css?family=Montserrat&display=swap'} />
+          <link rel="stylesheet" href={'https://fonts.googleapis.com/css?family=Montserrat&display=swap'} />
         </Head>
 
         <body>
           <Main />
           <NextScript />
         </body>
-
       </Html>
     );
   }
@@ -34,18 +30,17 @@ MyDocument.getInitialProps = async (ctx) => {
   const sheets = new ServerStyleSheets();
   const originalRenderPage = ctx.renderPage;
 
-  ctx.renderPage = () => originalRenderPage({
-    enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
-  });
+  ctx.renderPage = () =>
+    originalRenderPage({
+      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+    });
 
   const initialProps = await Document.getInitialProps(ctx);
 
   return {
     ...initialProps,
     // Styles fragment is rendered after the app and page rendering finish.
-    styles: [
-      ...Children.toArray(initialProps.styles),
-      sheets.getStyleElement()],
+    styles: [...Children.toArray(initialProps.styles), sheets.getStyleElement()],
   };
 };
 

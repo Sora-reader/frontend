@@ -14,16 +14,19 @@ export interface Manga {
   status?: string;
   year?: string;
   detailNeedsUpdate?: boolean;
+  chapters?: MangaChapters;
 }
 export interface MangaList extends Array<Manga> {}
-export interface MangaList_ extends Array<Manga> {}
-export interface MangaChapter extends String {}
+export interface MangaChapter {
+  id: number;
+  title: string;
+  link?: string;
+  volume: number;
+  chapter: number;
+}
 export interface MangaChapterImage extends String {}
 export interface MangaChapterImages extends Array<MangaChapterImage> {}
-export interface MangaVolume extends Array<MangaChapter> {}
-export interface MangaVolumes {
-  [key: string]: MangaVolume;
-}
+export interface MangaChapters extends Array<MangaChapter> {}
 export interface VerifyToken {
   token: string;
 }

@@ -6,11 +6,14 @@ import { MangaDetailHeader } from '../../components/manga/detail/MangaDetailHead
 import { MangaDetailDescription } from '../../components/manga/detail/MangaDetailDescription';
 import { RootState } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
-import { fetchMangaDetail, pushLastVisitedManga } from '../../redux/manga/actions';
+import { fetchMangaChapters, fetchMangaDetail, pushLastVisitedManga } from '../../redux/manga/actions';
 import { Manga } from '../../api/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
+import { List } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
+import { ListItemText } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,7 +22,6 @@ const useStyles = makeStyles(() =>
 );
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(context);
   return {
     props: { mangaId: Number(context.params?.id) },
   };
@@ -35,13 +37,13 @@ export default function Detail({ mangaId }: Props) {
   const dispatch = useDispatch() as TDispatch;
 
   useEffect(() => {
-    console.log(mangaId, router.query.id);
     if (!mangaId) {
       console.log('No data');
       router.push('/search');
     } else {
       if (manga.id) {
         dispatch(pushLastVisitedManga(manga));
+        dispatch(fetchMangaChapters(mangaId));
       }
 
       let retryCounter = 2;
@@ -69,7 +71,21 @@ export default function Detail({ mangaId }: Props) {
     [
       'Главы',
       <Box key={2} p={2}>
-        Список глав
+        <List>
+          {manga.chapters
+            ?.map((chapter) => (
+              <ListItem button key={chapter.link} alignItems="flex-start">
+                <ListItemText>{chapter.title || ''}</ListItemText>
+              </ListItem>
+            ))
+            .reduce((prev, curr) => (
+              <>
+                {prev}
+                <Divider />
+                {curr}
+              </>
+            ))}
+        </List>
       </Box>,
     ],
   ] as Array<[String, JSX.Element]>;

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type SoraChipProps = ChipProps<any, {component: any}>
+type SoraChipProps = ChipProps<any, { component: any }>;
 
 export const SoraChip = forwardRef<any, SoraChipProps>((props: SoraChipProps, ref: Ref<any>) => {
   const classes = { ...useStyles(), ...props.classes };

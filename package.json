@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "fix": "npx eslint . --fix",
+    "backend": "eval \"$(pyenv init -)\"; . ./.env && cd $BACKEND_PATH && make runserver port=$BACKEND_PORT",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p $PORT",
-    "heroku-postbuild": "npm run build",
-    "backend": "eval \"$(pyenv init -)\"; . ./.env && cd $BACKEND_PATH && make runserver port=$BACKEND_PORT"
+    "start": "next start",
+    "fix": "prettier-eslint --write --arrow-parens always 'src/**/*.ts' 'src/**/*.tsx' 'src/**/*.js'",
+    "check": "eslint src",
+    "heroku-postbuild": "npm run build"
+  },
+  "engines": {
+    "node": "16.x"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -43,8 +47,11 @@
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "eslint": "^7.23.0",
+    "eslint-config-next": "^11.0.1",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-unused-imports": "^1.1.1"
+    "eslint-plugin-unused-imports": "^1.1.1",
+    "prettier": "^2.3.2",
+    "prettier-eslint-cli": "^5.0.1"
   }
 }

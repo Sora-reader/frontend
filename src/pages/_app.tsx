@@ -1,25 +1,14 @@
 import { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
-import {
-  createMuiTheme,
-  createStyles,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { createMuiTheme, createStyles, makeStyles, Theme } from '@material-ui/core';
 import Head from 'next/head';
 import { useSelector, useStore } from 'react-redux';
 import { RootState, StoreType, wrapper } from '../redux/store';
 import { initInterceptors } from '../utils/axios';
 import { syncLastVisited } from '../redux/manga/utils';
 import { loadCachedPalettes } from '../redux/theme/utils';
-import {
-  Box,
-  Container,
-  LinearProgress,
-  ThemeProvider,
-} from '@material-ui/core';;
+import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
 import { Header } from '../components/Header';
-
 
 type StyleProps = { minHeight: string };
 
@@ -65,7 +54,6 @@ const useStyles = (theme: Theme) =>
       },
     })
   );
-
 
 function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;

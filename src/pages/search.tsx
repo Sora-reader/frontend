@@ -48,9 +48,11 @@ export default function Search() {
   const classes = useStyles();
   const dispatch = useDispatch() as TDispatch;
 
-  const { results: storedResults, query: storedQuery, searchInputRef } = useSelector(
-    (state: RootState) => state.search
-  );
+  const {
+    results: storedResults,
+    query: storedQuery,
+    searchInputRef,
+  } = useSelector((state: RootState) => state.search);
   const [searching, setSearching] = useState(false);
   const [message, setMessage] = useState('' as string);
   const [content, setContent] = useState([] as MangaList);
