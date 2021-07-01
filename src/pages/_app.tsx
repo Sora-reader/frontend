@@ -1,25 +1,26 @@
-// import '../styles/globals.css';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import {
-  Box,
-  Container,
   createMuiTheme,
   createStyles,
-  LinearProgress,
   makeStyles,
   Theme,
-  ThemeProvider,
 } from '@material-ui/core';
 import Head from 'next/head';
 import { useSelector, useStore } from 'react-redux';
-import { Header } from '../components/Header';
 import { RootState, StoreType, wrapper } from '../redux/store';
 import { initInterceptors } from '../utils/axios';
 import { syncLastVisited } from '../redux/manga/utils';
 import { loadCachedPalettes } from '../redux/theme/utils';
+import {
+  Box,
+  Container,
+  LinearProgress,
+  ThemeProvider,
+} from '@material-ui/core';;
+import { Header } from '../components/Header';
 
-// Just a test of style props for makeStyles
+
 type StyleProps = { minHeight: string };
 
 // We can't access local theme as it's passed only to children of ThemeProvider
@@ -38,7 +39,7 @@ const useStyles = (theme: Theme) =>
         body: {
           // TODO: stop using minHeight 100%/100vh everywhere
           'min-height': '100% !important',
-          'font-family': "-apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif",
+          'font-family': '-apple-system, BlinkMacSystemFont, \'Roboto\', \'Helvetica Neue\', sans-serif',
           '-webkit-font-smoothing': 'antialiased',
           '-moz-osx-font-smoothing': 'grayscale',
           margin: 0,
@@ -47,7 +48,7 @@ const useStyles = (theme: Theme) =>
         // TODO: override Typograhpy
         'h1, h2, h3, h4, h5, h6': {
           'font-family':
-            "-apple-system, BlinkMacSystemFont, 'Montserrat', 'Roboto', 'Helvetica Neue', sans-serif !important",
+            '-apple-system, BlinkMacSystemFont, \'Montserrat\', \'Roboto\', \'Helvetica Neue\', sans-serif !important',
         },
       },
       box: {
@@ -65,8 +66,8 @@ const useStyles = (theme: Theme) =>
     })
   );
 
-function WrappedApp(props: AppProps) {
-  const { Component, pageProps } = props;
+
+function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;
 
   const themeState = useSelector((state: RootState) => state.theme);

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { MutableRefObject, useEffect } from 'react';
 
 export function useNonLazyQuery(queryKey: string) {
   const router = useRouter();
@@ -10,7 +10,7 @@ export function useNonLazyQuery(queryKey: string) {
 }
 
 export function useSyncQuery(
-  searchInputRef: React.MutableRefObject<HTMLInputElement | undefined> | undefined,
+  searchInputRef: MutableRefObject<HTMLInputElement | undefined> | undefined,
   query: string
 ) {
   useEffect(() => {

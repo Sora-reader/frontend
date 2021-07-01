@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import Divider, { DividerProps } from '@material-ui/core/Divider';
 import { createStyles, makeStyles } from '@material-ui/core';
 

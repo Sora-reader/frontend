@@ -1,4 +1,3 @@
-import React from 'react';
 import { createStyles, ListItemText, makeStyles, Theme } from '@material-ui/core';
 import { SoraChip } from '../../SoraChip';
 import { Manga } from '../../../api/types';

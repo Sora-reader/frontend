@@ -1,4 +1,3 @@
-import React from 'react';
 import { useCallback } from 'react';
 import { createStyles, ListItem, ListItemAvatar, makeStyles, Theme } from '@material-ui/core';
 import { useRouter } from 'next/router';

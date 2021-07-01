@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { createStyles, Divider, List, makeStyles, MenuItem, Theme, useMediaQuery } from '@material-ui/core';
 import { ThemePage } from '../components/settings/theme/ThemePage';
 
@@ -51,7 +50,7 @@ export default function Settings() {
       break;
   }
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: MouseEvent) => {
     if (!(e.target instanceof HTMLLIElement)) {
       return;
     }

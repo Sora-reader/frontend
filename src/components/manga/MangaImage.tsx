@@ -1,4 +1,4 @@
-import React, { forwardRef, Ref } from 'react';
+import { forwardRef, Ref } from 'react';
 import { Avatar, AvatarProps, createStyles, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>

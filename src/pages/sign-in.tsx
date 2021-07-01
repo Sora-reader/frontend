@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from '../redux/user/actions';
 import { NextLink } from '../components/NextLink';

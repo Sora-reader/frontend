@@ -1,11 +1,11 @@
-import React from 'react';
+import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { SettingDivider } from './SettingDivider';
 import { SettingHeader } from './SettingHeader';
 
 type Props = {
   title: string;
   noDivier?: boolean;
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 export const SettingPart = ({ title, noDivier: noDivider, children, ...props }: Props) => {
   return (

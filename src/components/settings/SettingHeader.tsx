@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import Typography, { TypographyProps } from '@material-ui/core/Typography';
 
 export const SettingHeader = forwardRef<any, TypographyProps>(({ children, ...props }: TypographyProps, ref) => {

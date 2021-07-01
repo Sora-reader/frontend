@@ -1,4 +1,3 @@
-import React from 'react';
 import { createStyles, makeStyles, PaletteType, Theme } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPalette, setThemeType } from '../../../redux/theme/actions';

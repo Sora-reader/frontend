@@ -1,5 +1,4 @@
 import { FormControl, FormControlLabel, PaletteType, Radio, RadioGroup, useTheme } from '@material-ui/core';
-import React from 'react';
 
 type Props = {
   callback: (type: PaletteType) => any;

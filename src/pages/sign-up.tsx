@@ -1,4 +1,3 @@
-import React from 'react';
 import { signUp } from '../redux/user/actions';
 import { useRouter } from 'next/router';
 import { UserCredentialsForm } from '../components/UserCredentialsForm';

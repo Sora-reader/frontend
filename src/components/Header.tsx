@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
   AppBar,

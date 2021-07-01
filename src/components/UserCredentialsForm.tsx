@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { FormEvent, ReactNode, useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { Button, createStyles, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import { AnyAction } from 'redux';
@@ -36,7 +36,7 @@ type Props = {
   submitText: string;
   toDispatch: Function;
   afterSuccess: Function;
-  tip?: React.ReactNode;
+  tip?: ReactNode;
 };
 
 export const UserCredentialsForm = ({ headerText, submitText, toDispatch, afterSuccess, tip }: Props) => {
@@ -49,7 +49,7 @@ export const UserCredentialsForm = ({ headerText, submitText, toDispatch, afterS
     inputRef.current?.focus();
   }, [inputRef]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 

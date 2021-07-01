@@ -1,4 +1,4 @@
-import React, { createStyles, List, makeStyles } from '@material-ui/core';
+import { createStyles, List, makeStyles } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { MangaListItem } from '../components/manga/list/MangaListItem';
 import { RootState } from '../redux/store';

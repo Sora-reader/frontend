@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect } from 'react';
 import { Box, createStyles, Divider, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +19,7 @@ const useStyles = makeStyles(() =>
 );
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log(context);
   return {
     props: { mangaId: Number(context.params?.id) },
   };
