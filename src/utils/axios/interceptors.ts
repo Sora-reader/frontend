@@ -14,7 +14,6 @@ export function initInterceptors(store: StoreType) {
       else if (type === 'end' && !taskExists) return;
 
       const key = `${type}Loading` as keyof typeof progressBarActions;
-      console.log(`dispatching ${key} for ${taskNameFromConfig(config)}`);
       store.dispatch(progressBarActions[key](taskNameFromConfig(config)));
     }
   };

@@ -88,7 +88,7 @@ export function MangaDetailHeader(props: Props) {
             <SoraChip component="li" label={genre} key={genre} />
           ))}
         </ul>
-        <SoraChip component="a" target="_blank" href={props.source_url} label={props.source} clickable />
+        <SoraChip component="a" target="_blank" href={props.sourceUrl} label={props.source} clickable />
         <div className={classes.ratingContainer}>
           <MangaRating value={props.rating} />
           <p>

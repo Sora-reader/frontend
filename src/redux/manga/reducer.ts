@@ -32,7 +32,7 @@ const reducer = createReducer(initialState, (builder) => {
     if (state.currentChapter) state.currentChapter.images = action.payload;
   });
   builder.addCase(fetchMangaDetail.fulfilled, (state, action) => {
-    state.currentManga = action.payload;
+    state.currentManga = { ...state.currentManga, ...action.payload };
   });
   builder.addCase(fetchMangaChapters.fulfilled, (state, action) => {
     state.currentManga.chapters = action.payload;

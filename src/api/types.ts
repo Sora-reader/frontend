@@ -1,20 +1,21 @@
 export interface Manga {
   id: number;
   title: string;
-  alt_title?: string;
+  altTitle?: string;
   rating?: number;
   thumbnail?: string;
   image?: string;
   description: string;
   source?: string;
-  source_url?: string;
+  sourceUrl?: string;
   authors?: string[];
   genres?: string[];
   categories?: string[];
   status?: string;
   year?: string;
-  detailNeedsUpdate?: boolean;
   chapters?: MangaChapters;
+  updatedDetail?: string;
+  updatedChapters?: string;
 }
 export interface MangaList extends Array<Manga> {}
 export interface MangaChapter {

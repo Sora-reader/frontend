@@ -14,6 +14,7 @@ import { GetServerSideProps } from 'next';
 import { List } from '@material-ui/core';
 import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
+import { chaptersNeedUpdate } from '../../redux/manga/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,6 +31,31 @@ type Props = {
   mangaId: Number;
 };
 
+const fetchRetry = (
+  shouldRetry: (data: any) => boolean,
+  dispatchCall: () => Promise<any>,
+  onSuccess?: Function,
+  maxRetries: number = 2,
+  timeout: number = 2000
+) => {
+  /**
+   * A function to retry calls if data is outdated
+   * @param shouldRetry how to check if should retry
+   * @param onSuccess a callback to run when data was fetched
+   */
+  let retryCounter = maxRetries;
+  const retryIfNeeded = (data: any) => {
+    if (shouldRetry(data) && retryCounter) {
+      setTimeout(() => {
+        retryCounter -= 1;
+        dispatchCall().then(retryIfNeeded);
+      }, timeout);
+    }
+    if (onSuccess) onSuccess();
+  };
+  dispatchCall().then(retryIfNeeded);
+};
+
 export default function Detail({ mangaId }: Props) {
   const classes = useStyles();
   const router = useRouter();
@@ -43,19 +69,22 @@ export default function Detail({ mangaId }: Props) {
     } else {
       if (manga.id) {
         dispatch(pushLastVisitedManga(manga));
-        dispatch(fetchMangaChapters(mangaId));
       }
 
-      let retryCounter = 2;
-      const retryIfNeeded = (data: Manga) => {
-        if (data.detailNeedsUpdate && retryCounter)
-          setTimeout(() => {
-            retryCounter -= 1;
-            dispatch(pushLastVisitedManga(manga));
-            dispatch(fetchMangaDetail(mangaId)).then(unwrapResult).then(retryIfNeeded);
-          }, 2000);
-      };
-      dispatch(fetchMangaDetail(mangaId)).then(unwrapResult).then(retryIfNeeded);
+      fetchRetry(
+        (data) => !data.detailDataFresh,
+        () => dispatch(fetchMangaDetail(mangaId)).then(unwrapResult),
+        () => dispatch(pushLastVisitedManga(manga))
+      );
+
+      if (chaptersNeedUpdate(manga)) {
+        fetchRetry(
+          (data) => !data.length,
+          () => dispatch(fetchMangaChapters(mangaId)).then(unwrapResult)
+        );
+      } else {
+        dispatch(fetchMangaChapters(mangaId)).then(unwrapResult);
+      }
     }
   }, []);
 
@@ -78,13 +107,17 @@ export default function Detail({ mangaId }: Props) {
                 <ListItemText>{chapter.title || ''}</ListItemText>
               </ListItem>
             ))
-            .reduce((prev, curr) => (
-              <>
-                {prev}
-                <Divider />
-                {curr}
-              </>
-            ))}
+            .reduce(
+              (prev, curr) => (
+                // Reduce to place dividers between chapters
+                <>
+                  {prev}
+                  <Divider />
+                  {curr}
+                </>
+              ),
+              <div></div>
+            )}
         </List>
       </Box>,
     ],

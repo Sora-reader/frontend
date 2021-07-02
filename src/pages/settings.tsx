@@ -40,13 +40,12 @@ export default function Settings() {
   const [menuItem, setMenuItem] = useState('theme');
   const bp = useMediaQuery(`(max-width:${mediaPx}px)`);
 
-  let component: JSX.Element;
+  let component: JSX.Element | null = null;
   switch (menuItem) {
     case 'theme':
       component = <ThemePage />;
       break;
     default:
-      component = <ThemePage />;
       break;
   }
 

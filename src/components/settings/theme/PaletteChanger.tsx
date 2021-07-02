@@ -3,6 +3,7 @@ import { Color, ColorPicker } from 'material-ui-color';
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 import createPalette, { PaletteOptions, SimplePaletteColorOptions } from '@material-ui/core/styles/createPalette';
 import { SoraChip } from '../../SoraChip';
+import { NoSsr } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,7 +85,9 @@ export function PaletteChanger({ currentPalette, resetPalette, submitPalette }: 
           label="тёмный"
         />
       </div>
-      <ColorPicker onChange={updateDraft(activeColor)} value={paletteDraft.primary[activeColor]} />
+      <NoSsr>
+        <ColorPicker onChange={updateDraft(activeColor)} value={paletteDraft.primary[activeColor]} />
+      </NoSsr>
       <div className={classes.buttons}>
         <Button onClick={resetPalette}>Сбросить</Button>
         <Button onClick={() => submitPalette({ primary: paletteDraft.primary })}>Сохранить</Button>

@@ -9,6 +9,7 @@ import { syncLastVisited } from '../redux/manga/utils';
 import { loadCachedPalettes } from '../redux/theme/utils';
 import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
 import { Header } from '../components/Header';
+import { useRouter } from 'next/router';
 
 type StyleProps = { minHeight: string };
 
@@ -47,10 +48,15 @@ const useStyles = (theme: Theme) =>
         color: theme.palette.text.primary,
       },
       main: {
+        position: 'relative',
         padding: 0,
         backgroundColor: theme.palette.background.paper,
         color: theme.palette.text.primary,
         minHeight: ({ minHeight }) => minHeight,
+      },
+      progress: {
+        position: 'absolute',
+        width: '100%',
       },
     })
   );
@@ -62,6 +68,14 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   const generateTheme = () => createMuiTheme({ palette: themeState.palettes[themeState.mode] });
   const [loadedCachedTheme, setLoadedCachedTheme] = useState(false);
   const [theme, setTheme] = useState(generateTheme());
+
+  const router = useRouter();
+  // const [renderMenu, setRenderMenu] = useState(true);
+  // useEffect(() => {
+  //   if (/^\/detail/.test(router.asPath)) {
+  //     setRenderMenu(false);
+  //   }
+  // }, [router]);
 
   // Load palettes on first render
   useEffect(() => {
@@ -102,12 +116,18 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <Box className={classes.box}>
-          <Header />
-          <Container maxWidth="md" component="main" className={classes.main}>
-            {needSpinner && <LinearProgress />}
-            <br style={{ paddingBottom: '1rem' }} />
+          {!/^\/read/.test(router.asPath) ? (
+            <>
+              <Header />
+              <Container maxWidth="md" component="main" className={classes.main}>
+                {needSpinner && <LinearProgress className={classes.progress} />}
+                <br style={{ paddingBottom: '1rem' }} />
+                <Component {...pageProps} />
+              </Container>
+            </>
+          ) : (
             <Component {...pageProps} />
-          </Container>
+          )}
         </Box>
       </ThemeProvider>
     </>
