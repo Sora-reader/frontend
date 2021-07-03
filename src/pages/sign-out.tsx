@@ -9,7 +9,9 @@ function SignOut() {
   // Store in getServerSideProps in undefined
   const router = useRouter();
   const dispatch = useDispatch() as TDispatch;
+
   useEffect(() => {
+    router.prefetch('/');
     dispatch(signOut())
       .then(unwrapResult)
       .then(() => router.push('/'));

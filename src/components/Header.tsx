@@ -1,28 +1,10 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import {
-  AppBar,
-  createStyles,
-  IconButton,
-  Input,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  SwipeableDrawer,
-  Theme,
-  Toolbar,
-} from '@material-ui/core';
+import { AppBar, createStyles, IconButton, Input, makeStyles, Theme, Toolbar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useRouter } from 'next/router';
-import SettingsIcon from '@material-ui/icons/Settings';
-import HomeIcon from '@material-ui/icons/Home';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useDispatch, useSelector } from 'react-redux';
-import { NextLink } from './NextLink';
-import { RootState } from '../redux/store';
+import { useDispatch } from 'react-redux';
 import { setSearchRef } from '../redux/search/actions';
+import { HeaderDrawer } from './drawer/HeaderDrawer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,35 +30,26 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: theme.spacing(1, 3),
       },
     },
-    drawerWrapper: {
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    },
-    list: {
-      paddingTop: theme.spacing(2),
-      width: '250px',
-    },
   })
 );
 
 export function Header() {
   const classes = useStyles();
   const router = useRouter();
-  const nameInput = useRef<HTMLInputElement>();
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user);
-  let nameInputCurrent = nameInput.current;
+
   const [drawer, setDrawer] = useState(false);
+  const toggleDrawer = (value: boolean) => () => {
+    setDrawer(value);
+  };
+
+  const nameInput = useRef<HTMLInputElement>();
+  const menuButtonRef = useRef<any>();
+  let nameInputCurrent = nameInput.current;
 
   useEffect(() => {
     dispatch(setSearchRef(nameInput));
   }, [nameInput]);
-
-  const toggleDrawer = (value: boolean) => () => {
-    setDrawer(value);
-  };
 
   function submitSearch(e: FormEvent) {
     e.preventDefault();
@@ -90,89 +63,12 @@ export function Header() {
     }
   }
 
-  const drawerFooter = user.access ? (
-    <>
-      <ListItem
-        button
-        href="/profile"
-        component={NextLink}
-        color="inherit"
-        underline="none"
-        onClick={toggleDrawer(false)}
-      >
-        <ListItemIcon>
-          <AccountBoxIcon />
-        </ListItemIcon>
-        <ListItemText>{user.username}</ListItemText>
-      </ListItem>
-      <ListItem
-        button
-        href="/sign-out"
-        component={NextLink}
-        color="inherit"
-        underline="none"
-        onClick={toggleDrawer(false)}
-      >
-        <ListItemIcon>
-          <ExitToAppIcon />
-        </ListItemIcon>
-        <ListItemText>Выйти</ListItemText>
-      </ListItem>
-    </>
-  ) : (
-    <ListItem
-      button
-      href="/sign-in"
-      component={NextLink}
-      color="inherit"
-      underline="none"
-      onClick={toggleDrawer(false)}
-    >
-      <ListItemIcon>
-        <AccountBoxIcon />
-      </ListItemIcon>
-      <ListItemText>Вход</ListItemText>
-    </ListItem>
-  );
-
   return (
     <>
-      <SwipeableDrawer onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)} open={drawer}>
-        <div className={classes.drawerWrapper}>
-          <List className={classes.list}>
-            <ListItem
-              button
-              href="/"
-              component={NextLink}
-              color="inherit"
-              underline="none"
-              onClick={toggleDrawer(false)}
-            >
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText>Домой</ListItemText>
-            </ListItem>
-            <ListItem
-              button
-              href="/settings"
-              component={NextLink}
-              color="inherit"
-              underline="none"
-              onClick={toggleDrawer(false)}
-            >
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText>Настройки</ListItemText>
-            </ListItem>
-          </List>
-          <List className={classes.list}>{drawerFooter}</List>
-        </div>
-      </SwipeableDrawer>
+      <HeaderDrawer drawer={drawer} toggleDrawer={toggleDrawer} menuRef={menuButtonRef} />
       <AppBar className={classes.navbar} position="sticky">
         <Toolbar className={classes.toolbar}>
-          <IconButton onClick={toggleDrawer(true)} className={classes.toolbarIcon}>
+          <IconButton ref={menuButtonRef} onClick={toggleDrawer(true)} className={classes.toolbarIcon}>
             <MenuIcon />
           </IconButton>
           <form onSubmit={submitSearch} autoComplete="off">

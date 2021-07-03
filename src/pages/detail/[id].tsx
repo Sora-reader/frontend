@@ -88,6 +88,12 @@ export default function Detail({ mangaId }: Props) {
     }
   }, []);
 
+  const mappedChapters = manga.chapters?.map((chapter) => (
+    <ListItem button key={chapter.link} alignItems="flex-start">
+      <ListItemText>{chapter.title || ''}</ListItemText>
+    </ListItem>
+  ));
+
   const panels = [
     [
       'Описание',
@@ -101,23 +107,18 @@ export default function Detail({ mangaId }: Props) {
       'Главы',
       <Box key={2} p={2}>
         <List>
-          {manga.chapters
-            ?.map((chapter) => (
-              <ListItem button key={chapter.link} alignItems="flex-start">
-                <ListItemText>{chapter.title || ''}</ListItemText>
-              </ListItem>
+          {mappedChapters && mappedChapters.length ? (
+            mappedChapters.reduce((prev, curr) => (
+              // Reduce to place dividers between chapters, can't use join with JSX
+              <>
+                {prev}
+                <Divider />
+                {curr}
+              </>
             ))
-            .reduce(
-              (prev, curr) => (
-                // Reduce to place dividers between chapters
-                <>
-                  {prev}
-                  <Divider />
-                  {curr}
-                </>
-              ),
-              <div></div>
-            )}
+          ) : (
+            <p>Список глав пуст</p>
+          )}
         </List>
       </Box>,
     ],

@@ -25,27 +25,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = {
-  data: Manga;
-};
-
-export function MangaListItem(props: Props) {
+export function MangaListItem(manga: Manga) {
   const classes = useStyles();
   const router = useRouter();
-  const { data } = props;
   const dispatch = useDispatch();
 
   const passManga = useCallback(() => {
-    dispatch(setMangaPreview(data));
-    router.push(`/detail/${data.id}`);
-  }, [router, data, setMangaPreview]);
+    dispatch(setMangaPreview(manga));
+    router.push(`/detail/${manga.id}`);
+  }, [router, manga, setMangaPreview]);
 
   return (
-    <ListItem button onClick={passManga} key={data.id} alignItems="flex-start" className={classes.root}>
+    <ListItem button onClick={passManga} key={manga.id} alignItems="flex-start" className={classes.root}>
       <ListItemAvatar className={classes.avatarWrapper}>
-        <MangaImage src={data.thumbnail} className={classes.avatar} />
+        <MangaImage src={manga.thumbnail} className={classes.avatar} />
       </ListItemAvatar>
-      <MangaListItemDesc {...data} />
+      <MangaListItemDesc {...manga} />
     </ListItem>
   );
 }

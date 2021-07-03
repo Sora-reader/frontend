@@ -92,7 +92,7 @@ export default function Search() {
       {content && (
         <List className={classes.list}>
           {content.map((item) => (
-            <MangaListItem key={item.id} data={item} />
+            <MangaListItem key={item.id} {...item} />
           ))}
         </List>
       )}
