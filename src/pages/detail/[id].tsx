@@ -6,15 +6,17 @@ import { MangaDetailHeader } from '../../components/manga/detail/MangaDetailHead
 import { MangaDetailDescription } from '../../components/manga/detail/MangaDetailDescription';
 import { RootState } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
-import { fetchMangaChapters, fetchMangaDetail, pushLastVisitedManga } from '../../redux/manga/actions';
+import {
+  fetchMangaChapters,
+  fetchMangaDetail,
+  pushLastVisitedManga,
+} from '../../redux/manga/actions';
 import { Manga } from '../../api/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
-import { List } from '@material-ui/core';
-import { ListItem } from '@material-ui/core';
-import { ListItemText } from '@material-ui/core';
 import { chaptersNeedUpdate } from '../../redux/manga/utils';
+import { ChapterList } from '../../components/manga/detail/ChapterList';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -88,12 +90,6 @@ export default function Detail({ mangaId }: Props) {
     }
   }, []);
 
-  const mappedChapters = manga.chapters?.map((chapter) => (
-    <ListItem button key={chapter.link} alignItems="flex-start">
-      <ListItemText>{chapter.title || ''}</ListItemText>
-    </ListItem>
-  ));
-
   const panels = [
     [
       'Описание',
@@ -106,20 +102,7 @@ export default function Detail({ mangaId }: Props) {
     [
       'Главы',
       <Box key={2} p={2}>
-        <List>
-          {mappedChapters && mappedChapters.length ? (
-            mappedChapters.reduce((prev, curr) => (
-              // Reduce to place dividers between chapters, can't use join with JSX
-              <>
-                {prev}
-                <Divider />
-                {curr}
-              </>
-            ))
-          ) : (
-            <p>Список глав пуст</p>
-          )}
-        </List>
+        <ChapterList mangaId={manga.id} chapters={manga.chapters} />
       </Box>,
     ],
   ] as Array<[String, JSX.Element]>;

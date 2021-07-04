@@ -23,7 +23,7 @@ export interface MangaChapter {
   title: string;
   link?: string;
   volume: number;
-  chapter: number;
+  number: number;
 }
 export interface MangaChapterImage extends String {}
 export interface MangaChapterImages extends Array<MangaChapterImage> {}

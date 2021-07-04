@@ -29,7 +29,7 @@ const useStyles = (theme: Theme) =>
         body: {
           // TODO: stop using minHeight 100%/100vh everywhere
           'min-height': '100% !important',
-          'font-family': '-apple-system, BlinkMacSystemFont, \'Roboto\', \'Helvetica Neue\', sans-serif',
+          'font-family': "-apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif",
           '-webkit-font-smoothing': 'antialiased',
           '-moz-osx-font-smoothing': 'grayscale',
           margin: 0,
@@ -38,7 +38,7 @@ const useStyles = (theme: Theme) =>
         // TODO: override Typograhpy
         'h1, h2, h3, h4, h5, h6': {
           'font-family':
-            '-apple-system, BlinkMacSystemFont, \'Montserrat\', \'Roboto\', \'Helvetica Neue\', sans-serif !important',
+            "-apple-system, BlinkMacSystemFont, 'Montserrat', 'Roboto', 'Helvetica Neue', sans-serif !important",
         },
       },
       box: {
@@ -116,18 +116,19 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <Box className={classes.box}>
-          {!/^\/read/.test(router.asPath) ? (
-            <>
-              <Header />
-              <Container maxWidth="md" component="main" className={classes.main}>
-                {needSpinner && <LinearProgress className={classes.progress} />}
-                <br style={{ paddingBottom: '1rem' }} />
-                <Component {...pageProps} />
-              </Container>
-            </>
-          ) : (
-            <Component {...pageProps} />
-          )}
+          {/* TODO: read page must be without menu and stuff */}
+          {/* {!/^\/read/.test(router.asPath) ? ( */}
+          <>
+            <Header />
+            <Container maxWidth="md" component="main" className={classes.main}>
+              {needSpinner && <LinearProgress className={classes.progress} />}
+              <br style={{ paddingBottom: '1rem' }} />
+              <Component {...pageProps} />
+            </Container>
+          </>
+          {/* ) : ( */}
+          {/* <Component {...pageProps} /> */}
+          {/* )} */}
         </Box>
       </ThemeProvider>
     </>

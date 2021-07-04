@@ -17,9 +17,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   console.log(context);
   return {
     props: {
-      mangaId: Number(context.params?.mangaId),
-      volumeId: Number(context.params?.volumeId),
-      chapterId: Number(context.params?.chapterId),
+      mangaId: Number(context.query.mangaId),
+      volumeId: Number(context.query.volumeId),
+      chapterId: Number(context.query.chapterId),
     },
   };
 };

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { MutableRefObject, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export function useNonLazyQuery(queryKey: string) {
   const router = useRouter();
@@ -9,22 +9,17 @@ export function useNonLazyQuery(queryKey: string) {
   return query;
 }
 
-export function useSyncQuery(
-  searchInputRef: MutableRefObject<HTMLInputElement | undefined> | undefined,
-  query: string
-) {
+export function useSyncQuery(query: string, elementId: string) {
   useEffect(() => {
-    if (searchInputRef) {
-      const { current } = searchInputRef;
-      if (current) {
-        if (query && current.value !== query) {
-          // Sync query value from url to input
-          current.value = query;
-        } else if (!query) {
-          // If the query is empty then focus query input
-          current.focus();
-        }
+    const searchInputElement = document.getElementById(elementId) as HTMLInputElement;
+    if (searchInputElement) {
+      if (query && searchInputElement.value !== query) {
+        // Sync query value from url to input
+        searchInputElement.value = query;
+      } else if (!query) {
+        // If the query is empty then focus query input
+        searchInputElement.focus();
       }
     }
-  }, [query, searchInputRef]);
+  }, [query]);
 }

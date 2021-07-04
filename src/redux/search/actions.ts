@@ -1,10 +1,8 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { MutableRefObject } from 'react';
 import { MangaList } from '../../api/types';
 
 export const SEARCH_MANGA = 'SEARCH_MANGA';
-export const SET_SEARCH_INPUT_REF = 'SET_SEARCH_INPUT_REF';
 
 export const startSearch = createAsyncThunk<{ query: string; results: MangaList }, string>(
   'search/start',
@@ -20,5 +18,3 @@ export const startSearch = createAsyncThunk<{ query: string; results: MangaList 
     };
   }
 );
-
-export const setSearchRef = createAction<MutableRefObject<HTMLInputElement | undefined>>('setSearchRef');

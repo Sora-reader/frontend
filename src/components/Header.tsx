@@ -1,9 +1,8 @@
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { AppBar, createStyles, IconButton, Input, makeStyles, Theme, Toolbar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { setSearchRef } from '../redux/search/actions';
 import { HeaderDrawer } from './drawer/HeaderDrawer';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,17 +42,12 @@ export function Header() {
     setDrawer(value);
   };
 
-  const nameInput = useRef<HTMLInputElement>();
+  const searchInputRef = useRef<HTMLInputElement>();
   const menuButtonRef = useRef<any>();
-  let nameInputCurrent = nameInput.current;
-
-  useEffect(() => {
-    dispatch(setSearchRef(nameInput));
-  }, [nameInput]);
 
   function submitSearch(e: FormEvent) {
     e.preventDefault();
-    nameInputCurrent = nameInput.current;
+    const nameInputCurrent = searchInputRef?.current;
     if (nameInputCurrent) {
       const name = encodeURI(nameInputCurrent.value);
       router.push({
@@ -72,7 +66,13 @@ export function Header() {
             <MenuIcon />
           </IconButton>
           <form onSubmit={submitSearch} autoComplete="off">
-            <Input name="name" id="search-input" inputRef={nameInput} className={classes.search} placeholder="Поиск" />
+            <Input
+              name="name"
+              id="search-input"
+              inputRef={searchInputRef}
+              className={classes.search}
+              placeholder="Поиск"
+            />
           </form>
         </Toolbar>
       </AppBar>
