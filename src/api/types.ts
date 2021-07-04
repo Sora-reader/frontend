@@ -25,8 +25,7 @@ export interface MangaChapter {
   volume: number;
   number: number;
 }
-export interface MangaChapterImage extends String {}
-export interface MangaChapterImages extends Array<MangaChapterImage> {}
+export interface MangaChapterImages extends Array<string> {}
 export interface MangaChapters extends Array<MangaChapter> {}
 export interface VerifyToken {
   token: string;

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -14,7 +14,6 @@ const useStyles = makeStyles(() =>
 );
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(context);
   return {
     props: {
       mangaId: Number(context.query.mangaId),
@@ -34,15 +33,31 @@ export default function Detail({ mangaId, volumeId, chapterId }: Props) {
   const router = useRouter();
   const chapter = useSelector((state: RootState) => state.manga.currentChapter);
   const dispatch = useDispatch() as TDispatch;
+  const [imageNumber, setImageNumber] = useState(0);
 
   useEffect(() => {
     if (!(mangaId && volumeId && chapterId)) {
       console.log('No data');
       router.push('/search');
     } else if (chapter && !chapter?.images) {
-      dispatch(fetchChapterImages(chapter.id));
+      dispatch(fetchChapterImages(chapter.id)).then((data) => {
+        console.log(data);
+      });
     }
   }, []);
 
-  return <div className={classes.root}>🚧 Under construction 🚧</div>;
+  return (
+    <div className={classes.root}>
+      {chapter?.images ? (
+        <img
+          src={chapter.images[imageNumber]}
+          onClick={() => {
+            setImageNumber(imageNumber + 1);
+          }}
+        />
+      ) : (
+        ''
+      )}
+    </div>
+  );
 }
