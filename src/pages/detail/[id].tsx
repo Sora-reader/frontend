@@ -6,11 +6,7 @@ import { MangaDetailHeader } from '../../components/manga/detail/MangaDetailHead
 import { MangaDetailDescription } from '../../components/manga/detail/MangaDetailDescription';
 import { RootState } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
-import {
-  fetchMangaChapters,
-  fetchMangaDetail,
-  pushLastVisitedManga,
-} from '../../redux/manga/actions';
+import { fetchMangaChapters, fetchMangaDetail, pushLastVisitedManga } from '../../redux/manga/actions';
 import { Manga } from '../../api/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';

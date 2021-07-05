@@ -29,7 +29,7 @@ const useStyles = (theme: Theme) =>
         body: {
           // TODO: stop using minHeight 100%/100vh everywhere
           'min-height': '100% !important',
-          'font-family': "-apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif",
+          'font-family': '-apple-system, BlinkMacSystemFont, \'Roboto\', \'Helvetica Neue\', sans-serif',
           '-webkit-font-smoothing': 'antialiased',
           '-moz-osx-font-smoothing': 'grayscale',
           margin: 0,
@@ -38,7 +38,7 @@ const useStyles = (theme: Theme) =>
         // TODO: override Typograhpy
         'h1, h2, h3, h4, h5, h6': {
           'font-family':
-            "-apple-system, BlinkMacSystemFont, 'Montserrat', 'Roboto', 'Helvetica Neue', sans-serif !important",
+            '-apple-system, BlinkMacSystemFont, \'Montserrat\', \'Roboto\', \'Helvetica Neue\', sans-serif !important',
         },
       },
       box: {

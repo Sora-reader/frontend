@@ -1,12 +1,5 @@
-import { Dispatch, MouseEvent, MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
-import { Avatar } from '@material-ui/core';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
 import { MangaChapterImages } from '../../api/types';
-import { KeyboardEventHandler } from 'react';
 
 const scrolledBottom = () => window.window.scrollY + window.window.outerHeight >= document.body.offsetHeight;
 

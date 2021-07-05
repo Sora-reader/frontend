@@ -2,7 +2,6 @@ import { FormEvent, useRef, useState } from 'react';
 import { AppBar, createStyles, IconButton, Input, makeStyles, Theme, Toolbar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
 import { HeaderDrawer } from './drawer/HeaderDrawer';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -35,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export function Header() {
   const classes = useStyles();
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const [drawer, setDrawer] = useState(false);
   const toggleDrawer = (value: boolean) => () => {

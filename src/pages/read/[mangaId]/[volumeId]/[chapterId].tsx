@@ -1,4 +1,4 @@
-import { MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
