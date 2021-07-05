@@ -70,12 +70,6 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = useState(generateTheme());
 
   const router = useRouter();
-  // const [renderMenu, setRenderMenu] = useState(true);
-  // useEffect(() => {
-  //   if (/^\/detail/.test(router.asPath)) {
-  //     setRenderMenu(false);
-  //   }
-  // }, [router]);
 
   // Load palettes on first render
   useEffect(() => {
@@ -116,19 +110,21 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <Box className={classes.box}>
+          <Header />
           {/* TODO: read page must be without menu and stuff */}
-          {/* {!/^\/read/.test(router.asPath) ? ( */}
-          <>
-            <Header />
+          {!/^\/read/.test(router.asPath) ? (
+            <>
+              <Container maxWidth="md" component="main" className={classes.main}>
+                {needSpinner && <LinearProgress className={classes.progress} />}
+                <br style={{ paddingBottom: '1rem' }} />
+                <Component {...pageProps} />
+              </Container>
+            </>
+          ) : (
             <Container maxWidth="md" component="main" className={classes.main}>
-              {needSpinner && <LinearProgress className={classes.progress} />}
-              <br style={{ paddingBottom: '1rem' }} />
               <Component {...pageProps} />
             </Container>
-          </>
-          {/* ) : ( */}
-          {/* <Component {...pageProps} /> */}
-          {/* )} */}
+          )}
         </Box>
       </ThemeProvider>
     </>

@@ -10,9 +10,7 @@ type Props = {
 };
 
 export const ChapterList = memo(({ mangaId, chapters }: Props) => {
-  const mappedChapters = chapters?.map((chapter) => (
-    <ChapterItem key={chapter.link} mangaId={mangaId} chapter={chapter} />
-  ));
+  const mappedChapters = chapters?.map((chapter) => <ChapterItem mangaId={mangaId} chapter={chapter} />);
 
   return (
     <List>
