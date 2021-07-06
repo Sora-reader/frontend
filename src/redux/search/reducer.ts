@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { MangaList } from '../../api/types';
+import { MangaList } from '../../utils/apiTypes';
 import { startSearch } from './actions';
 
 type StateType = {

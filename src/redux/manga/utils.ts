@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import isEmpty from 'lodash.isempty';
 import { loadLastVisitedManga } from './actions';
-import { Manga } from '../../api/types';
+import { Manga } from '../../utils/apiTypes';
 
 export const detailsNeedUpdate = (manga: Manga) => {
   if (!manga.updatedDetail) return false;

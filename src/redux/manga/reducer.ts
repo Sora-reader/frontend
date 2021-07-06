@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { Manga, MangaChapter, MangaChapterImages, MangaList } from '../../api/types';
+import { Manga, MangaChapter, MangaChapterImages, MangaList } from '../../utils/apiTypes';
 import {
   setMangaPreview,
   loadLastVisitedManga,
@@ -36,7 +36,6 @@ const reducer = createReducer(initialState, (builder) => {
   });
   builder.addCase(fetchMangaChapters.fulfilled, (state, action) => {
     state.currentManga.chapters = action.payload;
-    console.log('Set chapters');
   });
   builder.addCase(loadLastVisitedManga, (state, action) => {
     state.lastVisited = action.payload;

@@ -1,4 +1,4 @@
-import { MangaChapter } from '../../../api/types';
+import { MangaChapter } from '../../../utils/apiTypes';
 import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
 import { setCurrentChapter } from '../../../redux/manga/actions';

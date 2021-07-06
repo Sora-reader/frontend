@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { MangaListItemDesc } from './MangaListItemDesc';
 import { MangaImage } from '../MangaImage';
 import { setMangaPreview } from '../../../redux/manga/actions';
-import { Manga } from '../../../api/types';
+import { Manga } from '../../../utils/apiTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

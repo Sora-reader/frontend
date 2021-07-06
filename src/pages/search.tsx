@@ -8,7 +8,7 @@ import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
 import { Dispatch } from 'react';
 import { TDispatch } from '../redux/types';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { MangaList } from '../api/types';
+import { MangaList } from '../utils/apiTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

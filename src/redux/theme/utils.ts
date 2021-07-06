@@ -1,6 +1,30 @@
-import { Dispatch } from 'react';
+import { Theme } from '@material-ui/core';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { StoreType } from '../store';
 import { setPalette } from './actions';
 import { ThemeState } from './reducer';
+
+type UseThemeHandlersProps = {
+  store: StoreType;
+  themeState: ThemeState;
+  setTheme: Dispatch<SetStateAction<any>>;
+  generateTheme: () => Theme;
+};
+
+export const useThemeHooks = ({ store, themeState, setTheme, generateTheme }: UseThemeHandlersProps) => {
+  const [loadedCachedTheme, setLoadedCachedTheme] = useState(false);
+  useEffect(() => {
+    loadCachedPalettes(store.dispatch, themeState);
+    setLoadedCachedTheme(true);
+  }, []);
+  useEffect(() => {
+    setTheme(generateTheme());
+    console.log('Written options to localStorage');
+    if (loadedCachedTheme) {
+      window.localStorage.setItem('sora-theme', JSON.stringify(themeState));
+    }
+  }, [themeState]);
+};
 
 export const loadCachedPalettes = (dispatch: Dispatch<any>, themeOptions: ThemeState) => {
   // Load palettes from localStorage if needed

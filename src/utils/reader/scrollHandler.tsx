@@ -1,5 +1,5 @@
-import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
-import { MangaChapterImages } from '../../api/types';
+import { Dispatch, MouseEventHandler, SetStateAction, useEffect } from 'react';
+import { MangaChapterImages } from '../apiTypes';
 
 const scrolledBottom = () => window.window.scrollY + window.window.outerHeight >= document.body.offsetHeight;
 
@@ -23,11 +23,21 @@ export const getScrollClickHandler =
     }
   };
 
-export const getScrollKBHandler = (setImageNumber: Dispatch<SetStateAction<number>>, images?: MangaChapterImages) => {
+export const useKeyboardScroll = (images?: MangaChapterImages) => {
+  const scrollKBHandler = getScrollKBHandler(images);
+  useEffect(() => {
+    // bindKeyboard is messing stuff up
+    document.removeEventListener('keydown', scrollKBHandler);
+    document.addEventListener('keydown', scrollKBHandler);
+    return () => {
+      document.removeEventListener('keydown', scrollKBHandler);
+    };
+  }, [images]);
+};
+
+export const getScrollKBHandler = (images?: MangaChapterImages) => {
   return function (e: KeyboardEvent): any {
-    // TODO: remove Home/End and fix rerender issues
-    if (!['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(e.key) || e.repeat || !images)
-      return;
+    if (!['ArrowDown', 'ArrowUp'].includes(e.key) || e.repeat || !images) return;
     e.preventDefault();
     switch (e.key) {
       case 'ArrowDown':
@@ -35,18 +45,6 @@ export const getScrollKBHandler = (setImageNumber: Dispatch<SetStateAction<numbe
         break;
       case 'ArrowUp':
         scrollVh('up');
-        break;
-      case 'ArrowRight':
-        setImageNumber((prevState) => (prevState + 1 < images.length ? prevState + 1 : prevState));
-        break;
-      case 'ArrowLeft':
-        setImageNumber((prevState) => (prevState - 1 >= 0 ? prevState - 1 : prevState));
-        break;
-      case 'End':
-        window.scroll(0, document.body.scrollHeight);
-        break;
-      case 'Home':
-        window.scroll(0, 0);
         break;
     }
   };

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, createStyles, Divider, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -7,11 +7,10 @@ import { MangaDetailDescription } from '../../components/manga/detail/MangaDetai
 import { RootState } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
 import { fetchMangaChapters, fetchMangaDetail, pushLastVisitedManga } from '../../redux/manga/actions';
-import { Manga } from '../../api/types';
+import { Manga } from '../../utils/apiTypes';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
-import { chaptersNeedUpdate } from '../../redux/manga/utils';
 import { ChapterList } from '../../components/manga/detail/ChapterList';
 
 const useStyles = makeStyles(() =>
@@ -42,8 +41,8 @@ const fetchRetry = (
    * @param onSuccess a callback to run when data was fetched
    */
   let retryCounter = maxRetries;
-  const retryIfNeeded = (data: any) => {
-    if (shouldRetry(data) && retryCounter) {
+  const retryIfNeeded = (data?: any) => {
+    if ((shouldRetry(data) && retryCounter) || !data) {
       setTimeout(() => {
         retryCounter -= 1;
         dispatchCall().then(retryIfNeeded);
@@ -57,6 +56,7 @@ const fetchRetry = (
 export default function Detail({ mangaId }: Props) {
   const classes = useStyles();
   const router = useRouter();
+  const [chaptersLoaded, setChaptersLoaded] = useState(false);
   const manga: Manga = useSelector((state: RootState) => state.manga.currentManga);
   const dispatch = useDispatch() as TDispatch;
 
@@ -75,14 +75,15 @@ export default function Detail({ mangaId }: Props) {
         () => dispatch(pushLastVisitedManga(manga))
       );
 
-      if (chaptersNeedUpdate(manga)) {
-        fetchRetry(
-          (data) => !data.length,
-          () => dispatch(fetchMangaChapters(mangaId)).then(unwrapResult)
-        );
-      } else {
-        dispatch(fetchMangaChapters(mangaId)).then(unwrapResult);
-      }
+      dispatch(fetchMangaChapters(mangaId))
+        .then(unwrapResult)
+        .then(() => setChaptersLoaded(true))
+        .catch(() => {
+          console.log('Rejected, scheduled a timeout');
+          setTimeout(() => {
+            dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
+          }, 2000);
+        });
     }
   }, []);
 
@@ -98,7 +99,7 @@ export default function Detail({ mangaId }: Props) {
     [
       'Главы',
       <Box key={2} p={2}>
-        <ChapterList mangaId={manga.id} chapters={manga.chapters} />
+        {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : 'Главы загружаются'}
       </Box>,
     ],
   ] as Array<[String, JSX.Element]>;

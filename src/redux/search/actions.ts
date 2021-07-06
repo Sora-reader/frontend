@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { MangaList } from '../../api/types';
+import { MangaList } from '../../utils/apiTypes';
 
 export const SEARCH_MANGA = 'SEARCH_MANGA';
 

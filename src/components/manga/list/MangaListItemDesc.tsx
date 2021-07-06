@@ -1,6 +1,6 @@
 import { createStyles, ListItemText, makeStyles, Theme } from '@material-ui/core';
 import { SoraChip } from '../../SoraChip';
-import { Manga } from '../../../api/types';
+import { Manga } from '../../../utils/apiTypes';
 import { MangaRating } from '../MangaRating';
 
 const useStyles = makeStyles((theme: Theme) =>
