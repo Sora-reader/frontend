@@ -1,6 +1,6 @@
 {
-  "name": "manga-reader",
-  "version": "0.1.0",
+  "name": "sora-reader",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "backend": "eval \"$(pyenv init -)\"; . ./.env && cd $BACKEND_PATH && make runserver port=$BACKEND_PORT",
