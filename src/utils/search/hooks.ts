@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { searchInputId } from '../../components/Header';
 
 export function useNonLazyQuery(queryKey: string) {
   const router = useRouter();
@@ -9,9 +10,9 @@ export function useNonLazyQuery(queryKey: string) {
   return query;
 }
 
-export function useSyncQuery(query: string, elementId: string) {
+export function useSyncQuery(query: string) {
   useEffect(() => {
-    const searchInputElement = document.getElementById(elementId) as HTMLInputElement;
+    const searchInputElement = document.getElementById(searchInputId) as HTMLInputElement;
     if (searchInputElement) {
       if (query && searchInputElement.value !== query) {
         // Sync query value from url to input

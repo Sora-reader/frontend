@@ -10,6 +10,7 @@ import { loadCachedPalettes } from '../redux/theme/utils';
 import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
 import { Header } from '../components/Header';
 import { useRouter } from 'next/router';
+import { slashSearch } from '../utils/eventListeners';
 
 type StyleProps = { minHeight: string };
 
@@ -70,6 +71,13 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = useState(generateTheme());
 
   const router = useRouter();
+
+  useEffect(() => {
+    document.addEventListener('keydown', slashSearch);
+    return () => {
+      document.removeEventListener('keydown', slashSearch);
+    };
+  }, []);
 
   // Load palettes on first render
   useEffect(() => {

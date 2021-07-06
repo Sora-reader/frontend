@@ -31,6 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+export const searchInputId = 'search-input';
+
 export function Header() {
   const classes = useStyles();
   const router = useRouter();
@@ -66,7 +68,7 @@ export function Header() {
           <form onSubmit={submitSearch} autoComplete="off">
             <Input
               name="name"
-              id="search-input"
+              id={searchInputId}
               inputRef={searchInputRef}
               className={classes.search}
               placeholder="Поиск"

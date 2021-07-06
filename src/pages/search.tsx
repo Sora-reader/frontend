@@ -54,7 +54,7 @@ export default function Search() {
   const [content, setContent] = useState([] as MangaList);
 
   const query = useNonLazyQuery('name');
-  useSyncQuery(query, 'search-input');
+  useSyncQuery(query);
 
   useEffect(() => {
     if (!query) {
