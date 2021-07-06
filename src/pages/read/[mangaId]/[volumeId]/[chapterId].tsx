@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -15,6 +15,7 @@ import { Avatar } from '@material-ui/core';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { MangaChapters } from '../../../../api/types';
 import { getScrollClickHandler, getScrollKBHandler } from '../../../../utils/reader/scrollHandler';
+import SwipeableViews from 'react-swipeable-views';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {},
@@ -40,15 +41,24 @@ type Props = {
   chapterId: Number;
 };
 
+// TODO: Clean up, add spinner on avatar load
 export default function Detail({ mangaId, volumeId, chapterId }: Props) {
   const classes = useStyles();
   const router = useRouter();
   const chapter = useSelector((state: RootState) => state.manga.currentChapter);
   const dispatch = useDispatch() as TDispatch;
   const [imageNumber, setImageNumber] = useState(0);
+  const imageRef = useRef<any>();
 
-  const scrollTop = useCallback(() => {
+  useEffect(() => {
     window.scroll({ top: 0 });
+  }, [imageNumber]);
+
+  const onChangeIndex = useCallback((newIndex, prevIndex) => {
+    if (!chapter?.images?.length) return;
+    const diff = newIndex - prevIndex ? 1 : 0;
+    const newNumber = imageNumber + diff;
+    if (0 <= newNumber && newNumber < chapter.images.length) setImageNumber(newNumber);
   }, []);
 
   useEffect(() => {
@@ -90,14 +100,19 @@ export default function Detail({ mangaId, volumeId, chapterId }: Props) {
 
   return (
     <div className={classes.root}>
-      {chapter?.images ? (
-        <Avatar
-          imgProps={{ onLoad: scrollTop }}
-          variant="square"
-          className={classes.chapter}
-          src={chapter.images[imageNumber]}
-          onClick={scrollClickHandler}
-        />
+      {chapter?.images?.length ? (
+        <SwipeableViews hysteresis={0.5} threshold={20} index={imageNumber} onChangeIndex={onChangeIndex}>
+          {chapter.images.map((image) => (
+            <Avatar
+              key={image}
+              ref={imageRef}
+              variant="square"
+              className={classes.chapter}
+              src={image}
+              onClick={scrollClickHandler}
+            />
+          ))}
+        </SwipeableViews>
       ) : (
         ''
       )}
