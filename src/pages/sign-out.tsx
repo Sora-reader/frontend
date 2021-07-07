@@ -5,7 +5,7 @@ import { signOut } from '../redux/user/actions';
 import { TDispatch } from '../redux/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 
-function SignOut() {
+export default function SignOut() {
   // Store.dispatch doesn't play well with redirect even if awaiting
   const router = useRouter();
   const dispatch = useDispatch() as TDispatch;
