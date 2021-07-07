@@ -31,7 +31,7 @@ type Props = {
 const fetchRetry = (
   shouldRetry: (data: any) => boolean,
   dispatchCall: () => Promise<any>,
-  onSuccess?: Function,
+  onSuccess?: (data: any) => any,
   maxRetries: number = 2,
   timeout: number = 2000
 ) => {
@@ -41,14 +41,16 @@ const fetchRetry = (
    * @param onSuccess a callback to run when data was fetched
    */
   let retryCounter = maxRetries;
+
   const retryIfNeeded = (data?: any) => {
-    if ((shouldRetry(data) && retryCounter) || !data) {
+    if (!data || (shouldRetry(data) && retryCounter)) {
       setTimeout(() => {
         retryCounter -= 1;
         dispatchCall().then(retryIfNeeded);
       }, timeout);
+      return;
     }
-    if (onSuccess) onSuccess();
+    if (data && onSuccess) onSuccess(data);
   };
   dispatchCall().then(retryIfNeeded);
 };
@@ -62,17 +64,16 @@ export default function Detail({ mangaId }: Props) {
 
   useEffect(() => {
     if (!mangaId) {
-      console.log('No data');
       router.push('/search');
     } else {
-      if (manga.id) {
+      if (~manga.id) {
         dispatch(pushLastVisitedManga(manga));
       }
 
       fetchRetry(
-        (data) => !data.detailDataFresh,
+        (data) => Boolean(~data.id) || !data.detailDataFresh,
         () => dispatch(fetchMangaDetail(mangaId)).then(unwrapResult),
-        () => dispatch(pushLastVisitedManga(manga))
+        (data) => dispatch(pushLastVisitedManga(data))
       );
 
       dispatch(fetchMangaChapters(mangaId))
