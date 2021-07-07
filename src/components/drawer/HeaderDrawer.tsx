@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactEventHandler, useEffect, useState } from 'react';
+import { MutableRefObject, ReactEventHandler, useMemo } from 'react';
 import { createStyles, List, makeStyles, SwipeableDrawer, Theme } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
@@ -10,7 +10,7 @@ import { DrawerItem } from './DrawerItem';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawerWrapper: {
-      height: '100%',
+      height: '100vh',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
@@ -29,14 +29,14 @@ type Props = {
 };
 
 export const HeaderDrawer = ({ drawer, toggleDrawer, menuRef }: Props) => {
-  const [drawerSwipeAreaWidth, setDrawerSWA] = useState(20);
   const user = useSelector((state: RootState) => state.user);
   const classes = useStyles();
 
-  useEffect(() => {
-    // Drawer area should end where menu button starts
-    if (menuRef?.current) setDrawerSWA(window.scrollX + menuRef.current.getBoundingClientRect().left);
-  }, [menuRef]);
+  // Drawer area should end where menu button starts
+  const drawerSwipeAreaWidth = useMemo(
+    () => (menuRef?.current ? window.scrollX + menuRef.current.getBoundingClientRect().left : 20),
+    [menuRef]
+  );
 
   return (
     <SwipeableDrawer

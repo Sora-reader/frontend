@@ -6,7 +6,7 @@ import { TDispatch } from '../redux/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 function SignOut() {
-  // Store in getServerSideProps in undefined
+  // Store.dispatch doesn't play well with redirect even if awaiting
   const router = useRouter();
   const dispatch = useDispatch() as TDispatch;
 
@@ -18,5 +18,3 @@ function SignOut() {
   }, []);
   return '';
 }
-
-export default SignOut;

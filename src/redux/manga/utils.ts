@@ -1,7 +1,8 @@
-import { Dispatch } from 'react';
+import { Dispatch, useEffect } from 'react';
 import isEmpty from 'lodash.isempty';
 import { loadLastVisitedManga } from './actions';
-import { Manga } from '../../utils/apiTypes';
+import { Manga, MangaList } from '../../utils/apiTypes';
+import { StoreType } from '../store';
 
 export const detailsNeedUpdate = (manga: Manga) => {
   if (!manga.updatedDetail) return false;
@@ -16,6 +17,10 @@ export const chaptersNeedUpdate = (manga: Manga) => {
   hourAgo.setHours(hourAgo.getHours() - 1);
   return new Date(manga.updatedChapters) < hourAgo;
 };
+
+// Load last visited from localstorage if needed
+export const useSyncLastVisited = (store: StoreType, lastVisited: MangaList) =>
+  useEffect(syncLastVisited(store.dispatch, lastVisited), [lastVisited]);
 
 export const syncLastVisited = (dispatch: Dispatch<any>, clientState: Array<Manga>) => {
   // Sync lastVisited both from and to localStorage

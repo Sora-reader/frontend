@@ -2,6 +2,7 @@ import { createStyles, ListItemText, makeStyles, Theme } from '@material-ui/core
 import { SoraChip } from '../../SoraChip';
 import { Manga } from '../../../utils/apiTypes';
 import { MangaRating } from '../MangaRating';
+import { memo } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,26 +38,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = Manga;
-
-export function MangaListItemDesc(props: Props) {
+export const MangaListItemDesc = memo((manga: Manga) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <div className={classes.header}>
-        <ListItemText className={classes.title}>{props.title}</ListItemText>
-        <MangaRating value={props.rating} />
+        <ListItemText className={classes.title}>{manga.title}</ListItemText>
+        <MangaRating value={manga.rating} />
       </div>
 
       <div className={classes.footer}>
-        <ListItemText className={classes.author}>{props.authors?.join(', ')}</ListItemText>
+        <ListItemText className={classes.author}>{manga.authors?.join(', ')}</ListItemText>
         <ul className={classes.genres}>
-          {props.genres?.map((genre) => (
+          {manga.genres?.map((genre) => (
             <SoraChip component="li" label={genre} key={genre} />
           ))}
         </ul>
       </div>
     </div>
   );
-}
+});

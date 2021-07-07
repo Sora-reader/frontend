@@ -1,4 +1,4 @@
-import { FormEvent, ReactNode, useState } from 'react';
+import { FormEvent, ReactNode, useCallback, useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { Button, createStyles, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import { AnyAction } from 'redux';
@@ -49,19 +49,22 @@ export const UserCredentialsForm = ({ headerText, submitText, toDispatch, afterS
     inputRef.current?.focus();
   }, [inputRef]);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
+  const handleSubmit = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const data = new FormData(e.currentTarget);
 
-    const username = String(data.get('username'));
-    const password = String(data.get('password'));
+      const username = String(data.get('username'));
+      const password = String(data.get('password'));
 
-    // Success
-    dispatch(toDispatch({ username, password }))
-      .then(unwrapResult)
-      .then(afterSuccess)
-      .catch(() => setErrorMessage('Произошла ошибка, проверьте введённые данные'));
-  };
+      // Success
+      dispatch(toDispatch({ username, password }))
+        .then(unwrapResult)
+        .then(afterSuccess)
+        .catch(() => setErrorMessage('Произошла ошибка, проверьте введённые данные'));
+    },
+    [setErrorMessage]
+  );
 
   return (
     <div>

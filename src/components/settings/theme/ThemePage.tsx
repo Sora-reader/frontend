@@ -7,6 +7,7 @@ import { defaultDark, defaultLight } from '../../../redux/theme/defaults';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 import { ChangeThemeRadio } from './ChangeThemeRadio';
 import { SettingPart } from '../SettingPart';
+import { useCallback } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,16 +49,16 @@ export function ThemePage() {
       <SettingPart title="Палитра темной темы">
         <PaletteChanger
           currentPalette={statePalettes.dark}
-          resetPalette={() => dispatch(setPalette('dark', defaultDark))}
-          submitPalette={(options: PaletteOptions) => dispatch(setPalette('dark', options))}
+          resetPalette={useCallback(() => dispatch(setPalette('dark', defaultDark)), [])}
+          submitPalette={useCallback((options: PaletteOptions) => dispatch(setPalette('dark', options)), [])}
         />
       </SettingPart>
 
       <SettingPart title="Палитра светлой темы" noDivier>
         <PaletteChanger
           currentPalette={statePalettes.light}
-          resetPalette={() => dispatch(setPalette('light', defaultLight))}
-          submitPalette={(options: PaletteOptions) => dispatch(setPalette('light', options))}
+          resetPalette={useCallback(() => dispatch(setPalette('light', defaultLight)), [])}
+          submitPalette={useCallback((options: PaletteOptions) => dispatch(setPalette('light', options)), [])}
         />
       </SettingPart>
     </div>

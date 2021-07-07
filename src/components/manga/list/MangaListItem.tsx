@@ -6,6 +6,7 @@ import { MangaListItemDesc } from './MangaListItemDesc';
 import { MangaImage } from '../MangaImage';
 import { setMangaPreview } from '../../../redux/manga/actions';
 import { Manga } from '../../../utils/apiTypes';
+import { memo } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export function MangaListItem(manga: Manga) {
+export const MangaListItem = memo((manga: Manga) => {
   const classes = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -43,4 +44,4 @@ export function MangaListItem(manga: Manga) {
       <MangaListItemDesc {...manga} />
     </ListItem>
   );
-}
+});

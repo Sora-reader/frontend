@@ -1,4 +1,4 @@
-import { ChangeEvent, HTMLAttributes, useState } from 'react';
+import { ChangeEvent, HTMLAttributes, useCallback, useState } from 'react';
 import { AppBar, createStyles, makeStyles, Tab, Tabs, Theme, useTheme } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
 
@@ -61,13 +61,13 @@ export function SwipeableTabs(props: Props) {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
-  const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
+  const handleChange = useCallback((event: ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
-  };
+  }, []);
 
-  const handleChangeIndex = (index: number) => {
+  const handleChangeIndex = useCallback((index: number) => {
     setValue(index);
-  };
+  }, []);
 
   return (
     <div>

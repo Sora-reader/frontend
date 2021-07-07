@@ -2,6 +2,7 @@ import { Theme } from '@material-ui/core';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { StoreType } from '../store';
 import { setPalette } from './actions';
+import { defaultDark, defaultLight } from './defaults';
 import { ThemeState } from './reducer';
 
 type UseThemeHandlersProps = {
@@ -17,11 +18,17 @@ export const useThemeHooks = ({ store, themeState, setTheme, generateTheme }: Us
     loadCachedPalettes(store.dispatch, themeState);
     setLoadedCachedTheme(true);
   }, []);
+
   useEffect(() => {
     setTheme(generateTheme());
     console.log('Written options to localStorage');
     if (loadedCachedTheme) {
-      window.localStorage.setItem('sora-theme', JSON.stringify(themeState));
+      if (
+        JSON.stringify(themeState.palettes.dark) === JSON.stringify(defaultDark) &&
+        JSON.stringify(themeState.palettes.light) === JSON.stringify(defaultLight)
+      ) {
+        window.localStorage.removeItem('sora-theme');
+      } else window.localStorage.setItem('sora-theme', JSON.stringify(themeState));
     }
   }, [themeState]);
 };

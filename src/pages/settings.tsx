@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useMemo } from 'react';
 import { createStyles, Divider, List, makeStyles, MenuItem, Theme, useMediaQuery } from '@material-ui/core';
 import { ThemePage } from '../components/settings/theme/ThemePage';
 
@@ -40,14 +40,14 @@ export default function Settings() {
   const [menuItem, setMenuItem] = useState('theme');
   const bp = useMediaQuery(`(max-width:${mediaPx}px)`);
 
-  let component: JSX.Element | null = null;
-  switch (menuItem) {
-    case 'theme':
-      component = <ThemePage />;
-      break;
-    default:
-      break;
-  }
+  const menuComponent = useMemo(() => {
+    switch (menuItem) {
+      case 'theme':
+        return <ThemePage />;
+      default:
+        return <ThemePage />;
+    }
+  }, [menuItem]);
 
   const handleClick = (e: MouseEvent) => {
     if (!(e.target instanceof HTMLLIElement)) {
@@ -66,7 +66,7 @@ export default function Settings() {
         </List>
       </div>
       <Divider className={classes.divider} orientation={bp ? 'horizontal' : 'vertical'} flexItem={!bp} />
-      <div className={classes.content}>{component}</div>
+      <div className={classes.content}>{menuComponent}</div>
     </div>
   );
 }
