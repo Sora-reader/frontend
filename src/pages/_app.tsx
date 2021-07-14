@@ -80,9 +80,9 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <Box className={classes.box}>
-          <Header />
           {!/^\/read/.test(router.asPath) ? (
             <>
+              <Header />
               <Container maxWidth="md" component="main" className={classes.main}>
                 {needSpinner && <LinearProgress className={classes.progress} />}
                 <Component {...pageProps} />

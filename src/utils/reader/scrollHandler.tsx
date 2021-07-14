@@ -5,9 +5,10 @@ const scrolledBottom = () => window.window.scrollY + window.window.outerHeight >
 
 const scrollVh = (direction: 'up' | 'down' = 'down') => {
   const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
+  // const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
   window.scroll({
-    top: window.scrollY + (vh - headerHeight) * (direction === 'up' ? -1 : 1),
+    // top: window.scrollY + (vh - headerHeight) * (direction === 'up' ? -1 : 1),
+    top: window.scrollY + vh * (direction === 'up' ? -1 : 1),
     behavior: 'smooth',
   });
 };
