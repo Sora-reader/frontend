@@ -7,6 +7,7 @@ import { RootState } from '../../../../redux/store';
 import { TDispatch } from '../../../../redux/types';
 import { fetchAll } from '../../../../components/reader/utils';
 import { fetchChapterImages } from '../../../../redux/manga/actions';
+import { CenteredProgress } from '../../../../components/reader/CenteredProgress';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -26,6 +27,7 @@ type Props = {
 
 export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const router = useRouter();
+  const manga = useSelector((state: RootState) => state.manga.currentManga);
   const chapter = useSelector((state: RootState) => state.manga.currentChapter);
   const dispatch = useDispatch() as TDispatch;
 
@@ -39,6 +41,6 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
     }
   }, []);
 
-  // TODO: Add more logic here and possibly AppBar
-  return <Reader />;
+  // TODO: Add possibly AppBar
+  return manga && chapter ? <Reader manga={manga} chapter={chapter} /> : <CenteredProgress />;
 }

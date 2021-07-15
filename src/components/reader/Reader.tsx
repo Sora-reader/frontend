@@ -8,6 +8,9 @@ import { bindKeyboard } from 'react-swipeable-views-utils';
 import { roundBinary } from './utils';
 import { useGetValidImageNumber, useNextChapterLink, useUserScalable } from './hooks';
 import { ReaderImage } from './ReaderImage';
+import { Manga, MangaChapter } from '../../utils/apiTypes';
+import { CurrentChapter } from '../../redux/manga/reducer';
+import { ReaderMode } from './types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,20 +23,25 @@ const useStyles = makeStyles(() =>
 
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
-export const Reader = () => {
+type Props = {
+  manga: Manga;
+  chapter: CurrentChapter;
+  mode: ReaderMode; // TODO: add different pagers
+};
+
+export const Reader = ({ manga, chapter, mode }: Props) => {
+  console.log(mode);
   const classes = useStyles();
-  const manga = useSelector((state: RootState) => state.manga.currentManga);
-  const chapter = useSelector((state: RootState) => state.manga.currentChapter);
   const [currentImage, setCurrentImage] = useState(0);
-  const validImageNumber = useGetValidImageNumber(chapter?.images);
+  const validImageNumber = useGetValidImageNumber(chapter.images);
 
   useUserScalable();
-  useKeyboardScroll(chapter?.images);
+  useKeyboardScroll(chapter.images);
   const nextChapterLink = useNextChapterLink(manga, chapter);
 
   const onChangeIndex = useCallback(
     (newIndex, prevIndex) => {
-      if (!chapter?.images || Math.abs(prevIndex - newIndex) === chapter.images.length - 1) return;
+      if (!chapter.images || Math.abs(prevIndex - newIndex) === chapter.images.length - 1) return;
       const diff = roundBinary(newIndex - prevIndex);
       const newNumber = validImageNumber(currentImage + diff);
       console.log(currentImage + diff);
@@ -43,12 +51,12 @@ export const Reader = () => {
         window.scroll({ top: 0 });
       }
     },
-    [chapter?.images, currentImage, setCurrentImage]
+    [chapter.images, currentImage, setCurrentImage]
   );
 
   return (
     <div className={classes.root}>
-      {chapter?.images ? (
+      {chapter.images ? (
         <BindKeyboardSwipeableViews hysteresis={0.5} threshold={20} index={currentImage} onChangeIndex={onChangeIndex}>
           {chapter.images.map((image, index) => {
             return <ReaderImage key={image} image={image} current={index === currentImage} />;
@@ -59,4 +67,8 @@ export const Reader = () => {
       )}
     </div>
   );
+};
+
+Reader.defaultProps = {
+  mode: 'default',
 };
