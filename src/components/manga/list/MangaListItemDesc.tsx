@@ -52,7 +52,7 @@ export const MangaListItemDesc = memo((manga: Manga) => {
         <ListItemText className={classes.author}>{manga.authors?.join(', ')}</ListItemText>
         <ul className={classes.genres}>
           {manga.genres?.map((genre) => (
-            <SoraChip component="li" label={genre} key={genre} />
+            <SoraChip key={genre} component="li" label={genre} />
           ))}
         </ul>
       </div>

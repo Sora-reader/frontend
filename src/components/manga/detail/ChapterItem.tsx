@@ -1,29 +1,21 @@
 import { MangaChapter } from '../../../utils/apiTypes';
-import { createStyles, ListItem, makeStyles, Theme } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
 import { setCurrentChapter } from '../../../redux/manga/actions';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { TDispatch } from '../../../redux/types';
 import { memo } from 'react';
-import { SoraChip } from '../../SoraChip';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    chip: {
-      opacity: 0.9,
-    },
-  })
-);
+import { ChapterChip } from './ChapterChip';
 
 type Props = {
   mangaId: number;
   chapter: MangaChapter;
   index: number;
+  chipWidth?: number;
 };
 
-export const ChapterItem = memo(({ mangaId, chapter, index }: Props) => {
-  const classes = useStyles();
+export const ChapterItem = memo(({ mangaId, chapter, index, chipWidth }: Props) => {
   const dispatch = useDispatch() as TDispatch;
   const router = useRouter();
 
@@ -36,7 +28,7 @@ export const ChapterItem = memo(({ mangaId, chapter, index }: Props) => {
   return (
     <ListItem button key={chapter.link} onClick={passChapterCallback} alignItems="flex-start">
       <ListItemText>
-        <SoraChip label={index + 1} style={{ margin: '0 1rem 0 0' }} variant="outlined" size="small" />
+        <ChapterChip chipWidth={chipWidth} value={index} />
         <span>{chapter.title || ''}</span>
       </ListItemText>
     </ListItem>

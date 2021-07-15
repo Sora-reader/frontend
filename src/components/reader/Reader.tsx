@@ -1,14 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { fetchChapterImages } from '../../redux/manga/actions';
-import { TDispatch } from '../../redux/types';
 import { useKeyboardScroll } from '../../utils/reader/scrollHandler';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
-import { fetchAll, roundBinary } from './utils';
+import { roundBinary } from './utils';
 import { useGetValidImageNumber, useNextChapterLink, useUserScalable } from './hooks';
 import { ReaderImage } from './ReaderImage';
 
@@ -21,37 +18,18 @@ const useStyles = makeStyles(() =>
   })
 );
 
-type Props = {
-  mangaId: number;
-  volumeNumber: number;
-  chapterNumber: number;
-};
-
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
-export const Reader = ({ mangaId, volumeNumber, chapterNumber }: Props) => {
+export const Reader = () => {
   const classes = useStyles();
-  const router = useRouter();
   const manga = useSelector((state: RootState) => state.manga.currentManga);
   const chapter = useSelector((state: RootState) => state.manga.currentChapter);
-  const dispatch = useDispatch() as TDispatch;
   const [currentImage, setCurrentImage] = useState(0);
   const validImageNumber = useGetValidImageNumber(chapter?.images);
 
   useUserScalable();
   useKeyboardScroll(chapter?.images);
   const nextChapterLink = useNextChapterLink(manga, chapter);
-
-  useEffect(() => {
-    if (!(mangaId && volumeNumber && chapterNumber)) {
-      router.push('/search');
-    } else if (!chapter) {
-      fetchAll(dispatch, mangaId, volumeNumber, chapterNumber);
-    } else if (chapter && !chapter?.images) {
-      dispatch(fetchChapterImages(chapter.id));
-      setCurrentImage(currentImage + 1);
-    }
-  }, []);
 
   const onChangeIndex = useCallback(
     (newIndex, prevIndex) => {

@@ -1,24 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CircularProgress, createStyles, makeStyles } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import { Avatar } from '@material-ui/core';
+import { CenteredProgress } from './CenteredProgress';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    container: {
-      position: 'relative',
-      minHeight: '100vh',
-    },
-    progress: {
-      position: 'absolute',
-      margin: '0',
-      top: '40%',
-      left: 'calc(50% - 2.5rem)',
-      width: '5rem !important',
-      height: '5rem !important',
-    },
     chapterImage: {
       pointerEvents: 'none',
-      height: '100%',
+      height: 'auto',
       width: '100%',
     },
   })
@@ -50,11 +39,5 @@ export const ReaderImage = ({ image, current }: Props) => {
     }
   }, [current]);
 
-  return shouldRender ? (
-    <Avatar variant="square" className={classes.chapterImage} src={image} />
-  ) : (
-    <div className={classes.container}>
-      <CircularProgress className={classes.progress} />
-    </div>
-  );
+  return shouldRender ? <Avatar variant="square" className={classes.chapterImage} src={image} /> : <CenteredProgress />;
 };

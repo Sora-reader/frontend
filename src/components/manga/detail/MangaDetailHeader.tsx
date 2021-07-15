@@ -1,4 +1,4 @@
-import { createStyles, Link, makeStyles, Theme, Typography } from '@material-ui/core';
+import { createStyles, Link, makeStyles, Theme } from '@material-ui/core';
 import { MangaImage } from '../MangaImage';
 import { SoraChip } from '../../SoraChip';
 import { Manga } from '../../../utils/apiTypes';
