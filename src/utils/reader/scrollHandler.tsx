@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { MangaChapterImages } from '../apiTypes';
 import { VH } from '../css';
 
-const scrolledBottom = () => window.window.scrollY + window.window.outerHeight >= document.body.offsetHeight;
-
 const scrollVh = (direction: 'up' | 'down' = 'down') => {
   // Scroll 80% of viewport height
   window.scroll({

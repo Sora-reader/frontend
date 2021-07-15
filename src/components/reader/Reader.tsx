@@ -1,14 +1,12 @@
 import { useCallback, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
 import { useKeyboardScroll } from '../../utils/reader/scrollHandler';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
 import { roundBinary } from './utils';
 import { useGetValidImageNumber, useNextChapterLink, useUserScalable } from './hooks';
 import { ReaderImage } from './ReaderImage';
-import { Manga, MangaChapter } from '../../utils/apiTypes';
+import { Manga } from '../../utils/apiTypes';
 import { CurrentChapter } from '../../redux/manga/reducer';
 import { ReaderMode } from './types';
 

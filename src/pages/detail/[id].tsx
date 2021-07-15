@@ -91,7 +91,7 @@ export default function Detail({ mangaId }: Props) {
   const panels = [
     [
       'Описание',
-      <Box p={2}>
+      <Box key={1} p={2}>
         <MangaDetailHeader {...manga} />
         <Divider />
         <MangaDetailDescription text={String(manga.description)} />
@@ -99,7 +99,7 @@ export default function Detail({ mangaId }: Props) {
     ],
     [
       'Главы',
-      <Box p={2}>
+      <Box key={1} p={2}>
         {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : 'Главы загружаются'}
       </Box>,
     ],
