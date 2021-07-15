@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, Link, makeStyles, Theme, Typography } from '@material-ui/core';
 import { MangaImage } from '../MangaImage';
 import { SoraChip } from '../../SoraChip';
 import { Manga } from '../../../utils/apiTypes';
@@ -36,13 +36,19 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       marginTop: 0,
+      marginBottom: 0,
       '& span': {
         fontSize: 'xx-large',
         lineHeight: '2rem',
       },
     },
-    author: {
-      fontSize: 'large',
+    altTitle: {
+      margin: 0,
+      marginBottom: '0.5rem',
+      opacity: 0.5,
+    },
+    authors: {
+      margin: 0,
       marginBottom: theme.spacing(2),
       color: theme.palette.text.secondary,
     },
@@ -69,6 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.text.secondary,
       },
     },
+    source: {},
   })
 );
 
@@ -82,19 +89,31 @@ export function MangaDetailHeader(props: Props) {
       <MangaImage src={props.image} variant="rounded" className={classes.avatar} />
       <div className={classes.details}>
         <h1 className={classes.title}>{props.title}</h1>
-        <p className={classes.author}>{props.authors?.join(', ')}</p>
+        {props.altTitle ? <h3 className={classes.altTitle}>{props.altTitle}</h3> : ''}
+        {props.authors ? <h3 className={classes.authors}>{props.authors?.join(', ')}</h3> : ''}
+
         <ul className={classes.genres}>
           {props.genres?.map((genre) => (
-            <SoraChip component="li" label={genre} key={genre} />
+            <SoraChip key={genre} component="li" label={genre} />
           ))}
         </ul>
-        <SoraChip component="a" target="_blank" href={props.sourceUrl} label={props.source} clickable />
-        <div className={classes.ratingContainer}>
-          <MangaRating value={props.rating} />
-          <p>
-            {props.rating}
-            /10
-          </p>
+
+        {props.rating ? (
+          <div className={classes.ratingContainer}>
+            <MangaRating value={props.rating} />
+            <p>
+              {props.rating}
+              /10
+            </p>
+          </div>
+        ) : (
+          ''
+        )}
+
+        <div>
+          <Link className={classes.source} target="_blank" href={props.sourceUrl}>
+            <h4>Читать на {props.source}</h4>
+          </Link>
         </div>
       </div>
     </div>

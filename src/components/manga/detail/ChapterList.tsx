@@ -10,14 +10,14 @@ type Props = {
 };
 
 export const ChapterList = memo(({ mangaId, chapters }: Props) => {
-  const mappedChapters = chapters?.map((chapter) => (
-    <ChapterItem key={chapter.title} mangaId={mangaId} chapter={chapter} />
+  const mappedChapters = chapters?.map((chapter, index) => (
+    <ChapterItem key={chapter.title} mangaId={mangaId} chapter={chapter} index={index} />
   ));
 
   return (
     <List>
       {mappedChapters && mappedChapters.length ? (
-        mappedChapters.reduce((prev, curr) => (
+        mappedChapters.reduce((prev, curr, index) => (
           // Reduce to place dividers between chapters, can't use join with JSX
           <>
             {prev}

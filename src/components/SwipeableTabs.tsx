@@ -1,6 +1,7 @@
-import { ChangeEvent, HTMLAttributes, useCallback, useState } from 'react';
+import { ChangeEvent, HTMLAttributes, useCallback, useMemo, useState } from 'react';
 import { AppBar, createStyles, makeStyles, Tab, Tabs, Theme, useTheme } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
+import { useRouter } from 'next/router';
 
 interface TabPanelProps extends HTMLAttributes<any> {
   dir?: string;
@@ -59,15 +60,24 @@ export function SwipeableTabs(props: Props) {
   const { panels } = props;
   const classes = { ...useStyles(), ...props.classes };
   const theme = useTheme();
-  const [value, setValue] = useState(0);
+  const router = useRouter();
+  const queryTab = router.query?.tab;
 
-  const handleChange = useCallback((event: ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-  }, []);
+  const value = useMemo(() => {
+    const queryValue = Number(queryTab);
+    if ([0, 1].includes(queryValue)) {
+      return queryValue;
+    }
+    return 0;
+  }, [queryTab]);
 
-  const handleChangeIndex = useCallback((index: number) => {
-    setValue(index);
+  const changeTab = (value: Number) => {
+    router.replace(`${router.asPath.split('?')[0]}?tab=${value}`);
+  };
+  const handleChange = useCallback((_, newValue: number) => {
+    changeTab(newValue);
   }, []);
+  const handleChangeIndex = useCallback(changeTab, []);
 
   return (
     <div>
