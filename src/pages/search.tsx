@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { createStyles, List, makeStyles, Theme } from '@material-ui/core';
+import { Box, CircularProgress, createStyles, List, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { MangaListItem } from '../components/manga/list/MangaListItem';
 import { RootState } from '../redux/store';
-import { startSearch } from '../redux/search/actions';
+import { paginateNext, startSearch } from '../redux/search/actions';
 import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
 import { Dispatch } from 'react';
 import { TDispatch } from '../redux/types';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { MangaList } from '../utils/apiTypes';
+import { MangaList, MangaSearchResult } from '../utils/apiTypes';
+import { useScrolledBottom } from '../utils/hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,17 +31,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const parseSearchResults = (
-  searchResults: MangaList,
+  searchResults: MangaSearchResult,
   storedQuery: string,
   setMessage: Dispatch<any>,
   setContent: Dispatch<any>
 ) => {
-  if (!searchResults.length) {
+  if (!searchResults.results.length) {
     setMessage('Результатов не найдено');
     setContent(undefined);
   } else {
     setMessage(`Итог поиска по запросу: "${storedQuery}"`);
-    setContent(searchResults);
+    setContent(searchResults.results);
   }
 };
 
@@ -52,9 +53,20 @@ export default function Search() {
   const [searching, setSearching] = useState(false);
   const [message, setMessage] = useState('' as string);
   const [content, setContent] = useState([] as MangaList);
+  const [paginating, setPaginating] = useState(false);
+  const scrolledBottom = useScrolledBottom();
 
   const query = useNonLazyQuery('name');
   useSyncQuery(query);
+
+  useEffect(() => {
+    if (scrolledBottom && storedResults.next) {
+      setPaginating(true);
+      dispatch(paginateNext()).then(() => {
+        setPaginating(false);
+      });
+    }
+  }, [scrolledBottom]);
 
   useEffect(() => {
     if (!query) {
@@ -91,6 +103,13 @@ export default function Search() {
             <MangaListItem key={item.id} {...item} />
           ))}
         </List>
+      )}
+      {paginating ? (
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <CircularProgress />
+        </Box>
+      ) : (
+        ''
       )}
     </div>
   );

@@ -18,6 +18,12 @@ export interface Manga {
   updatedChapters?: string;
 }
 export interface MangaList extends Array<Manga> {}
+export interface MangaSearchResult {
+  count: number;
+  next?: string;
+  previous?: string;
+  results: MangaList;
+}
 export interface MangaChapter {
   id: number;
   title: string;

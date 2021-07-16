@@ -1,21 +1,27 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { MangaList } from '../../utils/apiTypes';
-import { startSearch } from './actions';
+import { MangaSearchResult } from '../../utils/apiTypes';
+import { paginateNext, startSearch } from './actions';
 
 type StateType = {
   query: string;
-  results: MangaList;
+  results: MangaSearchResult;
 };
 
 const initialState: StateType = {
   query: '',
-  results: [],
+  results: { count: 0, results: [] },
 };
 
 const reducer = createReducer(initialState, (builder) => {
   builder.addCase(startSearch.fulfilled, (state, action) => {
     state.query = action.payload.query;
     state.results = action.payload.results;
+  });
+  builder.addCase(paginateNext.fulfilled, (state, action) => {
+    state.results.count = action.payload.count;
+    state.results.next = action.payload.next;
+    state.results.previous = action.payload.previous;
+    state.results.results.push(...action.payload.results);
   });
 });
 
