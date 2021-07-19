@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useSelector, useStore } from 'react-redux';
 import { RootState, StoreType, wrapper } from '../redux/store';
 import { useCustomInterceptors } from '../utils/axios';
-import { useSyncLastVisited } from '../redux/manga/utils';
+import { useSyncViewed } from '../redux/manga/utils';
 import { useThemeHooks } from '../redux/theme/utils';
 import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
 import { Header } from '../components/Header';
@@ -52,7 +52,7 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;
   const themeState = useSelector((state: RootState) => state.theme);
   const router = useRouter();
-  const { lastVisited } = useSelector((state: RootState) => state.manga);
+  const { viewed: lastVisited } = useSelector((state: RootState) => state.manga);
 
   const generateTheme = () => createMuiTheme({ palette: themeState.palettes[themeState.mode] });
   const [theme, setTheme] = useState(generateTheme());
@@ -62,7 +62,7 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
   useCustomEventListeners();
   useCustomInterceptors(store);
-  useSyncLastVisited(store, lastVisited);
+  useSyncViewed(store, lastVisited);
   useThemeHooks({ store, themeState, setTheme, generateTheme });
   const needSpinner = useNeedSpinner();
 

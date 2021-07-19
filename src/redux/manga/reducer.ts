@@ -1,9 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { Manga, MangaChapter, MangaChapterImages, MangaList } from '../../utils/apiTypes';
 import {
-  setMangaPreview,
-  loadLastVisitedManga,
-  pushLastVisitedManga,
+  setCurrentManga,
+  loadViewedManga,
+  pushViewedManga,
   fetchMangaDetail,
   fetchMangaChapters,
   setCurrentChapter,
@@ -14,45 +14,44 @@ export type CurrentChapterImages = { images?: MangaChapterImages };
 export type CurrentChapter = MangaChapter & CurrentChapterImages;
 
 type StateType = {
-  currentManga: Manga;
-  currentChapter?: CurrentChapter;
-  lastVisited: MangaList;
+  current: Manga;
+  chapter?: CurrentChapter;
+  viewed: MangaList;
 };
 
 const initialState: StateType = {
-  currentManga: { id: -1, title: '', description: '' },
-  lastVisited: [],
+  current: { id: -1, title: '', description: '' },
+  viewed: [],
 };
 
 const reducer = createReducer(initialState, (builder) => {
-  builder.addCase(setMangaPreview, (state, action) => {
-    state.currentManga = action.payload;
+  builder.addCase(setCurrentManga, (state, action) => {
+    state.current = action.payload;
   });
   builder.addCase(setCurrentChapter, (state, action) => {
-    state.currentChapter = action.payload;
+    state.chapter = action.payload;
   });
   builder.addCase(fetchChapterImages.fulfilled, (state, action) => {
-    if (state.currentChapter) state.currentChapter.images = action.payload;
+    if (state.chapter) state.chapter.images = action.payload;
   });
   builder.addCase(fetchMangaDetail.fulfilled, (state, action) => {
-    state.currentManga = { ...state.currentManga, ...action.payload };
+    state.current = { ...state.current, ...action.payload };
   });
   builder.addCase(fetchMangaChapters.fulfilled, (state, action) => {
-    state.currentManga.chapters = action.payload;
+    state.current.chapters = action.payload;
   });
-  builder.addCase(loadLastVisitedManga, (state, action) => {
-    state.lastVisited = action.payload;
+  builder.addCase(loadViewedManga, (state, action) => {
+    state.viewed = action.payload;
   });
-  builder.addCase(pushLastVisitedManga, (state, action) => {
-    let newLastVisited = state.lastVisited.filter((element) => element.id !== action.payload.id);
-    newLastVisited.unshift(action.payload);
+  builder.addCase(pushViewedManga, (state, action) => {
+    let newViewed = state.viewed.filter((element) => element.id !== action.payload.id);
+    newViewed.unshift(action.payload);
     // If some values were removed after filter
-    while (newLastVisited.length > 3) {
-      console.log('Popping');
-      newLastVisited.pop();
+    while (newViewed.length > 3) {
+      newViewed.pop();
     }
 
-    state.lastVisited = newLastVisited;
+    state.viewed = newViewed;
   });
 });
 

@@ -1,9 +1,8 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
 import { Manga } from '../../utils/apiTypes';
 import { WebtoonImage } from './WebtoonImage';
-
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
+import { useScrolledBottom } from '../../utils/hooks';
+import { GoNextButton } from '../reader/GoNextButton';
 
 type Props = {
   manga: Manga;
@@ -11,14 +10,21 @@ type Props = {
   nextChapterLink?: string;
 };
 
-export const WebtoonPager = ({ chapter }: Props) => {
-  const classes = useStyles();
+export const WebtoonPager = ({ manga, chapter, nextChapterLink }: Props) => {
+  const scrolledBottom = useScrolledBottom();
 
   return (
     <div>
       {chapter.images.map((image) => {
         return <WebtoonImage key={image} image={image} />;
       })}
+      {scrolledBottom ? (
+        nextChapterLink ? (
+          <GoNextButton nextUrl={nextChapterLink} />
+        ) : (
+          <GoNextButton nextUrl={`/detail/${manga.id}`} exit />
+        )
+      ) : null}
     </div>
   );
 };

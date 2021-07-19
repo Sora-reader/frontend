@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function IndexView() {
   const classes = useStyles();
-  const lastVisited = useSelector((state: RootState) => state.manga.lastVisited);
+  const lastVisited = useSelector((state: RootState) => state.manga.viewed);
 
   return (
     <div className={classes.root}>

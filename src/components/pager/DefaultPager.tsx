@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
 import { roundBinary } from '../pager/utils';
@@ -7,8 +6,7 @@ import { useGetValidImageNumber } from '../pager/hooks';
 import { ReaderImage } from '../reader/ReaderImage';
 import { Manga } from '../../utils/apiTypes';
 import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
-
-const useStyles = makeStyles(() => createStyles({}));
+import { GoNextButton } from '../reader/GoNextButton';
 
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
@@ -18,8 +16,7 @@ type Props = {
   nextChapterLink?: string;
 };
 
-export const DefaultPager = ({ manga, chapter }: Props) => {
-  const classes = useStyles();
+export const DefaultPager = ({ manga, chapter, nextChapterLink }: Props) => {
   const [currentImage, setCurrentImage] = useState(0);
   const validImageNumber = useGetValidImageNumber(chapter.images);
 
@@ -44,6 +41,13 @@ export const DefaultPager = ({ manga, chapter }: Props) => {
           return <ReaderImage key={image} image={image} current={index === currentImage} />;
         })}
       </BindKeyboardSwipeableViews>
+      {currentImage === chapter.images.length - 1 ? (
+        nextChapterLink ? (
+          <GoNextButton nextUrl={nextChapterLink} />
+        ) : (
+          <GoNextButton nextUrl={`/detail/${manga.id}`} exit />
+        )
+      ) : null}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Manga, MangaChapter, MangaChapterImages, MangaChapters, MangaList } from '../../utils/apiTypes';
 
-export const setMangaPreview = createAction<Manga>('manga/setPreview');
+export const setCurrentManga = createAction<Manga>('manga/setPreview');
 export const setCurrentChapter = createAction<MangaChapter>('manga/setCurrentChapter');
 export const fetchMangaDetail = createAsyncThunk<Manga, Number>('manga/fetchDetail', async (id: Number) => {
   const response = await axios.get(`manga/${id}`);
@@ -20,5 +20,5 @@ export const fetchChapterImages = createAsyncThunk<MangaChapterImages, Number>(
     return response.data;
   }
 );
-export const loadLastVisitedManga = createAction<MangaList>('manga/loadLastVisited');
-export const pushLastVisitedManga = createAction<Manga>('manga/pushLastVisited');
+export const loadViewedManga = createAction<MangaList>('manga/loadViewed');
+export const pushViewedManga = createAction<Manga>('manga/pushViewed');

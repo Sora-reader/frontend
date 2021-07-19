@@ -19,27 +19,27 @@ export const ChapterList = memo(({ mangaId, chapters }: Props) => {
     return 3;
   }, [chapters]);
 
-  const mappedChapters = chapters?.map((chapter, index) => (
-    <ChapterItem
-      key={chapter.title}
-      mangaId={mangaId}
-      chapter={chapter}
-      index={chapters.length - index}
-      chipWidth={chipWidth}
-    />
-  ));
-
   return (
     <List>
-      {mappedChapters && mappedChapters.length ? (
-        mappedChapters.reduce((prev, curr) => (
-          // Reduce to place dividers between chapters, can't use join with JSX
-          <>
-            {prev}
-            <Divider />
-            {curr}
-          </>
-        ))
+      {chapters && chapters?.length ? (
+        chapters
+          .map((chapter, index) => (
+            <ChapterItem
+              key={chapter.link}
+              mangaId={mangaId}
+              chapter={chapter}
+              index={chapters.length - index}
+              chipWidth={chipWidth}
+            />
+          ))
+          .reduce((prev, curr) => (
+            // Reduce to place dividers between chapters, can't use join with JSX
+            <>
+              {prev}
+              <Divider />
+              {curr}
+            </>
+          ))
       ) : (
         <p>Список глав пуст</p>
       )}

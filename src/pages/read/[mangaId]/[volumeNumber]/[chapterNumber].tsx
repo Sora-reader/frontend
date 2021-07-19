@@ -29,10 +29,9 @@ type Props = {
 
 export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const router = useRouter();
-  const manga = useSelector((state: RootState) => state.manga.currentManga);
+  const { current: manga, chapter } = useSelector((state: RootState) => state.manga);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
   const dispatch = useDispatch() as TDispatch;
-  const chapter = useSelector((state: RootState) => state.manga.currentChapter);
 
   useEffect(() => {
     if (!(mangaId && volumeNumber && chapterNumber)) {

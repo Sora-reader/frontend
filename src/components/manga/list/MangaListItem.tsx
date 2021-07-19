@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { MangaListItemDesc } from './MangaListItemDesc';
 import { MangaImage } from '../MangaImage';
-import { setMangaPreview } from '../../../redux/manga/actions';
+import { setCurrentManga } from '../../../redux/manga/actions';
 import { Manga } from '../../../utils/apiTypes';
 import { memo } from 'react';
 
@@ -32,9 +32,9 @@ export const MangaListItem = memo((manga: Manga) => {
   const dispatch = useDispatch();
 
   const passManga = useCallback(() => {
-    dispatch(setMangaPreview(manga));
+    dispatch(setCurrentManga(manga));
     router.push(`/detail/${manga.id}`);
-  }, [router, manga, setMangaPreview]);
+  }, [router, manga, setCurrentManga]);
 
   return (
     <ListItem button onClick={passManga} key={manga.id} alignItems="flex-start" className={classes.root}>

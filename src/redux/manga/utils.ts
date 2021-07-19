@@ -1,6 +1,6 @@
 import { Dispatch, useEffect } from 'react';
 import isEmpty from 'lodash.isempty';
-import { loadLastVisitedManga } from './actions';
+import { loadViewedManga } from './actions';
 import { Manga, MangaList } from '../../utils/apiTypes';
 import { StoreType } from '../store';
 
@@ -18,14 +18,14 @@ export const chaptersNeedUpdate = (manga: Manga) => {
   return new Date(manga.updatedChapters) < hourAgo;
 };
 
-// Load last visited from localstorage if needed
-export const useSyncLastVisited = (store: StoreType, lastVisited: MangaList) =>
-  useEffect(syncLastVisited(store.dispatch, lastVisited), [lastVisited]);
+// Load viewed from localstorage if needed
+export const useSyncViewed = (store: StoreType, viewed: MangaList) =>
+  useEffect(syncViewed(store.dispatch, viewed), [viewed]);
 
-export const syncLastVisited = (dispatch: Dispatch<any>, clientState: Array<Manga>) => {
-  // Sync lastVisited both from and to localStorage
+export const syncViewed = (dispatch: Dispatch<any>, clientState: Array<Manga>) => {
+  // Sync viewed both from and to localStorage
   return () => {
-    const data = window.localStorage.getItem('sora-last-visited') || '[]';
+    const data = window.localStorage.getItem('sora-viewed') || '[]';
     const cachedState = JSON.parse(String(data));
 
     const jsonClientState = JSON.stringify(clientState);
@@ -36,13 +36,13 @@ export const syncLastVisited = (dispatch: Dispatch<any>, clientState: Array<Mang
       // And client's state is empty (first render)
       if (isEmpty(clientState)) {
         // Then load cached state
-        const cachedLastVisited: Array<Manga> = cachedState;
-        dispatch(loadLastVisitedManga(cachedLastVisited));
+        const cachedViewed: Array<Manga> = cachedState;
+        dispatch(loadViewedManga(cachedViewed));
       }
       // But if client state has something different, than cache
       else {
         // Then it means we need to sync localStorage
-        window.localStorage.setItem('sora-last-visited', jsonClientState);
+        window.localStorage.setItem('sora-viewed', jsonClientState);
       }
     }
   };

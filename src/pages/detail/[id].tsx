@@ -6,7 +6,7 @@ import { MangaDetailHeader } from '../../components/manga/detail/MangaDetailHead
 import { MangaDetailDescription } from '../../components/manga/detail/MangaDetailDescription';
 import { RootState } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
-import { fetchMangaChapters, fetchMangaDetail, pushLastVisitedManga } from '../../redux/manga/actions';
+import { fetchMangaChapters, fetchMangaDetail, pushViewedManga } from '../../redux/manga/actions';
 import { Manga } from '../../utils/apiTypes';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';
@@ -59,7 +59,7 @@ export default function Detail({ mangaId }: Props) {
   const classes = useStyles();
   const router = useRouter();
   const [chaptersLoaded, setChaptersLoaded] = useState(false);
-  const manga: Manga = useSelector((state: RootState) => state.manga.currentManga);
+  const manga: Manga = useSelector((state: RootState) => state.manga.current);
   const dispatch = useDispatch() as TDispatch;
 
   useEffect(() => {
@@ -67,13 +67,13 @@ export default function Detail({ mangaId }: Props) {
       router.push('/search');
     } else {
       if (~manga.id) {
-        dispatch(pushLastVisitedManga(manga));
+        dispatch(pushViewedManga(manga));
       }
 
       fetchRetry(
         (data) => Boolean(~data.id) || !data.detailDataFresh,
         () => dispatch(fetchMangaDetail(mangaId)).then(unwrapResult),
-        (data) => dispatch(pushLastVisitedManga(data))
+        (data) => dispatch(pushViewedManga(data))
       );
 
       dispatch(fetchMangaChapters(mangaId))
@@ -88,26 +88,26 @@ export default function Detail({ mangaId }: Props) {
     }
   }, []);
 
-  const panels = [
-    [
-      'Описание',
-      <Box key={1} p={2}>
-        <MangaDetailHeader {...manga} />
-        <Divider />
-        <MangaDetailDescription text={String(manga.description)} />
-      </Box>,
-    ],
-    [
-      'Главы',
-      <Box key={1} p={2}>
-        {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : 'Главы загружаются'}
-      </Box>,
-    ],
-  ] as Array<[String, JSX.Element]>;
-
   return (
     <div className={classes.root}>
-      <SwipeableTabs panels={panels} />
+      <SwipeableTabs
+        panels={[
+          [
+            'Описание',
+            <Box key={1} p={2}>
+              <MangaDetailHeader {...manga} />
+              <Divider />
+              <MangaDetailDescription text={String(manga.description)} />
+            </Box>,
+          ],
+          [
+            'Главы',
+            <Box key={2} p={2}>
+              {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : 'Главы загружаются'}
+            </Box>,
+          ],
+        ]}
+      />
     </div>
   );
 }
