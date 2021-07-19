@@ -1,14 +1,12 @@
-import { useCallback, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
 import { useKeyboardScroll } from '../../utils/reader/scrollHandler';
-import SwipeableViews from 'react-swipeable-views';
-import { bindKeyboard } from 'react-swipeable-views-utils';
-import { roundBinary } from './utils';
-import { useGetValidImageNumber, useNextChapterLink, useUserScalable } from './hooks';
-import { ReaderImage } from './ReaderImage';
+import { useNextChapterLink, useUserScalable } from '../pager/hooks';
 import { Manga } from '../../utils/apiTypes';
-import { CurrentChapter } from '../../redux/manga/reducer';
+import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
 import { ReaderMode } from './types';
+import { DefaultPager } from '../pager/DefaultPager';
+import { WebtoonPager } from '../pager/WebtoonPager';
+import { useMemo } from 'react';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -18,51 +16,26 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-
-const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
-
 type Props = {
   manga: Manga;
-  chapter: CurrentChapter;
-  mode: ReaderMode; // TODO: add different pagers
+  chapter: CurrentChapter & Required<CurrentChapterImages>;
+  mode: ReaderMode;
 };
 
 export const Reader = ({ manga, chapter, mode }: Props) => {
-  console.log(mode);
   const classes = useStyles();
-  const [currentImage, setCurrentImage] = useState(0);
-  const validImageNumber = useGetValidImageNumber(chapter.images);
 
   useUserScalable();
   useKeyboardScroll(chapter.images);
   const nextChapterLink = useNextChapterLink(manga, chapter);
 
-  const onChangeIndex = useCallback(
-    (newIndex, prevIndex) => {
-      if (!chapter.images || Math.abs(prevIndex - newIndex) === chapter.images.length - 1) return;
-      const diff = roundBinary(newIndex - prevIndex);
-      const newNumber = validImageNumber(currentImage + diff);
-      console.log(currentImage + diff);
-      console.log(chapter.images.length, nextChapterLink);
-      if (newNumber !== undefined) {
-        setCurrentImage(newNumber);
-        window.scroll({ top: 0 });
-      }
-    },
-    [chapter.images, currentImage, setCurrentImage]
-  );
+  const pagerProps = useMemo(() => {
+    return { manga, chapter, nextChapterLink };
+  }, [manga, chapter, nextChapterLink]);
 
   return (
     <div className={classes.root}>
-      {chapter.images ? (
-        <BindKeyboardSwipeableViews hysteresis={0.5} threshold={20} index={currentImage} onChangeIndex={onChangeIndex}>
-          {chapter.images.map((image, index) => {
-            return <ReaderImage key={image} image={image} current={index === currentImage} />;
-          })}
-        </BindKeyboardSwipeableViews>
-      ) : (
-        ''
-      )}
+      {mode === 'default' ? <DefaultPager {...pagerProps} /> : <WebtoonPager {...pagerProps} />}
     </div>
   );
 };

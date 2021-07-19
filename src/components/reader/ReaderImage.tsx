@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { forwardRef, MutableRefObject, Ref, useEffect, useMemo, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
 import { Avatar } from '@material-ui/core';
-import { CenteredProgress } from './CenteredProgress';
+import { CenteredProgress } from '../CenteredProgress';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -13,12 +13,13 @@ const useStyles = makeStyles(() =>
   })
 );
 
-type Props = {
+export type ReaderImageProps = {
   image: string;
   current: boolean;
+  elRef?: MutableRefObject<any>;
 };
 
-export const ReaderImage = ({ image, current }: Props) => {
+export const ReaderImage = forwardRef(({ image, current }: ReaderImageProps, ref: Ref<any>) => {
   const classes = useStyles();
   const [visited, setVisited] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -39,5 +40,9 @@ export const ReaderImage = ({ image, current }: Props) => {
     }
   }, [current]);
 
-  return shouldRender ? <Avatar variant="square" className={classes.chapterImage} src={image} /> : <CenteredProgress />;
-};
+  return (
+    <div ref={ref}>
+      {shouldRender ? <Avatar variant="square" className={classes.chapterImage} src={image} /> : <CenteredProgress />}
+    </div>
+  );
+});

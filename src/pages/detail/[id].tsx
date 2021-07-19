@@ -80,7 +80,7 @@ export default function Detail({ mangaId }: Props) {
         .then(unwrapResult)
         .then(() => setChaptersLoaded(true))
         .catch(() => {
-          console.log('Rejected, scheduled a timeout');
+          console.log('Chapters are not yet loaded, scheduled a timeout');
           setTimeout(() => {
             dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
           }, 2000);

@@ -10,7 +10,8 @@ import {
   fetchChapterImages,
 } from './actions';
 
-export type CurrentChapter = MangaChapter & { images?: MangaChapterImages };
+export type CurrentChapterImages = { images?: MangaChapterImages };
+export type CurrentChapter = MangaChapter & CurrentChapterImages;
 
 type StateType = {
   currentManga: Manga;

@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { RootState } from '../../../../redux/store';
 import { TDispatch } from '../../../../redux/types';
-import { fetchAll } from '../../../../components/reader/utils';
+import { fetchAll } from '../../../../components/pager/utils';
 import { fetchChapterImages } from '../../../../redux/manga/actions';
-import { CenteredProgress } from '../../../../components/reader/CenteredProgress';
+import { CenteredProgress } from '../../../../components/CenteredProgress';
 import { ReaderMode } from '../../../../components/reader/types';
+import { CurrentChapter, CurrentChapterImages } from '../../../../redux/manga/reducer';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -29,9 +30,9 @@ type Props = {
 export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const router = useRouter();
   const manga = useSelector((state: RootState) => state.manga.currentManga);
-  const chapter = useSelector((state: RootState) => state.manga.currentChapter);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
   const dispatch = useDispatch() as TDispatch;
+  const chapter = useSelector((state: RootState) => state.manga.currentChapter);
 
   useEffect(() => {
     if (!(mangaId && volumeNumber && chapterNumber)) {
@@ -58,6 +59,9 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
     }
   }, [chapter?.images]);
 
-  // TODO: Add possibly AppBar
-  return manga && chapter && mode ? <Reader manga={manga} chapter={chapter} /> : <CenteredProgress />;
+  return manga && chapter && chapter.images !== undefined ? (
+    <Reader manga={manga} chapter={chapter as CurrentChapter & Required<CurrentChapterImages>} mode={mode} />
+  ) : (
+    <CenteredProgress />
+  );
 }
