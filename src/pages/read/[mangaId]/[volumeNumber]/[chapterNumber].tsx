@@ -31,6 +31,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const router = useRouter();
   const { current: manga, chapter } = useSelector((state: RootState) => state.manga);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
+  const [showHeader, setShowHeader] = useState(false);
   const dispatch = useDispatch() as TDispatch;
 
   useEffect(() => {
@@ -59,7 +60,12 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   }, [chapter?.images]);
 
   return manga && chapter && chapter.images !== undefined ? (
-    <Reader manga={manga} chapter={chapter as CurrentChapter & Required<CurrentChapterImages>} mode={mode} />
+    <Reader
+      onClick={() => setShowHeader(!showHeader)}
+      manga={manga}
+      chapter={chapter as CurrentChapter & Required<CurrentChapterImages>}
+      mode={mode}
+    />
   ) : (
     <CenteredProgress />
   );

@@ -16,20 +16,29 @@ const useStyles = makeStyles(() =>
 export type ReaderImageProps = {
   image: string;
   current: boolean;
+  persist?: boolean;
 };
 
-export const ReaderImage = forwardRef(({ image, current }: ReaderImageProps, ref: Ref<any>) => {
+export const PagerImage = forwardRef(({ image, current, persist }: ReaderImageProps, ref: Ref<any>) => {
+  /**
+   * Component for image rendering. Will show circular progress until the image is loaded. Loading starts lazily
+   * @param image Image link
+   * @param current Boolean to detect if the image is currently shown to client (used to start loading)
+   * @param persist Whether to not hide the image if it's not current. Persist for webtoon and hide for default pager to
+   * prevent spoilers if you scroll down and then swipe next chapter
+   */
   const classes = useStyles();
   const [visited, setVisited] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   const shouldRender = useMemo(() => {
-    return current && visited && loaded;
+    if (!persist) return;
+    current && loaded;
+    return loaded;
   }, [visited, loaded, current]);
 
   useEffect(() => {
     if (current && !visited) {
-      console.log('Start loading');
       const img = new Image();
       img.src = image;
       img.onload = () => {

@@ -42,5 +42,5 @@
   "theme_color": "#FFFFFF",
   "start_url": "/",
   "scope": "/",
-  "display": "fullscreen"
+  "display": "standalone"
 }

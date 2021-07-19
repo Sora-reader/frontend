@@ -74,7 +74,13 @@ function WrappedApp({ Component, pageProps }: AppProps) {
           Sora
           {process.env.NODE_ENV === 'development' ? ' DEV' : ''}
         </title>
-        <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+        <meta
+          name="viewport"
+          id="viewport"
+          content="width=device-width, viewport-fit=cover, initial-scale=1, user-scalable=0"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes"></meta>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></meta>
         <meta name="theme-color" content={theme.palette.primary.main} />
       </Head>
 

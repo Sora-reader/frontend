@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import ForwardIcon from '@material-ui/icons/Forward';
@@ -22,6 +22,10 @@ type Props = {
 export const GoNextButton = ({ nextUrl, exit }: Props) => {
   const classes = useStyles();
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch(String(nextUrl));
+  }, []);
 
   const goNext = useCallback(() => {
     if (nextUrl) router.replace(String(nextUrl));

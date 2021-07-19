@@ -14,7 +14,9 @@ h1, h2, h3, h4, h5, h6 {
 /*  */
 
 body {
-  min-height: 100vh;
+  min-height: calc(100vh + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
+  /* min-height: 100vh; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

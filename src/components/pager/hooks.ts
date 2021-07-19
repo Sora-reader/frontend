@@ -23,21 +23,18 @@ export const useKeyboardScroll = (images?: MangaChapterImages) => {
 };
 
 export const getScrollKBHandler = (images?: MangaChapterImages) => {
-  return useCallback(
-    function (e: KeyboardEvent): any {
-      if (!['ArrowDown', 'ArrowUp'].includes(e.key) || e.repeat || !images) return;
-      e.preventDefault();
-      switch (e.key) {
-        case 'ArrowDown':
-          scrollVh('down');
-          break;
-        case 'ArrowUp':
-          scrollVh('up');
-          break;
-      }
-    },
-    [images]
-  );
+  return function (e: KeyboardEvent): any {
+    if (!['ArrowDown', 'ArrowUp'].includes(e.key) || e.repeat || !images) return;
+    e.preventDefault();
+    switch (e.key) {
+      case 'ArrowDown':
+        scrollVh('down');
+        break;
+      case 'ArrowUp':
+        scrollVh('up');
+        break;
+    }
+  };
 };
 
 export const useNextChapterLink = (manga: Manga, chapter?: MangaChapter) =>
@@ -53,20 +50,6 @@ export const useNextChapterLink = (manga: Manga, chapter?: MangaChapter) =>
 
 export const useGetValidImageNumber = (images?: MangaChapterImages) =>
   useCallback((value: number) => (0 <= value && value < (images?.length || -1) ? value : undefined), [images]);
-
-export const useUserScalable = () =>
-  useEffect(() => {
-    const viewport = document.getElementById('viewport');
-    if (viewport) {
-      viewport.setAttribute('content', 'width=device-width, initial-scale=1, user-scalable=1');
-    }
-
-    return () => {
-      if (viewport) {
-        viewport.setAttribute('content', 'width=device-width, initial-scale=1, user-scalable=0');
-      }
-    };
-  }, []);
 
 export const useVisible = (rootElRef: MutableRefObject<any>, top?: any) => {
   const [visible, setVisible] = useState(false);

@@ -11,6 +11,9 @@ type Props = {
 };
 
 export const WebtoonPager = ({ manga, chapter, nextChapterLink }: Props) => {
+  /**
+   * Webtoon pager. Append every other image to the bottom to form complete canvas
+   */
   const scrolledBottom = useScrolledBottom();
 
   return (
