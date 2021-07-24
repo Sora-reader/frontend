@@ -26,7 +26,7 @@ export const ChapterItem = memo(({ mangaId, chapter, index, chipWidth }: Props) 
   };
 
   return (
-    <ListItem button key={chapter.link} onClick={passChapterCallback} alignItems="flex-start">
+    <ListItem button onClick={passChapterCallback} alignItems="flex-start">
       <ListItemText>
         <ChapterChip chipWidth={chipWidth} value={index} />
         <span>{chapter.title || ''}</span>

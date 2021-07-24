@@ -33,13 +33,8 @@ function a11yProps(index: number) {
 }
 
 type Props = {
-  panels: Array<[String, JSX.Element]>;
-  panelWrapper?: JSX.Element;
-  classes?: {
-    appBar?: string;
-    tab?: string;
-    tabPanel?: string;
-  };
+  panelNames: Array<string>;
+  children: Array<JSX.Element>;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,9 +51,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export function SwipeableTabs(props: Props) {
-  const { panels } = props;
-  const classes = { ...useStyles(), ...props.classes };
+export function SwipeableTabs({ panelNames, children }: Props) {
+  const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
   const queryTab = router.query?.tab;
@@ -85,21 +79,21 @@ export function SwipeableTabs(props: Props) {
   );
 
   return (
-    <div>
+    <>
       <AppBar position="static" color="default" className={classes.appBar}>
         <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" variant="fullWidth">
-          {panels.map(([label], index) => (
+          {panelNames.map((label, index) => (
             <Tab className={classes.tab} key={index} label={label} {...a11yProps(index)} />
           ))}
         </Tabs>
       </AppBar>
       <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={changeTab}>
-        {panels.map(([_, jsx], index) => (
+        {children.map((jsx, index) => (
           <TabPanel key={index} className={classes.tabPanel} value={value} index={index} dir={theme.direction}>
             {jsx}
           </TabPanel>
         ))}
       </SwipeableViews>
-    </div>
+    </>
   );
 }

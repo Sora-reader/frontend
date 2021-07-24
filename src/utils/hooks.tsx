@@ -1,7 +1,6 @@
 import { MutableRefObject, useEffect, useLayoutEffect, useState } from 'react';
 
 export const useScrolledBottom = () => {
-  console.log('Init useScrolledBottom');
   const [scrolledBottom, setScrolledBottom] = useState(false);
   // On mobile scrollY + outerHeight may be couple pixels less than offsetHeight
   const mobileOffset = 20;

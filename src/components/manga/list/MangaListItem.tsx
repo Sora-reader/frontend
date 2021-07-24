@@ -37,7 +37,7 @@ export const MangaListItem = memo((manga: Manga) => {
   }, [router, manga, dispatch]);
 
   return (
-    <ListItem button onClick={passManga} key={manga.id} alignItems="flex-start" className={classes.root}>
+    <ListItem button onClick={passManga} alignItems="flex-start" className={classes.root}>
       <ListItemAvatar className={classes.avatarWrapper}>
         <MangaImage src={manga.thumbnail} className={classes.avatar} />
       </ListItemAvatar>

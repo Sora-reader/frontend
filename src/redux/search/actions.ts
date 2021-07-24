@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { MangaSearchResult } from '../../utils/apiTypes';
 import { RootState } from '../store';
+import { queryDidNotChange } from './conditions';
 
 export const SEARCH_MANGA = 'SEARCH_MANGA';
 
@@ -17,7 +18,8 @@ export const startSearch = createAsyncThunk<{ query: string; results: MangaSearc
       query,
       results: response.data,
     };
-  }
+  },
+  { condition: queryDidNotChange }
 );
 
 export const paginateNext = createAsyncThunk<MangaSearchResult>('search/paginate', async (_, thunkAPI) => {
