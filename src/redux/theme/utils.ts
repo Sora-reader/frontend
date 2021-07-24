@@ -1,5 +1,5 @@
-import { Theme } from '@material-ui/core';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, useEffect, useRef, useState } from 'react';
+import { useInitialEffect } from '../../utils/hooks';
 import { StoreType } from '../store';
 import { setPalette } from './actions';
 import { defaultDark, defaultLight } from './defaults';
@@ -8,19 +8,21 @@ import { ThemeState } from './reducer';
 type UseThemeHandlersProps = {
   store: StoreType;
   themeState: ThemeState;
-  setTheme: Dispatch<SetStateAction<any>>;
-  generateTheme: () => Theme;
+  callback: Function;
 };
 
-export const useThemeHooks = ({ store, themeState, setTheme, generateTheme }: UseThemeHandlersProps) => {
+export const useThemeHooks = ({ store, themeState, callback }: UseThemeHandlersProps) => {
   const [loadedCachedTheme, setLoadedCachedTheme] = useState(false);
-  useEffect(() => {
+  const refCallback = useRef<Function>();
+  refCallback.current = callback;
+
+  useInitialEffect(() => {
     loadCachedPalettes(store.dispatch, themeState);
     setLoadedCachedTheme(true);
-  }, []);
+  });
 
   useEffect(() => {
-    setTheme(generateTheme());
+    if (refCallback.current) refCallback.current();
     console.log('Written options to localStorage');
     if (loadedCachedTheme) {
       if (
@@ -30,7 +32,7 @@ export const useThemeHooks = ({ store, themeState, setTheme, generateTheme }: Us
         window.localStorage.removeItem('sora-theme');
       } else window.localStorage.setItem('sora-theme', JSON.stringify(themeState));
     }
-  }, [themeState]);
+  }, [themeState, loadedCachedTheme]);
 };
 
 export const loadCachedPalettes = (dispatch: Dispatch<any>, themeOptions: ThemeState) => {

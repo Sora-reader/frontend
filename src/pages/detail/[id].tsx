@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, createStyles, Divider, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -12,6 +12,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/ChapterList';
+import { useInitialEffect } from '../../utils/hooks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -62,7 +63,7 @@ export default function Detail({ mangaId }: Props) {
   const manga: Manga = useSelector((state: RootState) => state.manga.current);
   const dispatch = useDispatch() as TDispatch;
 
-  useEffect(() => {
+  useInitialEffect(() => {
     if (!mangaId) {
       router.push('/search');
     } else {
@@ -86,7 +87,7 @@ export default function Detail({ mangaId }: Props) {
           }, 2000);
         });
     }
-  }, [dispatch]);
+  });
 
   return (
     <div className={classes.root}>

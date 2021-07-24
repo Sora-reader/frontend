@@ -92,6 +92,7 @@ export default function Search() {
           setMessage('Ошибка, проверьте подключение к интернету');
         });
     }
+    // eslint-disable-next-line
   }, [query, storedResults]);
 
   return (

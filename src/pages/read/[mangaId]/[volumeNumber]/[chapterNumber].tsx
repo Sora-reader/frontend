@@ -13,6 +13,7 @@ import Slide from '@material-ui/core/Slide';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { AppBar, createStyles, IconButton, makeStyles, Theme, Toolbar, Typography } from '@material-ui/core';
+import { useInitialEffect } from '../../../../utils/hooks';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -53,8 +54,8 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const [showHeader, setShowHeader] = useState(false);
   const dispatch = useDispatch() as TDispatch;
 
-  useEffect(() => {
-    router.prefetch(`/detail/${manga.id}/?tab=1`);
+  useInitialEffect(() => {
+    console.log('Chapter useEffect');
     if (!(mangaId && volumeNumber && chapterNumber)) {
       router.push('/search');
     } else if (!manga || !chapter) {
@@ -62,7 +63,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
     } else if (chapter && !chapter?.images) {
       dispatch(fetchChapterImages(chapter.id));
     }
-  }, [dispatch, mangaId, volumeNumber, chapterNumber]);
+  });
 
   useEffect(() => {
     if (chapter?.images?.length) {

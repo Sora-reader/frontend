@@ -2,14 +2,14 @@ import { useRouter } from 'next/router';
 import { signIn } from '../redux/user/actions';
 import { NextLink } from '../components/NextLink';
 import { UserCredentialsForm } from '../components/UserCredentialsForm';
-import { useEffect } from 'react';
+import { useInitialEffect } from '../utils/hooks';
 
 export default function SignIn() {
   const router = useRouter();
 
-  useEffect(() => {
+  useInitialEffect(() => {
     router.prefetch('/');
-  }, []);
+  });
 
   return (
     <div>

@@ -4,7 +4,7 @@ export const mangaDidNotChange: Condition<Number> = (id, { getState }) => {
   const {
     manga: { current },
   } = getState();
-  return current.id === id;
+  return Boolean((~current.id && current.id === id) || !~current.id);
 };
 
 export const chapterDidNotChange: Condition<Number> = (id, { getState }) => {

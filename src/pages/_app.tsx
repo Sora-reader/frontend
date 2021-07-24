@@ -52,7 +52,7 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;
   const themeState = useSelector((state: RootState) => state.theme);
   const router = useRouter();
-  const { viewed: lastVisited } = useSelector((state: RootState) => state.manga);
+  const lastViewed = useSelector((state: RootState) => state.manga.viewed);
 
   const generateTheme = () => createMuiTheme({ palette: themeState.palettes[themeState.mode] });
   const [theme, setTheme] = useState(generateTheme());
@@ -62,8 +62,8 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
   useCustomEventListeners();
   useCustomInterceptors(store);
-  useSyncViewed(store, lastVisited);
-  useThemeHooks({ store, themeState, setTheme, generateTheme });
+  useSyncViewed(store.dispatch, lastViewed);
+  useThemeHooks({ store, themeState, callback: () => setTheme(generateTheme()) });
   const needSpinner = useNeedSpinner();
 
   return (

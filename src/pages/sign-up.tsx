@@ -1,14 +1,14 @@
 import { signUp } from '../redux/user/actions';
 import { useRouter } from 'next/router';
 import { UserCredentialsForm } from '../components/UserCredentialsForm';
-import { useEffect } from 'react';
+import { useInitialEffect } from '../utils/hooks';
 
 export default function SignOut() {
   const router = useRouter();
 
-  useEffect(() => {
+  useInitialEffect(() => {
     router.prefetch('/');
-  }, []);
+  });
 
   return (
     <div>

@@ -49,6 +49,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^11.0.1",
     "@next/eslint-plugin-next": "^11.0.1",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",

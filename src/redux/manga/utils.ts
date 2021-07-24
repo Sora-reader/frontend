@@ -1,8 +1,7 @@
-import { Dispatch, useEffect } from 'react';
+import { useEffect } from 'react';
 import isEmpty from 'lodash.isempty';
 import { loadViewedManga } from './actions';
 import { Manga, MangaList } from '../../utils/apiTypes';
-import { StoreType } from '../store';
 
 export const detailsNeedUpdate = (manga: Manga) => {
   if (!manga.updatedDetail) return false;
@@ -19,12 +18,8 @@ export const chaptersNeedUpdate = (manga: Manga) => {
 };
 
 // Load viewed from localstorage if needed
-export const useSyncViewed = (store: StoreType, viewed: MangaList) =>
-  useEffect(syncViewed(store.dispatch, viewed), [viewed]);
-
-export const syncViewed = (dispatch: Dispatch<any>, clientState: Array<Manga>) => {
-  // Sync viewed both from and to localStorage
-  return () => {
+export const useSyncViewed = (dispatch: any, clientState: MangaList) =>
+  useEffect(() => {
     const data = window.localStorage.getItem('sora-viewed') || '[]';
     const cachedState = JSON.parse(String(data));
 
@@ -45,5 +40,4 @@ export const syncViewed = (dispatch: Dispatch<any>, clientState: Array<Manga>) =
         window.localStorage.setItem('sora-viewed', jsonClientState);
       }
     }
-  };
-};
+  }, [clientState, dispatch]);

@@ -1,5 +1,21 @@
-import { MutableRefObject, useEffect, useLayoutEffect, useState } from 'react';
+import { EffectCallback, useRef } from 'react';
+import { MutableRefObject, useEffect, useState } from 'react';
 
+/**
+ * useEffect which runs only once avoiding exhaustive-deps linter
+ */
+export const useInitialEffect = (effect: EffectCallback) => {
+  const refCallback = useRef<EffectCallback>();
+  refCallback.current = effect;
+
+  useEffect(() => {
+    if (refCallback.current) refCallback.current();
+  }, []);
+};
+
+/**
+ * Hook to determine whether user scrolled to bottom or not
+ */
 export const useScrolledBottom = () => {
   const [scrolledBottom, setScrolledBottom] = useState(false);
   // On mobile scrollY + outerHeight may be couple pixels less than offsetHeight
@@ -19,7 +35,7 @@ export const useScrolledBottom = () => {
  */
 export const useVisible = (rootElRef: MutableRefObject<any>) => {
   const [visible, setVisible] = useState(false);
-  useLayoutEffect(() => {
+  useInitialEffect(() => {
     if (rootElRef && rootElRef.current) {
       const ob = new IntersectionObserver(
         ([entry]) => {
@@ -34,6 +50,6 @@ export const useVisible = (rootElRef: MutableRefObject<any>) => {
         ob.unobserve(rootElRef.current);
       };
     }
-  }, []);
+  });
   return visible;
 };
