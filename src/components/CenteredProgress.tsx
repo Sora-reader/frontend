@@ -25,7 +25,8 @@ export const CenteredProgress = ({ spinnerSize }: Props) => {
   const classes = useStyles({ spinnerSize: spinnerSize || 5 });
   return (
     <div className={classes.container}>
-      <CircularProgress className={classes.progress} />
+      <CircularProgress disableShrink className={classes.progress} />
+      <CircularProgress disableShrink />
     </div>
   );
 };

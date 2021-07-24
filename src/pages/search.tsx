@@ -107,7 +107,7 @@ export default function Search() {
       )}
       {paginating ? (
         <Box display="flex" justifyContent="center" alignItems="center">
-          <CircularProgress />
+          <CircularProgress disableShrink />
         </Box>
       ) : (
         ''
