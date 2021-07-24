@@ -34,7 +34,7 @@ export const MangaListItem = memo((manga: Manga) => {
   const passManga = useCallback(() => {
     dispatch(setCurrentManga(manga));
     router.push(`/detail/${manga.id}`);
-  }, [router, manga, setCurrentManga]);
+  }, [router, manga, dispatch]);
 
   return (
     <ListItem button onClick={passManga} key={manga.id} alignItems="flex-start" className={classes.root}>

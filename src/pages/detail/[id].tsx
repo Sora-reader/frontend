@@ -86,7 +86,7 @@ export default function Detail({ mangaId }: Props) {
           }, 2000);
         });
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={classes.root}>

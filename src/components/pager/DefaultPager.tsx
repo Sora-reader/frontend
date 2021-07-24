@@ -4,19 +4,12 @@ import { bindKeyboard } from 'react-swipeable-views-utils';
 import { roundBinary } from '../pager/utils';
 import { useGetValidImageNumber } from '../pager/hooks';
 import { PagerImage } from './PagerImage';
-import { Manga } from '../../utils/apiTypes';
-import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
 import { GoNextButton } from '../reader/GoNextButton';
+import { PagerProps } from '../reader/types';
 
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
-type Props = {
-  manga: Manga;
-  chapter: CurrentChapter & Required<CurrentChapterImages>;
-  nextChapterLink?: string;
-};
-
-export const DefaultPager = ({ manga, chapter, nextChapterLink }: Props) => {
+export const DefaultPager = ({ manga, chapter, nextChapterLink }: PagerProps) => {
   /**
    * Default pager component. Pages are changed by swiping Left/Right
    */
@@ -34,7 +27,7 @@ export const DefaultPager = ({ manga, chapter, nextChapterLink }: Props) => {
         window.scroll({ top: 0 });
       }
     },
-    [chapter.images, currentImage, setCurrentImage]
+    [validImageNumber, chapter.images, currentImage, setCurrentImage]
   );
 
   return (
