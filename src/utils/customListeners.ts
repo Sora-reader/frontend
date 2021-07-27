@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { searchInputId } from '../components/Header';
+import { searchInputId } from '../components/header/NavigationHeader';
 
 export function useCustomEventListeners() {
   useEffect(() => {

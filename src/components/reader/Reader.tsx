@@ -5,7 +5,7 @@ import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer'
 import { ReaderMode } from './types';
 import { DefaultPager } from '../pager/DefaultPager';
 import { WebtoonPager } from '../pager/WebtoonPager';
-import { MouseEventHandler, useMemo } from 'react';
+import { Dispatch, MouseEventHandler, SetStateAction, useMemo } from 'react';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,17 +20,18 @@ type Props = {
   chapter: CurrentChapter & Required<CurrentChapterImages>;
   mode: ReaderMode;
   onClick?: MouseEventHandler<HTMLDivElement> | undefined;
+  setCurrentImage: Dispatch<SetStateAction<number>>;
 };
 
-export const Reader = ({ manga, chapter, mode, onClick }: Props) => {
+export const Reader = ({ manga, chapter, mode, onClick, setCurrentImage }: Props) => {
   const classes = useStyles();
-
+  const mangaId = manga.id;
   useKeyboardScroll(chapter.images);
   const nextChapterLink = useNextChapterLink(manga, chapter);
 
   const pagerProps = useMemo(() => {
-    return { manga, chapter, nextChapterLink };
-  }, [manga, chapter, nextChapterLink]);
+    return { mangaId, chapter, nextChapterLink, setCurrentImage };
+  }, [mangaId, chapter, nextChapterLink]);
 
   return (
     <div className={classes.root} onClick={onClick}>

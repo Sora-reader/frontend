@@ -12,8 +12,9 @@ import { CurrentChapter, CurrentChapterImages } from '../../../../redux/manga/re
 import Slide from '@material-ui/core/Slide';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import { AppBar, createStyles, IconButton, makeStyles, Theme, Toolbar, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
 import { useInitialEffect } from '../../../../utils/hooks';
+import { Header } from '../../../../components/header/Header';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -27,16 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    appBar: {
-      // TODO: DRY (src/components/Header.tsx 10:6)
-      backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey['800'] : theme.palette.primary.main,
-      [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(0.5, 1),
-      },
-      [theme.breakpoints.down('sm')]: {
-        padding: theme.spacing(1, 1),
-      },
-    },
+    headerInner: {},
   })
 );
 
@@ -50,6 +42,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const classes = useStyles();
   const router = useRouter();
   const { current: manga, chapter } = useSelector((state: RootState) => state.manga);
+  const [currentImage, setCurrentImage] = useState(0);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
   const [showHeader, setShowHeader] = useState(false);
   const dispatch = useDispatch() as TDispatch;
@@ -84,20 +77,29 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   return manga && chapter && chapter.number === chapterNumber && chapter.images !== undefined ? (
     <>
       <Slide appear={false} direction="down" in={!showHeader}>
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton onClick={() => router.push(`/detail/${manga.id}/?tab=1`)}>
-              <ArrowBackIcon />
-            </IconButton>
-            <Typography color="textPrimary">{chapter.title}</Typography>
-          </Toolbar>
-        </AppBar>
+        <Header
+          icon={<ArrowBackIcon />}
+          onIconClick={() => router.push(`/detail/${manga.id}/?tab=1`)}
+          style={{ opacity: 0.7 }}
+        >
+          <div className={classes.headerInner}>
+            <Typography color="textPrimary" variant="h6">
+              {chapter.title}
+            </Typography>
+            {chapter?.images ? (
+              <Typography color="textPrimary" variant="subtitle1">
+                {currentImage} / {chapter.images.length}
+              </Typography>
+            ) : null}
+          </div>
+        </Header>
       </Slide>
       <Reader
         onClick={() => setShowHeader(!showHeader)}
         manga={manga}
         chapter={chapter as CurrentChapter & Required<CurrentChapterImages>}
         mode={mode}
+        setCurrentImage={setCurrentImage}
       />
     </>
   ) : (

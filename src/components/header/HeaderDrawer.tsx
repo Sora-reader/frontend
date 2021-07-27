@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactEventHandler, useMemo } from 'react';
+import { ReactEventHandler } from 'react';
 import { createStyles, List, makeStyles, SwipeableDrawer, Theme } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
@@ -25,26 +25,14 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   drawer: boolean;
   toggleDrawer: (value: boolean) => ReactEventHandler;
-  menuRef: MutableRefObject<HTMLAnchorElement | undefined>;
 };
 
-export const HeaderDrawer = ({ drawer, toggleDrawer, menuRef }: Props) => {
+export const HeaderDrawer = ({ drawer, toggleDrawer }: Props) => {
   const user = useSelector((state: RootState) => state.user);
   const classes = useStyles();
 
-  // Drawer area should end where menu button starts
-  const drawerSwipeAreaWidth = useMemo(
-    () => (menuRef?.current ? window.scrollX + menuRef.current.getBoundingClientRect().left : 20),
-    [menuRef]
-  );
-
   return (
-    <SwipeableDrawer
-      swipeAreaWidth={drawerSwipeAreaWidth}
-      onClose={toggleDrawer(false)}
-      onOpen={toggleDrawer(true)}
-      open={drawer}
-    >
+    <SwipeableDrawer onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)} open={drawer}>
       <div className={classes.drawerWrapper}>
         <List className={classes.list}>
           <DrawerItem href="/" text="Домой" icon={<HomeIcon />} toggleDrawer={toggleDrawer} />

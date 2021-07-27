@@ -35,14 +35,18 @@ export const useScrolledBottom = () => {
  */
 export const useVisible = (rootElRef: MutableRefObject<any>) => {
   const [visible, setVisible] = useState(false);
+  // seems that the callback is fired on object creation
+  const [firstFire, setFirstFire] = useState(false);
+
   useInitialEffect(() => {
     if (rootElRef && rootElRef.current) {
       const ob = new IntersectionObserver(
         ([entry]) => {
-          setVisible(entry.isIntersecting);
+          if (!firstFire) setVisible(entry.isIntersecting);
+          else setFirstFire(true);
         },
         {
-          rootMargin: undefined,
+          rootMargin: '-50% 0%',
         }
       );
       ob.observe(rootElRef.current);

@@ -1,9 +1,10 @@
+import { Dispatch, SetStateAction } from 'react';
 import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
-import { Manga } from '../../utils/apiTypes';
 
 export type PagerProps = {
-  manga: Manga;
+  mangaId: number;
   chapter: CurrentChapter & Required<CurrentChapterImages>;
   nextChapterLink?: string;
+  setCurrentImage: Dispatch<SetStateAction<number>>;
 };
 export type ReaderMode = 'default' | 'webtoon';

@@ -1,13 +1,17 @@
 import { FormEvent, useRef, useState } from 'react';
-import { AppBar, createStyles, IconButton, Input, makeStyles, Theme, Toolbar } from '@material-ui/core';
+import { createStyles, Input, makeStyles, Theme } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useRouter } from 'next/router';
-import { HeaderDrawer } from './drawer/HeaderDrawer';
+import { HeaderDrawer } from './HeaderDrawer';
+import { Header } from './Header';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    navbar: {
-      backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey['800'] : theme.palette.primary.main,
+    toolbar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
+    header: {
       [theme.breakpoints.up('sm')]: {
         padding: theme.spacing(0.5, 1),
       },
@@ -15,11 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: theme.spacing(1, 1),
       },
     },
-    toolbar: {
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    toolbarIcon: {},
     search: {
       borderTopLeftRadius: 5,
       borderTopRightRadius: 5,
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const searchInputId = 'search-input';
 
-export function Header() {
+export function NavigationHeader() {
   const classes = useStyles();
   const router = useRouter();
 
@@ -43,7 +42,6 @@ export function Header() {
   };
 
   const searchInputRef = useRef<HTMLInputElement>();
-  const menuButtonRef = useRef<any>();
 
   function submitSearch(e: FormEvent) {
     e.preventDefault();
@@ -59,23 +57,24 @@ export function Header() {
 
   return (
     <>
-      <HeaderDrawer drawer={drawer} toggleDrawer={toggleDrawer} menuRef={menuButtonRef} />
-      <AppBar className={classes.navbar} position="sticky">
-        <Toolbar className={classes.toolbar}>
-          <IconButton ref={menuButtonRef} onClick={toggleDrawer(true)} className={classes.toolbarIcon}>
-            <MenuIcon />
-          </IconButton>
-          <form onSubmit={submitSearch} autoComplete="off">
-            <Input
-              name="name"
-              id={searchInputId}
-              inputRef={searchInputRef}
-              className={classes.search}
-              placeholder="Поиск"
-            />
-          </form>
-        </Toolbar>
-      </AppBar>
+      <HeaderDrawer drawer={drawer} toggleDrawer={toggleDrawer} />
+      <Header
+        className={classes.header}
+        icon={<MenuIcon />}
+        onIconClick={toggleDrawer(true)}
+        position="sticky"
+        classes={{ toolbar: classes.toolbar }}
+      >
+        <form onSubmit={submitSearch} autoComplete="off">
+          <Input
+            name="name"
+            id={searchInputId}
+            inputRef={searchInputRef}
+            className={classes.search}
+            placeholder="Поиск"
+          />
+        </form>
+      </Header>
     </>
   );
 }

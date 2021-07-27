@@ -9,7 +9,7 @@ import { useCustomInterceptors } from '../utils/axios';
 import { useSyncViewed } from '../redux/manga/utils';
 import { useThemeHooks } from '../redux/theme/utils';
 import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
-import { Header } from '../components/Header';
+import { NavigationHeader } from '../components/header/NavigationHeader';
 import { useRouter } from 'next/router';
 import { useCustomEventListeners } from '../utils/customListeners';
 import { useNeedSpinner } from '../redux/progressBar/utils';
@@ -88,14 +88,14 @@ function WrappedApp({ Component, pageProps }: AppProps) {
         <Box className={classes.box}>
           {!/^\/read/.test(router.asPath) ? (
             <>
-              <Header />
+              <NavigationHeader />
               <Container maxWidth="md" component="main" className={classes.main}>
                 {needSpinner && <LinearProgress className={classes.progress} />}
                 <Component {...pageProps} />
               </Container>
             </>
           ) : (
-            // We don't want to render spinner (and probably Container in the future) when in reader mode
+            // We don't want to render progress bar when in reader mode
             <Container maxWidth="md" component="main" className={classes.readerMain}>
               <Component {...pageProps} />
             </Container>
