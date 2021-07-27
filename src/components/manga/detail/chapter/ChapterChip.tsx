@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { SoraChip, SoraChipProps } from '../../SoraChip';
+import { SoraChip, SoraChipProps } from '../../../SoraChip';
 
 type Props = {
   value: number;

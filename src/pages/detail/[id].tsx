@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { Box, createStyles, Divider, makeStyles } from '@material-ui/core';
+import { Box, createStyles, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { MangaDetailHeader } from '../../components/manga/detail/MangaDetailHeader';
-import { MangaDetailDescription } from '../../components/manga/detail/MangaDetailDescription';
 import { RootState } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
 import { fetchMangaChapters, fetchMangaDetail, pushViewedManga } from '../../redux/manga/actions';
@@ -11,9 +9,10 @@ import { Manga } from '../../utils/apiTypes';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
-import { ChapterList } from '../../components/manga/detail/ChapterList';
+import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
 import { useInitialEffect } from '../../utils/hooks';
 import { CenteredProgress } from '../../components/CenteredProgress';
+import { MangaDetail } from '../../components/manga/detail/MangaDetail';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -93,10 +92,8 @@ export default function Detail({ mangaId }: Props) {
   return (
     <div className={classes.root}>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
-        <Box p={2}>
-          <MangaDetailHeader {...manga} />
-          <Divider />
-          <MangaDetailDescription text={String(manga.description)} />
+        <Box p={2} style={{ padding: 0 }}>
+          <MangaDetail manga={manga} />
         </Box>
         <Box p={2}>
           {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : <CenteredProgress />}

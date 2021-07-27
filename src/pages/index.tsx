@@ -1,4 +1,4 @@
-import { createStyles, List, makeStyles } from '@material-ui/core';
+import { createStyles, List, makeStyles, Typography } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { MangaListItem } from '../components/manga/list/MangaListItem';
 import { RootState } from '../redux/store';
@@ -6,12 +6,8 @@ import { RootState } from '../redux/store';
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      paddingTop: theme.spacing(1),
+      paddingTop: theme.spacing(2),
       minHeight: '100vh',
-    },
-    lastVisited: {
-      padding: theme.spacing(0, 1),
-      textAlign: 'center',
     },
   })
 );
@@ -22,7 +18,9 @@ export default function IndexView() {
 
   return (
     <div className={classes.root}>
-      <h1 className={classes.lastVisited}>Недавно просмотренные</h1>
+      <Typography variant="h4" align="center" gutterBottom>
+        Недавно просмотренные
+      </Typography>
       <List>
         {lastVisited.map((element) => (
           <MangaListItem key={element.id} {...element} />

@@ -27,11 +27,13 @@ export const PagerImage = forwardRef(
      * Component for image rendering. Will show circular progress until the image is loaded. Loading starts lazily
      * @param image Image link
      * @param current Boolean to detect if the image is currently shown to client (used to start loading)
+     * @param position Image number to show in Header
      * @param persist Whether to not hide the image if it's not current. Persist for webtoon and hide for default pager
      * to prevent spoilers if you scroll down and then swipe next chapter
      */
     const classes = useStyles();
     const [visited, setVisited] = useState(false);
+
     const [loaded, setLoaded] = useState(false);
 
     const shouldRender = useMemo(() => {

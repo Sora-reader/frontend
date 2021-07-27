@@ -14,6 +14,24 @@ export const useInitialEffect = (effect: EffectCallback) => {
 };
 
 /**
+ * Hook to load image in background and return true when it's loaded
+ */
+export const useImageLoaded = (image?: string) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (image) {
+      const img = new Image();
+      img.src = image;
+      img.onload = () => setLoaded(true);
+      img.onerror = () => setLoaded(true);
+    }
+  }, [image]);
+
+  return loaded;
+};
+
+/**
  * Hook to determine whether user scrolled to bottom or not
  */
 export const useScrolledBottom = () => {

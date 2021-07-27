@@ -1,10 +1,10 @@
-import { MangaChapter } from '../../../utils/apiTypes';
+import { MangaChapter } from '../../../../utils/apiTypes';
 import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
-import { setCurrentChapter } from '../../../redux/manga/actions';
+import { setCurrentChapter } from '../../../../redux/manga/actions';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { TDispatch } from '../../../redux/types';
+import { TDispatch } from '../../../../redux/types';
 import { memo } from 'react';
 import { ChapterChip } from './ChapterChip';
 
