@@ -103,7 +103,7 @@ export function MangaDetailHeader(props: Props) {
             <MangaRating value={props.rating} />
             <p>
               {props.rating}
-              /10
+              /5
             </p>
           </div>
         ) : (
