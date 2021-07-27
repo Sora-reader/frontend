@@ -13,6 +13,7 @@ import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/ChapterList';
 import { useInitialEffect } from '../../utils/hooks';
+import { CenteredProgress } from '../../components/CenteredProgress';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -98,7 +99,7 @@ export default function Detail({ mangaId }: Props) {
           <MangaDetailDescription text={String(manga.description)} />
         </Box>
         <Box p={2}>
-          {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : 'Главы загружаются'}
+          {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : <CenteredProgress />}
         </Box>
       </SwipeableTabs>
     </div>
