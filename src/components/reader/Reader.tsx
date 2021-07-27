@@ -31,7 +31,7 @@ export const Reader = ({ manga, chapter, mode, onClick, setCurrentImage }: Props
 
   const pagerProps = useMemo(() => {
     return { mangaId, chapter, nextChapterLink, setCurrentImage };
-  }, [mangaId, chapter, nextChapterLink]);
+  }, [mangaId, chapter, nextChapterLink, setCurrentImage]);
 
   return (
     <div className={classes.root} onClick={onClick}>

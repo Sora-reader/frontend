@@ -20,7 +20,7 @@ export const DefaultPager = memo(
 
     useEffect(() => {
       setHeaderImage(currentImage + 1);
-    }, [currentImage]);
+    }, [currentImage, setHeaderImage]);
 
     const onChangeIndex = useCallback(
       (newIndex, prevIndex) => {

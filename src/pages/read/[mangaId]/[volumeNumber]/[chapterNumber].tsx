@@ -12,7 +12,7 @@ import { CurrentChapter, CurrentChapterImages } from '../../../../redux/manga/re
 import Slide from '@material-ui/core/Slide';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Typography } from '@material-ui/core';
 import { useInitialEffect } from '../../../../utils/hooks';
 import { Header } from '../../../../components/header/Header';
 
@@ -26,9 +26,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     headerInner: {},
+    header: { opacity: 0.7 },
   })
 );
 
@@ -78,9 +79,9 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
     <>
       <Slide appear={false} direction="down" in={!showHeader}>
         <Header
+          className={classes.header}
           icon={<ArrowBackIcon />}
           onIconClick={() => router.push(`/detail/${manga.id}/?tab=1`)}
-          style={{ opacity: 0.7 }}
         >
           <div className={classes.headerInner}>
             <Typography color="textPrimary" variant="h6">

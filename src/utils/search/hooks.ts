@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { searchInputId } from '../../components/Header';
+import { searchInputId } from '../../components/header/NavigationHeader';
 
 export function useNonLazyQuery(queryKey: string) {
   const router = useRouter();
