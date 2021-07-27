@@ -43,7 +43,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const classes = useStyles();
   const router = useRouter();
   const { current: manga, chapter } = useSelector((state: RootState) => state.manga);
-  const [currentImage, setCurrentImage] = useState(0);
+  const [headerImageNumber, setHeaderImageNumber] = useState(0);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
   const [showHeader, setShowHeader] = useState(false);
   const dispatch = useDispatch() as TDispatch;
@@ -89,7 +89,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
             </Typography>
             {chapter?.images ? (
               <Typography color="textPrimary" variant="subtitle1">
-                {currentImage} / {chapter.images.length}
+                {headerImageNumber} / {chapter.images.length}
               </Typography>
             ) : null}
           </div>
@@ -100,7 +100,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
         manga={manga}
         chapter={chapter as CurrentChapter & Required<CurrentChapterImages>}
         mode={mode}
-        setCurrentImage={setCurrentImage}
+        setHeaderImageNumber={setHeaderImageNumber}
       />
     </>
   ) : (

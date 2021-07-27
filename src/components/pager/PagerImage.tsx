@@ -5,6 +5,7 @@ import { CenteredProgress } from '../CenteredProgress';
 
 const useStyles = makeStyles(() =>
   createStyles({
+    root: {},
     chapterImage: {
       pointerEvents: 'none',
       height: 'auto',
@@ -17,12 +18,16 @@ export type ReaderImageProps = {
   image: string;
   current: boolean;
   position: number;
+  setHeaderImageNumber: Dispatch<SetStateAction<number>>;
   persist?: boolean;
-  setCurrentImage: Dispatch<SetStateAction<number>>;
+  classes?: Partial<ReturnType<typeof useStyles>>;
 };
 
 export const PagerImage = forwardRef(
-  ({ image, current, position, persist, setCurrentImage }: ReaderImageProps, ref: Ref<any>) => {
+  (
+    { image, current, position, persist, classes: propClasses, setHeaderImageNumber }: ReaderImageProps,
+    ref: Ref<any>
+  ) => {
     /**
      * Component for image rendering. Will show circular progress until the image is loaded. Loading starts lazily
      * @param image Image link
@@ -31,7 +36,7 @@ export const PagerImage = forwardRef(
      * @param persist Whether to not hide the image if it's not current. Persist for webtoon and hide for default pager
      * to prevent spoilers if you scroll down and then swipe next chapter
      */
-    const classes = useStyles();
+    const classes = { ...useStyles(), ...propClasses };
     const [visited, setVisited] = useState(false);
 
     const [loaded, setLoaded] = useState(false);
@@ -42,8 +47,8 @@ export const PagerImage = forwardRef(
     }, [persist, loaded]);
 
     useEffect(() => {
-      if (current && loaded && setCurrentImage) setCurrentImage(position + 1);
-    }, [current, position, loaded, setCurrentImage]);
+      if (current && loaded && setHeaderImageNumber) setHeaderImageNumber(position + 1);
+    }, [current, position, loaded, setHeaderImageNumber]);
 
     useEffect(() => {
       if (current && !visited) {
@@ -57,7 +62,7 @@ export const PagerImage = forwardRef(
     }, [image, visited, current]);
 
     return (
-      <div ref={ref}>
+      <div className={classes.root} ref={ref}>
         {shouldRender ? <Avatar variant="square" className={classes.chapterImage} src={image} /> : <CenteredProgress />}
       </div>
     );

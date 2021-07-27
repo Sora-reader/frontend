@@ -20,18 +20,18 @@ type Props = {
   chapter: CurrentChapter & Required<CurrentChapterImages>;
   mode: ReaderMode;
   onClick?: MouseEventHandler<HTMLDivElement> | undefined;
-  setCurrentImage: Dispatch<SetStateAction<number>>;
+  setHeaderImageNumber: Dispatch<SetStateAction<number>>;
 };
 
-export const Reader = ({ manga, chapter, mode, onClick, setCurrentImage }: Props) => {
+export const Reader = ({ manga, chapter, mode, onClick, setHeaderImageNumber }: Props) => {
   const classes = useStyles();
   const mangaId = manga.id;
   useKeyboardScroll(chapter.images);
   const nextChapterLink = useNextChapterLink(manga, chapter);
 
   const pagerProps = useMemo(() => {
-    return { mangaId, chapter, nextChapterLink, setCurrentImage };
-  }, [mangaId, chapter, nextChapterLink, setCurrentImage]);
+    return { mangaId, chapter, nextChapterLink, setHeaderImageNumber };
+  }, [mangaId, chapter, nextChapterLink, setHeaderImageNumber]);
 
   return (
     <div className={classes.root} onClick={onClick}>

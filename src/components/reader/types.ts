@@ -5,6 +5,6 @@ export type PagerProps = {
   mangaId: number;
   chapter: CurrentChapter & Required<CurrentChapterImages>;
   nextChapterLink?: string;
-  setCurrentImage: Dispatch<SetStateAction<number>>;
+  setHeaderImageNumber: Dispatch<SetStateAction<number>>;
 };
 export type ReaderMode = 'default' | 'webtoon';
