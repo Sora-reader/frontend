@@ -15,13 +15,11 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '8rem',
     },
     avatarWrapper: {
-      height: '100%',
-      width: '15%',
       margin: 0,
     },
     avatar: {
-      height: '100%',
-      width: '100%',
+      height: 'auto',
+      width: 'auto',
     },
   })
 );
