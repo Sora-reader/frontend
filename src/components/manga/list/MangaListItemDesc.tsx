@@ -1,4 +1,4 @@
-import { createStyles, ListItemText, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core';
 import { SoraChip } from '../../SoraChip';
 import { Manga } from '../../../utils/apiTypes';
 import { MangaRating } from '../MangaRating';
@@ -10,11 +10,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       padding: theme.spacing(1),
     },
-    header: {
-      display: 'flex',
-      flexFlow: 'row wrap',
-      justifyContent: 'space-between',
-    },
     footer: {},
     title: {
       marginTop: 0,
@@ -23,8 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
         lineHeight: '2rem',
       },
     },
-    author: {
-      marginBottom: theme.spacing(2),
+    authors: {
       color: theme.palette.text.secondary,
     },
     genres: {
@@ -43,13 +37,12 @@ export const MangaListItemDesc = memo((manga: Manga) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.header}>
-        <ListItemText className={classes.title}>{manga.title}</ListItemText>
-        <MangaRating value={manga.rating} />
-      </div>
+      <ListItemText className={classes.title}>
+        <Typography variant="h4">{manga.title}</Typography>
+      </ListItemText>
 
+      <MangaRating value={manga.rating} />
       <div className={classes.footer}>
-        <ListItemText className={classes.author}>{manga.authors?.join(', ')}</ListItemText>
         <ul className={classes.genres}>
           {manga.genres?.map((genre) => (
             <SoraChip key={genre} component="li" label={genre} />

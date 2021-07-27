@@ -19,7 +19,7 @@ export default function IndexView() {
   return (
     <div className={classes.root}>
       <Typography variant="h4" align="center" gutterBottom>
-        Недавно просмотренные
+        {lastVisited.length ? 'Недавно просмотренные' : 'Ни одной манги не просмотрено'}
       </Typography>
       <List>
         {lastVisited.map((element) => (

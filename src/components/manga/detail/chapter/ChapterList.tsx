@@ -1,5 +1,5 @@
 import { MangaChapters } from '../../../../utils/apiTypes';
-import { List } from '@material-ui/core';
+import { List, Typography } from '@material-ui/core';
 import { ChapterItem } from './ChapterItem';
 import { Divider } from '@material-ui/core';
 import { memo } from 'react';
@@ -41,7 +41,9 @@ export const ChapterList = memo(({ mangaId, chapters }: Props) => {
             </>
           ))
       ) : (
-        <p>Список глав пуст</p>
+        <Typography variant="h5" align="center">
+          Главы не найдены
+        </Typography>
       )}
     </List>
   );

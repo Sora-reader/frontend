@@ -81,7 +81,10 @@ function WrappedApp({ Component, pageProps }: AppProps) {
         />
         <meta name="apple-mobile-web-app-capable" content="yes"></meta>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></meta>
-        <meta name="theme-color" content={theme.palette.primary.main} />
+        <meta
+          name="theme-color"
+          content={theme.palette.type === 'dark' ? theme.palette.grey['800'] : theme.palette.primary.main}
+        />
       </Head>
 
       <ThemeProvider theme={theme}>
