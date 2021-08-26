@@ -6,6 +6,7 @@ import theme from './theme/reducer';
 import search from './search/reducer';
 import user from './user/reducer';
 import progressBar from './progressBar/reducer';
+import saveLists from './saveLists/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 
 const combinedReducer = combineReducers({
@@ -14,6 +15,7 @@ const combinedReducer = combineReducers({
   search,
   user,
   progressBar,
+  saveLists,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
