@@ -38,8 +38,8 @@
       "purpose": "any maskable"
     }
   ],
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF",
+  "background_color": "#03cafc",
+  "theme_color": "#a6db4b",
   "start_url": "/",
   "scope": "/",
   "display": "standalone"
