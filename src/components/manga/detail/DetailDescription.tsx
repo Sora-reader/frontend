@@ -4,7 +4,6 @@ import { Manga } from '../../../utils/apiTypes';
 import { MangaRating } from '../MangaRating';
 import { memo } from 'react';
 import { Skeleton } from '@material-ui/lab';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { DetailSave } from './DeatilSave';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,7 +63,13 @@ export const DetailDescription = memo(({ manga }: Props) => {
         ))}
       </ul>
 
-      <DetailSave manga={manga} />
+      {manga.source ? (
+        <DetailSave manga={manga} />
+      ) : (
+        <Skeleton>
+          <DetailSave manga={manga} />
+        </Skeleton>
+      )}
 
       {manga.rating ? (
         <div className={classes.ratingContainer}>

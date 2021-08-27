@@ -1,1 +1,1 @@
-export type ListType = 'favorite';
+export type ListType = 'favorite' | 'readLater';
