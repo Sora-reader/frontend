@@ -1,5 +1,5 @@
 import { AnyAction, combineReducers, Reducer } from 'redux';
-import { createWrapper, HYDRATE } from 'next-redux-wrapper';
+import { createWrapper, HYDRATE, MakeStore } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
@@ -8,13 +8,14 @@ import user from './user/reducer';
 import progressBar from './progressBar/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 
-const combinedReducer = combineReducers({
+const defaultReducers = {
   theme,
   manga,
   search,
   user,
   progressBar,
-});
+};
+const combinedReducer = combineReducers(defaultReducers);
 
 export type RootState = ReturnType<typeof combinedReducer>;
 export type StoreType = Store<RootState>;
@@ -36,11 +37,44 @@ const reducer: Reducer = (state: RootState, action: AnyAction) => {
   }
 };
 
-const createStoreWrapped = () =>
-  configureStore<RootState>({
-    reducer,
+const createStoreWrapped: MakeStore = () => {
+  const isServer = typeof window === 'undefined';
+  if (isServer) {
+    return configureStore<RootState>({
+      reducer,
+      devTools: process.env.NODE_ENV !== 'production',
+      middleware: [thunkMiddleware],
+    });
+  }
+
+  // If it's on client side, create a store which will persist
+  const { persistStore, persistReducer } = require('redux-persist');
+  const storage = require('redux-persist/lib/storage').default;
+
+  const persistConfig = {
+    key: 'sora-reader',
+    whitelist: ['theme', 'manga'], // only counter will be persisted, add other reducers if needed
+    storage, // if needed, use a safer storage
+  };
+
+  const persistReducers = {
+    manga: persistReducer({ key: 'viewed', whitelist: ['viewed'], storage }, manga),
+  };
+
+  const persistCombinedReducers = combineReducers({ ...defaultReducers, ...persistReducers });
+  const persistedReducer = persistReducer(persistConfig, persistCombinedReducers);
+
+  const store = configureStore({
+    reducer: persistedReducer,
     devTools: process.env.NODE_ENV !== 'production',
     middleware: [thunkMiddleware],
-  });
+  }); // Creating the store again
+
+  // @ts-ignore
+  store.__persistor = persistStore(store); // This creates a persistor object to .__persistor,
+  // so that we can avail the persistability feature
+
+  return store;
+};
 
 export const wrapper = createWrapper(createStoreWrapped);
