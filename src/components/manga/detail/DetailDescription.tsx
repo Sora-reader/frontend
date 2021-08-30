@@ -4,6 +4,7 @@ import { Manga } from '../../../utils/apiTypes';
 import { MangaRating } from '../MangaRating';
 import { memo } from 'react';
 import { Skeleton } from '@material-ui/lab';
+import { DetailSave } from './DeatilSave';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,6 +62,14 @@ export const DetailDescription = memo(({ manga }: Props) => {
           <SoraChip key={genre} component="li" label={genre} />
         ))}
       </ul>
+
+      {manga.source ? (
+        <DetailSave manga={manga} />
+      ) : (
+        <Skeleton>
+          <DetailSave manga={manga} />
+        </Skeleton>
+      )}
 
       {manga.rating ? (
         <div className={classes.ratingContainer}>

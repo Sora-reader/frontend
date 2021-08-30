@@ -6,6 +6,7 @@ import theme from './theme/reducer';
 import search from './search/reducer';
 import user from './user/reducer';
 import progressBar from './progressBar/reducer';
+import saveLists from './saveLists/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 
 const defaultReducers = {
@@ -14,6 +15,7 @@ const defaultReducers = {
   search,
   user,
   progressBar,
+  saveLists,
 };
 const combinedReducer = combineReducers(defaultReducers);
 
@@ -53,7 +55,7 @@ const createStoreWrapped: MakeStore = () => {
 
   const persistConfig = {
     key: 'sora-reader',
-    whitelist: ['theme', 'manga'], // only counter will be persisted, add other reducers if needed
+    whitelist: ['theme', 'manga', 'saveLists'], // only counter will be persisted, add other reducers if needed
     storage, // if needed, use a safer storage
   };
 
