@@ -1,19 +1,8 @@
-const { withSentryConfig } = require("@sentry/nextjs");
-const withPWA = require('next-pwa');
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-const moduleExports = withBundleAnalyzer(withPWA({
-  pwa: {
-    disable: process.env.NODE_ENV === 'development',
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
-  },
+const defaultConfig = {
   env: {
     BACKEND_URL: process.env.BACKEND_URL,
     BACKEND_PORT: process.env.BACKEND_PORT,
@@ -23,8 +12,33 @@ const moduleExports = withBundleAnalyzer(withPWA({
     SENTRY_PROJECT: process.env.SENTRY_PROJECT,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
   },
-}));
+};
+const bundleAnalyzerConfig = {
+  enabled: true,
+};
+const pwaConfig = {
+  disable: process.env.NODE_ENV === 'development',
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+}
+const sentryConfig = {};
 
-const SentryWebpackPluginOptions = {};
 
-module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions);
+if (process.env.NODE_ENV !== 'development') {
+  const withPWA = require('next-pwa');
+  const { withSentryConfig } = require("@sentry/nextjs");
+
+  const config = {
+    ...defaultConfig,
+    ...pwaConfig,
+  }
+
+  module.exports = withSentryConfig(withPWA(config), sentryConfig); 
+  if (process.env.ANALYZE === 'true') {
+    const withBundleAnalyzer = require('@next/bundle-analyzer')()
+    module.exports = withBundleAnalyzer(module.exports, bundleAnalyzerConfig);
+  }
+}
+else
+  module.exports = defaultConfig;
