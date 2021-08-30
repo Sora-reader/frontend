@@ -1,19 +1,18 @@
 import '../style/global.css';
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { AppProps } from 'next/app';
-import { createMuiTheme, createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createMuiTheme, createStyles, makeStyles, Theme, ThemeOptions } from '@material-ui/core';
 import Head from 'next/head';
 import { useSelector, useStore } from 'react-redux';
 import { RootState, StoreType, wrapper } from '../redux/store';
 import { useCustomInterceptors } from '../utils/axios';
-import { useSyncViewed } from '../redux/manga/utils';
-import { useThemeHooks } from '../redux/theme/utils';
 import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
 import { NavigationHeader } from '../components/header/NavigationHeader';
 import { useRouter } from 'next/router';
 import { useCustomEventListeners } from '../utils/customListeners';
 import { useNeedSpinner } from '../redux/progressBar/utils';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { defaultDark } from '../redux/theme/defaults';
 
 type StyleProps = { minHeight: string };
 
@@ -52,18 +51,18 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;
   const themeState = useSelector((state: RootState) => state.theme);
   const router = useRouter();
-  const lastViewed = useSelector((state: RootState) => state.manga.viewed);
 
-  const generateTheme = () => createMuiTheme({ palette: themeState.palettes[themeState.mode] });
-  const [theme, setTheme] = useState(generateTheme());
+  const theme = useMemo(() => {
+    let options: ThemeOptions = { palette: defaultDark };
+    if (themeState) options = { palette: themeState.palettes[themeState.mode] };
+    return createMuiTheme(options);
+  }, [themeState]);
   const classes = useStyles(theme)({
     minHeight: '100vh',
   });
 
   useCustomEventListeners();
   useCustomInterceptors(store);
-  useSyncViewed(store.dispatch, lastViewed);
-  useThemeHooks({ store, themeState, callback: () => setTheme(generateTheme()) });
   const needSpinner = useNeedSpinner();
 
   return (

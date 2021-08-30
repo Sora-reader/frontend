@@ -17,7 +17,7 @@ export const WebtoonPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
       })}
       {scrolledBottom ? (
         nextChapterLink ? (
-          <GoNextButton nextUrl={nextChapterLink} />
+          <GoNextButton nextUrl={nextChapterLink} setCurrentImage={setHeaderImageNumber} />
         ) : (
           <GoNextButton nextUrl={`/detail/${mangaId}`} exit />
         )

@@ -66,7 +66,7 @@ export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
       </BindKeyboardSwipeableViews>
       {currentImage === chapter.images.length - 1 ? (
         nextChapterLink ? (
-          <GoNextButton nextUrl={nextChapterLink} />
+          <GoNextButton nextUrl={nextChapterLink} setCurrentImage={setCurrentImage} />
         ) : (
           <GoNextButton nextUrl={`/detail/${mangaId}`} exit />
         )

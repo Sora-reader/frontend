@@ -39,3 +39,4 @@ public/workbox-*.js
 public/workbox-*.js.map
 .env
 .eslintcache
+*.bak

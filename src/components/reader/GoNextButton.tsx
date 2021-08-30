@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import ForwardIcon from '@material-ui/icons/Forward';
@@ -21,10 +21,11 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
   nextUrl: string | number;
+  setCurrentImage?: Dispatch<SetStateAction<number>>;
   exit?: boolean;
 };
 
-export const GoNextButton = ({ nextUrl, exit }: Props) => {
+export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
   const classes = useStyles();
   const router = useRouter();
   const dispatch = useDispatch() as TDispatch;
@@ -38,11 +39,12 @@ export const GoNextButton = ({ nextUrl, exit }: Props) => {
   const goNext = useCallback(() => {
     if (nextUrl && nextChapter) {
       router.replace(String(nextUrl)).then(() => {
+        !exit && setCurrentImage && setCurrentImage(1);
         dispatch(setCurrentChapter(nextChapter));
         dispatch(fetchChapterImages(nextChapter.id));
       });
     }
-  }, [nextUrl, nextChapter, router, dispatch]);
+  }, [nextUrl, exit, setCurrentImage, nextChapter, router, dispatch]);
 
   return (
     <Fab className={classes.goNext} aria-label="goNext" variant="round" color="primary" onClick={goNext}>
