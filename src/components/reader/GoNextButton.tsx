@@ -44,7 +44,7 @@ export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
         dispatch(fetchChapterImages(nextChapter.id));
       });
     }
-  }, [nextUrl, nextChapter, router, dispatch]);
+  }, [nextUrl, exit, setCurrentImage, nextChapter, router, dispatch]);
 
   return (
     <Fab className={classes.goNext} aria-label="goNext" variant="round" color="primary" onClick={goNext}>
