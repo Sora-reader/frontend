@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Box, CircularProgress, createStyles, List, makeStyles, Theme } from '@material-ui/core';
+import { Box, CircularProgress, createStyles, makeStyles, Theme } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { MangaListItem } from '../components/manga/list/MangaListItem';
 import { RootState } from '../redux/store';
 import { paginateNext, startSearch } from '../redux/search/actions';
 import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';

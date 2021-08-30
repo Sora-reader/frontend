@@ -19,8 +19,6 @@ import { RootState } from '../../redux/store';
 import { DrawerItem } from './DrawerItem';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import ListIcon from '@material-ui/icons/List';
-import { useRouter } from 'next/router';
-import { ListType } from '../../redux/saveLists/types';
 import { saveList } from '../../core/consts';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,27 +38,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-type SaveListItemProps = {
-  title: string;
-  href: ListType;
-  icon: JSX.Element;
-};
-
-const SaveListItem = ({ title, href, icon }: SaveListItemProps) => {
-  const router = useRouter();
-  const classes = useStyles();
-  const handleClick = useCallback(() => {
-    router.push(`/lists/${href}`);
-  }, [router, href]);
-
-  return (
-    <ListItem button onClick={handleClick} className={classes.nested}>
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText primary={title} />
-    </ListItem>
-  );
-};
 
 type Props = {
   drawer: boolean;
@@ -91,7 +68,14 @@ export const HeaderDrawer = ({ drawer, toggleDrawer }: Props) => {
           <Collapse in={listsOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               {Object.entries(saveList).map(([listName, map]) => (
-                <SaveListItem key={listName} title={map.alt} href={listName as ListType} icon={map.icon} />
+                <DrawerItem
+                  key={listName}
+                  href={`/lists/${listName}`}
+                  className={classes.nested}
+                  text={map.alt}
+                  icon={map.icon}
+                  toggleDrawer={toggleDrawer}
+                />
               ))}
             </List>
           </Collapse>
