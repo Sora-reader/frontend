@@ -55,7 +55,7 @@ const createStoreWrapped: MakeStore = () => {
 
   const persistConfig = {
     key: 'sora-reader',
-    whitelist: ['theme', 'manga'], // only counter will be persisted, add other reducers if needed
+    whitelist: ['theme', 'manga', 'saveLists'], // only counter will be persisted, add other reducers if needed
     storage, // if needed, use a safer storage
   };
 
