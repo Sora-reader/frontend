@@ -10,6 +10,7 @@ import { TDispatch } from '../redux/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { MangaList, MangaSearchResult } from '../utils/apiTypes';
 import { useScrolledBottom } from '../utils/hooks';
+import { MangaListView } from '../components/views/MangaListView';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -99,11 +100,12 @@ export default function Search() {
     <div className={classes.root}>
       <h1 className={classes.header}>{message}</h1>
       {content && (
-        <List className={classes.list}>
-          {content.map((item) => (
-            <MangaListItem key={item.id} {...item} />
-          ))}
-        </List>
+        <MangaListView header="" mangaList={content} />
+        // <List className={classes.list}>
+        //   {content.map((item) => (
+        //     <MangaListItem key={item.id} {...item} />
+        //   ))}
+        // </List>
       )}
       {paginating ? (
         <Box display="flex" justifyContent="center" alignItems="center">

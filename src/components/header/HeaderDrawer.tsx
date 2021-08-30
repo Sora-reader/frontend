@@ -1,6 +1,4 @@
-import WatchLaterIcon from '@material-ui/icons/WatchLater';
 import { ReactEventHandler, useCallback, useState } from 'react';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import {
   Collapse,
   createStyles,
@@ -23,6 +21,7 @@ import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import ListIcon from '@material-ui/icons/List';
 import { useRouter } from 'next/router';
 import { ListType } from '../../redux/saveLists/types';
+import { saveList } from '../../core/consts';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -91,8 +90,9 @@ export const HeaderDrawer = ({ drawer, toggleDrawer }: Props) => {
           </ListItem>
           <Collapse in={listsOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <SaveListItem title="Избранное" href="favorite" icon={<FavoriteIcon />} />
-              <SaveListItem title="Буду читать" href="readLater" icon={<WatchLaterIcon />} />
+              {Object.entries(saveList).map(([listName, map]) => (
+                <SaveListItem key={listName} title={map.alt} href={listName as ListType} icon={map.icon} />
+              ))}
             </List>
           </Collapse>
           <DrawerItem href="/settings" text="Настройки" icon={<SettingsIcon />} toggleDrawer={toggleDrawer} />
