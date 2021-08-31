@@ -49,14 +49,17 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const dispatch = useDispatch() as TDispatch;
 
   useInitialEffect(() => {
-    console.log('Chapter useEffect');
+    let promise: any;
     if (!(mangaId && volumeNumber && chapterNumber)) {
       router.push('/search');
     } else if (!manga || !chapter) {
-      dispatch(fetchAll({ mangaId, volumeNumber, chapterNumber }));
+      promise = dispatch(fetchAll({ mangaId, volumeNumber, chapterNumber }));
     } else if (chapter && !chapter?.images) {
-      dispatch(fetchChapterImages(chapter.id));
+      promise = dispatch(fetchChapterImages(chapter.id));
     }
+    return () => {
+      promise?.abort();
+    };
   });
 
   useEffect(() => {

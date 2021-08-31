@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Box, CircularProgress, createStyles, makeStyles, Theme } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../redux/store';
 import { paginateNext, startSearch } from '../redux/search/actions';
 import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
 import { Dispatch } from 'react';
-import { TDispatch } from '../redux/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { MangaList, MangaSearchResult } from '../utils/apiTypes';
 import { useScrolledBottom } from '../utils/hooks';
@@ -47,7 +46,7 @@ const parseSearchResults = (
 
 export default function Search() {
   const classes = useStyles();
-  const dispatch = useDispatch() as TDispatch;
+  const dispatch = useAppDispatch();
 
   const { results: storedResults, query: storedQuery } = useSelector((state: RootState) => state.search);
   const [searching, setSearching] = useState(false);
@@ -62,9 +61,13 @@ export default function Search() {
   useEffect(() => {
     if (scrolledBottom && storedResults.next) {
       setPaginating(true);
-      dispatch(paginateNext()).then(() => {
+      const promise = dispatch(paginateNext()).then(() => {
         setPaginating(false);
       });
+      return () => {
+        // @ts-ignore
+        promise.abort();
+      };
     }
   }, [scrolledBottom, dispatch, storedResults]);
 
@@ -82,7 +85,7 @@ export default function Search() {
       setMessage('');
       setContent([]);
       setSearching(true);
-      dispatch(startSearch(query))
+      const promise = dispatch(startSearch(query))
         .then(unwrapResult)
         .then(({ query, results }) => {
           setSearching(false);
@@ -91,6 +94,10 @@ export default function Search() {
         .catch(() => {
           setMessage('Ошибка, проверьте подключение к интернету');
         });
+      return () => {
+        // @ts-ignore
+        promise.abort();
+      };
     }
     // eslint-disable-next-line
   }, [query, storedResults]);

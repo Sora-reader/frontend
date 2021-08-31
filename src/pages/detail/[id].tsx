@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Box, createStyles, makeStyles } from '@material-ui/core';
 import Head from 'next/head';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
 import { fetchMangaChapters, pushViewedManga, setCurrentManga } from '../../redux/manga/actions';
 import { Manga } from '../../utils/apiTypes';
@@ -55,27 +55,35 @@ export default function Detail({ mangaId }: Props) {
   const classes = useStyles();
   const [chaptersLoaded, setChaptersLoaded] = useState(false);
   const manga: Manga = useSelector((state: RootState) => state.manga.current);
-  const dispatch = useDispatch() as TDispatch;
+  const dispatch = useAppDispatch();
 
   useInitialEffect(() => {
+    let promises = [] as Array<any>;
     if (~manga.id) {
-      dispatch(pushViewedManga(manga));
+      promises.push(dispatch(pushViewedManga(manga)));
     }
 
     reRequestMangaData(manga, (data) => {
       dispatch(setCurrentManga(data));
-      dispatch(pushViewedManga(data));
+      promises.push(dispatch(pushViewedManga(data)));
     });
 
-    dispatch(fetchMangaChapters(mangaId))
-      .then(unwrapResult)
-      .then(() => setChaptersLoaded(true))
-      .catch(() => {
-        console.log('Chapters are not yet loaded, scheduled a timeout');
-        setTimeout(() => {
-          dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
-        }, 2000);
-      });
+    promises.push(
+      dispatch(fetchMangaChapters(mangaId))
+        .then(unwrapResult)
+        .then(() => setChaptersLoaded(true))
+        .catch(() => {
+          console.log('Chapters are not yet loaded, scheduled a timeout');
+          setTimeout(() => {
+            promises.push(dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true)));
+          }, 2000);
+        })
+    );
+
+    return () => {
+      // @ts-ignore
+      promises.forEach((p) => p.abort());
+    };
   });
 
   return (

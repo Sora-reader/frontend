@@ -8,6 +8,8 @@ import user from './user/reducer';
 import progressBar from './progressBar/reducer';
 import saveLists from './saveLists/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import { TDispatch } from './types';
 
 const defaultReducers = {
   theme,
@@ -80,3 +82,5 @@ const createStoreWrapped: MakeStore = () => {
 };
 
 export const wrapper = createWrapper(createStoreWrapped);
+
+export const useAppDispatch = () => useDispatch<TDispatch>();

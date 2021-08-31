@@ -12,9 +12,13 @@ export default function SignOut() {
 
   useInitialEffect(() => {
     router.prefetch('/');
-    dispatch(signOut())
+    const promise = dispatch(signOut())
       .then(unwrapResult)
       .then(() => router.push('/'));
+    return () => {
+      // @ts-ignore
+      promise.abort();
+    };
   });
   return '';
 }
