@@ -84,6 +84,12 @@ function WrappedApp({ Component, pageProps }: AppProps) {
           name="theme-color"
           content={theme.palette.type === 'dark' ? theme.palette.grey['800'] : theme.palette.primary.main}
         />
+        {/* Open Graph */}
+        <meta property="og:site_name" content="Sora reader" key="site_name" />
+        <meta property="og:title" content="Sora reader" key="title" />
+        <meta property="og:image:height" content="512" key="image_height" />
+        <meta property="og:image:width" content="512" key="image_width" />
+        <meta property="og:image:url" content="/icon-512x512.png" key="image" />
       </Head>
 
       <ThemeProvider theme={theme}>
@@ -104,12 +110,6 @@ function WrappedApp({ Component, pageProps }: AppProps) {
           )}
         </Box>
       </ThemeProvider>
-
-      <Head>
-        {/* Leave OG tag priority to the component */}
-        <meta property="og:title" content="Sora reader" />
-        <meta property="og:image" content="/icon-512x512.png" />
-      </Head>
     </>
   );
 }

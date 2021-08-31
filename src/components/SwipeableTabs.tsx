@@ -67,7 +67,7 @@ export function SwipeableTabs({ panelNames, children }: Props) {
 
   const changeTab = useCallback(
     (value: Number) => {
-      router.replace(`${router.asPath.split('?')[0]}?tab=${value}`);
+      router.replace(`${router.asPath.split('?')[0]}?tab=${value}`, undefined, { shallow: true });
     },
     [router]
   );

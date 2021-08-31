@@ -3,20 +3,13 @@ import axios from 'axios';
 import { Manga, MangaChapter, MangaChapterImages, MangaChapters, MangaList } from '../../utils/apiTypes';
 import { chapterDidNotChange, mangaDidNotChange } from './conditions';
 import { CurrentChapter } from './reducer';
-import { detailsNeedUpdate } from './utils';
+import { detailsNeedUpdate, requestMangaData } from './utils';
 
 // Manga
 export const setCurrentManga = createAction<Manga>('manga/setPreview');
-export const fetchMangaDetail = createAsyncThunk<Manga, Number>(
-  'manga/fetchDetail',
-  async (id: Number) => {
-    const response = await axios.get(`manga/${id}`);
-    return response.data;
-  },
-  {
-    condition: mangaDidNotChange,
-  }
-);
+export const fetchMangaDetail = createAsyncThunk<Manga, Number>('manga/fetchDetail', requestMangaData, {
+  condition: mangaDidNotChange,
+});
 
 // Chapters
 export const setCurrentChapter = createAction<MangaChapter>('manga/setCurrentChapter');

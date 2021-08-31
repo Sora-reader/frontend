@@ -23,7 +23,6 @@ export function slashSearch(e: KeyboardEvent) {
     const searchInputElement = document.getElementById(searchInputId) as HTMLInputElement | undefined;
     if (searchInputElement) {
       e.preventDefault();
-      console.log('prevent /');
       searchInputElement.focus();
     }
   } else if (e.key === 'Escape' && target?.localName === 'input') {
@@ -39,7 +38,6 @@ export function firefoxHomeEndFix(e: KeyboardEvent) {
   if (!['Home', 'End'].includes(e.key) || !('localName' in target)) return;
 
   if (target?.localName !== 'input') {
-    console.log('prevent firefox');
     e.preventDefault();
     switch (e.key) {
       case 'End':

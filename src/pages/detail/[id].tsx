@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Box, createStyles, makeStyles } from '@material-ui/core';
+import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import { RootState } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
-import { fetchMangaChapters, fetchMangaDetail, pushViewedManga } from '../../redux/manga/actions';
+import { fetchMangaChapters, pushViewedManga, setCurrentManga } from '../../redux/manga/actions';
 import { Manga } from '../../utils/apiTypes';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TDispatch } from '../../redux/types';
@@ -13,6 +13,9 @@ import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
 import { useInitialEffect } from '../../utils/hooks';
 import { CenteredProgress } from '../../components/CenteredProgress';
 import { MangaDetail } from '../../components/manga/detail/MangaDetail';
+import { wrapper } from '../../redux/store';
+import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
+import cookie from 'cookie';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,77 +23,74 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(async ({ params, req, store }) => {
+  const mangaId = Number(params?.id);
+  if (mangaId) {
+    const cookies = cookie.parse(req.headers.cookie ?? '');
+    const cookieMangaId = cookies.currentMangaId;
+    if (cookieMangaId === params?.id) return { props: { mangaId } };
+
+    const dispatch = store.dispatch as TDispatch;
+    try {
+      const initialMangaData = await requestMangaData(mangaId);
+      dispatch(setCurrentManga(initialMangaData));
+    } catch (e) {
+      console.log('Eror on server side');
+    }
+    return { props: { mangaId } };
+  }
   return {
-    props: { mangaId: Number(context.params?.id) },
+    redirect: {
+      destination: '/search',
+      permanent: false,
+    },
   };
-};
+});
+
 type Props = {
   mangaId: Number;
 };
 
-const fetchRetry = (
-  shouldRetry: (data: any) => boolean,
-  dispatchCall: () => Promise<any>,
-  onSuccess?: (data: any) => any,
-  maxRetries: number = 2,
-  timeout: number = 2000
-) => {
-  /**
-   * A function to retry calls if data is outdated
-   * @param shouldRetry how to check if should retry
-   * @param onSuccess a callback to run when data was fetched
-   */
-  let retryCounter = maxRetries;
-
-  const retryIfNeeded = (data?: any) => {
-    if (!data || (shouldRetry(data) && retryCounter)) {
-      setTimeout(() => {
-        retryCounter -= 1;
-        dispatchCall().then(retryIfNeeded);
-      }, timeout);
-      return;
-    }
-    if (data && onSuccess) onSuccess(data);
-  };
-  dispatchCall().then(retryIfNeeded);
-};
-
 export default function Detail({ mangaId }: Props) {
   const classes = useStyles();
-  const router = useRouter();
   const [chaptersLoaded, setChaptersLoaded] = useState(false);
   const manga: Manga = useSelector((state: RootState) => state.manga.current);
   const dispatch = useDispatch() as TDispatch;
 
   useInitialEffect(() => {
-    if (!mangaId) {
-      router.push('/search');
-    } else {
-      if (~manga.id) {
-        dispatch(pushViewedManga(manga));
-      }
-
-      fetchRetry(
-        (data) => Boolean(~data.id) || !data.detailDataFresh,
-        () => dispatch(fetchMangaDetail(mangaId)).then(unwrapResult),
-        (data) => dispatch(pushViewedManga(data))
-      );
-
-      dispatch(fetchMangaChapters(mangaId))
-        .then(unwrapResult)
-        .then(() => setChaptersLoaded(true))
-        .catch(() => {
-          console.log('Chapters are not yet loaded, scheduled a timeout');
-          setTimeout(() => {
-            dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
-          }, 2000);
-        });
+    if (~manga.id) {
+      dispatch(pushViewedManga(manga));
     }
+
+    reRequestMangaData(manga, (data) => {
+      dispatch(setCurrentManga(data));
+      dispatch(pushViewedManga(data));
+    });
+
+    dispatch(fetchMangaChapters(mangaId))
+      .then(unwrapResult)
+      .then(() => setChaptersLoaded(true))
+      .catch(() => {
+        console.log('Chapters are not yet loaded, scheduled a timeout');
+        setTimeout(() => {
+          dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
+        }, 2000);
+      });
   });
 
   return (
     <div className={classes.root}>
+      <Head>
+        <meta property="og:title" content={manga.title} key="title" />
+        <meta
+          property="og:description"
+          content={'Sora reader - ' + manga.title + '.\n' + manga.description}
+          key="desc"
+        />
+        <meta property="og:image:height" content="512" key="image_height" />
+        <meta property="og:image:width" content="256" key="image_width" />
+        <meta property="og:image:url" content={manga.thumbnail} key="image" />
+      </Head>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
         <Box p={2} style={{ padding: 0 }}>
           <MangaDetail manga={manga} />
