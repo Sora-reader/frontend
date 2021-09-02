@@ -31,7 +31,7 @@ if (process.env.NODE_ENV !== 'development') {
 
   const config = {
     ...defaultConfig,
-    ...pwaConfig,
+    pwa: pwaConfig,
   }
 
   module.exports = withSentryConfig(withPWA(config), sentryConfig); 

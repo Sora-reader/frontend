@@ -16,6 +16,8 @@ import { MangaDetail } from '../../components/manga/detail/MangaDetail';
 import { wrapper } from '../../redux/store';
 import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
 import cookie from 'cookie';
+import axios from 'axios';
+import { baseUrl, domain } from '../../core/consts';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,6 +27,13 @@ const useStyles = makeStyles(() =>
 
 type Props = {
   mangaId: Number;
+};
+
+const resizeUrlPrefix = axios.defaults.baseURL + 'preview/resize?image=';
+const getDescription = (manga: Manga) => {
+  const output = `Sora: ${manga.description}`;
+  if (output.length > 55) return output.slice(0, 52) + '...';
+  return output;
 };
 
 export default function Detail({ mangaId }: Props) {
@@ -58,7 +67,7 @@ export default function Detail({ mangaId }: Props) {
 
     return () => {
       // @ts-ignore
-      promises.forEach((p) => p.abort());
+      promises.forEach((p) => p?.abort());
     };
   });
 
@@ -66,26 +75,20 @@ export default function Detail({ mangaId }: Props) {
     <div className={classes.root}>
       <Head>
         <title>Sora: {manga.title}</title>
-        <meta name="description" content={manga?.description.slice(0, 55)} />
+        <meta name="description" content={getDescription(manga)} />
 
-        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:url" content={baseUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={manga?.title} />
-        <meta property="og:description" content={manga?.description.slice(0, 55)} />
-        <meta
-          property="og:image"
-          content={'https://backend.sora-reader.app/api/preview/resize?image=' + manga.thumbnail}
-        />
+        <meta property="og:description" content={getDescription(manga)} />
+        <meta property="og:image" content={resizeUrlPrefix + manga.thumbnail} />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content="byeindonesia.com" />
-        <meta property="twitter:url" content="https://www.byeindonesia.com/" />
+        <meta property="twitter:domain" content={domain} />
+        <meta property="twitter:url" content={baseUrl} />
         <meta name="twitter:title" content={manga?.title} />
-        <meta name="twitter:description" content={manga?.description.slice(0, 55)} />
-        <meta
-          name="twitter:image"
-          content={'https://backend.sora-reader.app/api/preview/resize?image=' + manga.thumbnail}
-        ></meta>
+        <meta name="twitter:description" content={getDescription(manga)} />
+        <meta name="twitter:image" content={resizeUrlPrefix + manga.thumbnail}></meta>
       </Head>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
         <Box p={2} style={{ padding: 0 }}>
@@ -100,25 +103,15 @@ export default function Detail({ mangaId }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(async ({ params, req, store }) => {
-  console.log('GETSERVERSIDEPROPS');
   const mangaId = Number(params?.id);
-  console.log('MANGA', mangaId);
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
   if (mangaId) {
     const cookies = cookie.parse(req.headers.cookie ?? '');
     const cookieMangaId = cookies.currentMangaId;
     if (cookieMangaId === params?.id) return { props: { mangaId } };
 
     const dispatch = store.dispatch as TDispatch;
-    try {
-      const initialMangaData = await requestMangaData(mangaId);
-      dispatch(setCurrentManga(initialMangaData));
-      console.log('DISPATCH');
-      await delay(1000);
-      console.log('DELAYED');
-    } catch (e) {
-      console.log('Eror on server side');
-    }
+    const initialMangaData = await requestMangaData(mangaId);
+    dispatch(setCurrentManga(initialMangaData));
     return { props: { mangaId } };
   }
   return {

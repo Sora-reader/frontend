@@ -17,7 +17,7 @@ export default function SignOut() {
       .then(() => router.push('/'));
     return () => {
       // @ts-ignore
-      promise.abort();
+      promise?.abort();
     };
   });
   return '';

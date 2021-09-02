@@ -66,7 +66,7 @@ export default function Search() {
       });
       return () => {
         // @ts-ignore
-        promise.abort();
+        promise?.abort();
       };
     }
   }, [scrolledBottom, dispatch, storedResults]);
@@ -96,7 +96,7 @@ export default function Search() {
         });
       return () => {
         // @ts-ignore
-        promise.abort();
+        promise?.abort();
       };
     }
     // eslint-disable-next-line
@@ -105,14 +105,7 @@ export default function Search() {
   return (
     <div className={classes.root}>
       <h1 className={classes.header}>{message}</h1>
-      {content && (
-        <MangaListView header="" mangaList={content} />
-        // <List className={classes.list}>
-        //   {content.map((item) => (
-        //     <MangaListItem key={item.id} {...item} />
-        //   ))}
-        // </List>
-      )}
+      {content && <MangaListView header="" mangaList={content} />}
       {paginating ? (
         <Box display="flex" justifyContent="center" alignItems="center">
           <CircularProgress disableShrink />
