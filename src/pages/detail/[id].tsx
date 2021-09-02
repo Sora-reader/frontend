@@ -23,30 +23,6 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(async ({ params, req, store }) => {
-  const mangaId = Number(params?.id);
-  if (mangaId) {
-    const cookies = cookie.parse(req.headers.cookie ?? '');
-    const cookieMangaId = cookies.currentMangaId;
-    if (cookieMangaId === params?.id) return { props: { mangaId } };
-
-    const dispatch = store.dispatch as TDispatch;
-    try {
-      const initialMangaData = await requestMangaData(mangaId);
-      dispatch(setCurrentManga(initialMangaData));
-    } catch (e) {
-      console.log('Eror on server side');
-    }
-    return { props: { mangaId } };
-  }
-  return {
-    redirect: {
-      destination: '/search',
-      permanent: false,
-    },
-  };
-});
-
 type Props = {
   mangaId: Number;
 };
@@ -89,15 +65,27 @@ export default function Detail({ mangaId }: Props) {
   return (
     <div className={classes.root}>
       <Head>
-        <meta property="og:title" content={manga.title} key="title" />
+        <title>Sora: {manga.title}</title>
+        <meta name="description" content={manga?.description.slice(0, 55)} />
+
+        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={manga?.title} />
+        <meta property="og:description" content={manga?.description.slice(0, 55)} />
         <meta
-          property="og:description"
-          content={'Sora reader - ' + manga.title + '.\n' + manga.description}
-          key="desc"
+          property="og:image"
+          content={'https://backend.sora-reader.app/api/preview/resize?image=' + manga.thumbnail}
         />
-        <meta property="og:image:height" content="512" key="image_height" />
-        <meta property="og:image:width" content="256" key="image_width" />
-        <meta property="og:image:url" content={manga.thumbnail} key="image" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="byeindonesia.com" />
+        <meta property="twitter:url" content="https://www.byeindonesia.com/" />
+        <meta name="twitter:title" content={manga?.title} />
+        <meta name="twitter:description" content={manga?.description.slice(0, 55)} />
+        <meta
+          name="twitter:image"
+          content={'https://backend.sora-reader.app/api/preview/resize?image=' + manga.thumbnail}
+        ></meta>
       </Head>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
         <Box p={2} style={{ padding: 0 }}>
@@ -110,3 +98,33 @@ export default function Detail({ mangaId }: Props) {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(async ({ params, req, store }) => {
+  console.log('GETSERVERSIDEPROPS');
+  const mangaId = Number(params?.id);
+  console.log('MANGA', mangaId);
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  if (mangaId) {
+    const cookies = cookie.parse(req.headers.cookie ?? '');
+    const cookieMangaId = cookies.currentMangaId;
+    if (cookieMangaId === params?.id) return { props: { mangaId } };
+
+    const dispatch = store.dispatch as TDispatch;
+    try {
+      const initialMangaData = await requestMangaData(mangaId);
+      dispatch(setCurrentManga(initialMangaData));
+      console.log('DISPATCH');
+      await delay(1000);
+      console.log('DELAYED');
+    } catch (e) {
+      console.log('Eror on server side');
+    }
+    return { props: { mangaId } };
+  }
+  return {
+    redirect: {
+      destination: '/search',
+      permanent: false,
+    },
+  };
+});
