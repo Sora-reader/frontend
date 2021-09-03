@@ -79,14 +79,14 @@ export default function Detail({ mangaId }: Props) {
         <meta property="og:type" content="website" />
         <meta property="og:title" content={manga?.title} />
         <meta property="og:description" content={getDescription(manga)} />
-        <meta property="og:image" content={resizeUrl + manga.thumbnail} />
+        <meta property="og:image" content={resizeUrl + manga?.image || manga.thumbnail} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content={domain} />
         <meta property="twitter:url" content={baseUrl} />
         <meta name="twitter:title" content={manga?.title} />
         <meta name="twitter:description" content={getDescription(manga)} />
-        <meta name="twitter:image" content={resizeUrl + manga.thumbnail}></meta>
+        <meta name="twitter:image" content={resizeUrl + manga?.image || manga.thumbnail}></meta>
       </Head>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
         <Box p={2} style={{ padding: 0 }}>
