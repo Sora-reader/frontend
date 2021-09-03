@@ -84,28 +84,6 @@ function WrappedApp({ Component, pageProps }: AppProps) {
           name="theme-color"
           content={theme.palette.type === 'dark' ? theme.palette.grey['800'] : theme.palette.primary.main}
         />
-
-        {/* OG */}
-        {/* <meta name="description" content="Читайте мангу на Sora" /> */}
-        {/* Facebook */}
-        {/* <meta property="og:type" content="website" key="facebook_type" />
-
-        <meta property="og:site_name" content="Sora reader" key="facebook_site_name" />
-
-        <meta property="og:title" content="Sora reader" key="facebook_title" />
-        <meta property="og:description" content="Читайте мангу на Sora" key="facebook_description" />
-        <meta property="og:image" content="/icon-512x512.png" key="facebook_image" /> */}
-
-        {/* Twitter */}
-        {/* <meta property="twitter:card" content="summary_large_image" key="twitter_card" />
-
-        <meta property="twitter:url" content={router.route} key="twitter_url" />
-        <meta property="twitter:site" content="@sora-reader" key="twitter_site" />
-        <meta property="twitter:domain" content="sora-reader.app" key="twitter_domain" />
-
-        <meta property="twitter:title" content="Sora reader" key="twitter_title" />
-        <meta property="twitter:description" content="Читайте мангу на Sora" key="twitter_description" />
-        <meta property="twitter:image" content="/icon-512x512.png" key="twitter_image" /> */}
       </Head>
 
       <ThemeProvider theme={theme}>

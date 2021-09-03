@@ -16,8 +16,7 @@ import { MangaDetail } from '../../components/manga/detail/MangaDetail';
 import { wrapper } from '../../redux/store';
 import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
 import cookie from 'cookie';
-import axios from 'axios';
-import { baseUrl, domain } from '../../core/consts';
+import { baseUrl, domain, resizeUrl } from '../../core/consts';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,7 +28,6 @@ type Props = {
   mangaId: Number;
 };
 
-const resizeUrlPrefix = axios.defaults.baseURL + 'preview/resize?image=';
 const getDescription = (manga: Manga) => {
   const output = `Sora: ${manga.description}`;
   if (output.length > 55) return output.slice(0, 52) + '...';
@@ -81,14 +79,14 @@ export default function Detail({ mangaId }: Props) {
         <meta property="og:type" content="website" />
         <meta property="og:title" content={manga?.title} />
         <meta property="og:description" content={getDescription(manga)} />
-        <meta property="og:image" content={resizeUrlPrefix + manga.thumbnail} />
+        <meta property="og:image" content={resizeUrl + manga.thumbnail} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content={domain} />
         <meta property="twitter:url" content={baseUrl} />
         <meta name="twitter:title" content={manga?.title} />
         <meta name="twitter:description" content={getDescription(manga)} />
-        <meta name="twitter:image" content={resizeUrlPrefix + manga.thumbnail}></meta>
+        <meta name="twitter:image" content={resizeUrl + manga.thumbnail}></meta>
       </Head>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
         <Box p={2} style={{ padding: 0 }}>
