@@ -80,7 +80,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
         <Header
           className={classes.header}
           icon={<ArrowBackIcon />}
-          onIconClick={() => router.push(`/detail/${manga.id}/?tab=1`)}
+          onIconClick={() => router.push(`/detail/${manga.id}/?tab=1`, undefined, { shallow: true })}
         >
           <div className={classes.headerInner}>
             <Typography color="textPrimary" variant="h6">

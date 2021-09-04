@@ -57,12 +57,15 @@ const createStoreWrapped: MakeStore = () => {
 
   const persistConfig = {
     key: 'sora-reader',
-    whitelist: ['theme', 'manga', 'saveLists'], // only counter will be persisted, add other reducers if needed
+    whitelist: ['theme', 'saveLists'],
     storage, // if needed, use a safer storage
   };
 
   const persistReducers = {
-    manga: persistReducer({ key: 'manga', whitelist: ['viewed', 'readChapters'], storage }, manga),
+    manga: persistReducer(
+      { key: 'manga', whitelist: ['viewed', 'readChapters'], blacklist: ['current'], storage },
+      manga
+    ),
   };
 
   const persistCombinedReducers = combineReducers({ ...defaultReducers, ...persistReducers });

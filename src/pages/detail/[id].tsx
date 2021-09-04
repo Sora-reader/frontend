@@ -7,17 +7,15 @@ import { SwipeableTabs } from '../../components/SwipeableTabs';
 import { fetchMangaChapters, pushViewedManga, setCurrentManga } from '../../redux/manga/actions';
 import { Manga } from '../../utils/apiTypes';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
 import { useInitialEffect } from '../../utils/hooks';
 import { MangaDetail } from '../../components/manga/detail/MangaDetail';
-import { wrapper } from '../../redux/store';
 import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
-import cookie from 'cookie';
 import { baseUrl, domain, resizeUrl } from '../../core/consts';
 import { Skeleton } from '@material-ui/lab';
 import { ChapterItem } from '../../components/manga/detail/chapter/ChapterItem';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,6 +28,7 @@ const useStyles = makeStyles(() =>
 
 type Props = {
   mangaId: Number;
+  ssrManga?: Manga;
 };
 
 const getDescription = (manga: Manga) => {
@@ -38,10 +37,16 @@ const getDescription = (manga: Manga) => {
   return output;
 };
 
-export default function Detail({ mangaId }: Props) {
+export default function Detail({ mangaId, ssrManga }: Props) {
   const classes = useStyles();
   const [chaptersLoaded, setChaptersLoaded] = useState(false);
-  const manga: Manga = useSelector((state: RootState) => state.manga.current);
+  const [manga, setManga] = useState(ssrManga ?? { id: -1, title: '', description: '' });
+
+  const stateManga: Manga = useSelector((state: RootState) => state.manga.current);
+  useEffect(() => {
+    setManga(stateManga);
+  }, [stateManga]);
+
   const dispatch = useAppDispatch();
 
   useInitialEffect(() => {
@@ -106,17 +111,11 @@ export default function Detail({ mangaId }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(async ({ params, req, store }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const mangaId = Number(params?.id);
   if (mangaId) {
-    const cookies = cookie.parse(req.headers.cookie ?? '');
-    const cookieMangaId = cookies.currentMangaId;
-    if (cookieMangaId === params?.id) return { props: { mangaId } };
-
-    const dispatch = store.dispatch as TDispatch;
-    const initialMangaData = await requestMangaData(mangaId);
-    dispatch(setCurrentManga(initialMangaData));
-    return { props: { mangaId } };
+    const ssrManga = await requestMangaData(mangaId);
+    return { props: { mangaId, ssrManga } };
   }
   return {
     redirect: {
@@ -124,4 +123,4 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       permanent: false,
     },
   };
-});
+};

@@ -32,8 +32,7 @@ export const MangaListItem = memo((manga: Manga) => {
 
   const passManga = useCallback(() => {
     dispatch(setCurrentManga(manga));
-    document.cookie = 'currentMangaId=' + manga.id;
-    router.push(`/detail/${manga.id}`);
+    router.push(`/detail/${manga.id}`, undefined, { shallow: true });
   }, [router, manga, dispatch]);
 
   return (
