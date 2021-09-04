@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, createStyles, makeStyles } from '@material-ui/core';
+import { Box, createStyles, List, makeStyles } from '@material-ui/core';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../redux/store';
@@ -11,16 +11,20 @@ import { TDispatch } from '../../redux/types';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
 import { useInitialEffect } from '../../utils/hooks';
-import { CenteredProgress } from '../../components/CenteredProgress';
 import { MangaDetail } from '../../components/manga/detail/MangaDetail';
 import { wrapper } from '../../redux/store';
 import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
 import cookie from 'cookie';
 import { baseUrl, domain, resizeUrl } from '../../core/consts';
+import { Skeleton } from '@material-ui/lab';
+import { ChapterItem } from '../../components/manga/detail/chapter/ChapterItem';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {},
+    chapterSkeleton: {
+      height: '3rem',
+    },
   })
 );
 
@@ -41,32 +45,24 @@ export default function Detail({ mangaId }: Props) {
   const dispatch = useAppDispatch();
 
   useInitialEffect(() => {
-    let promises = [] as Array<any>;
     if (~manga.id) {
-      promises.push(dispatch(pushViewedManga(manga)));
+      dispatch(pushViewedManga(manga));
     }
 
     reRequestMangaData(manga, (data) => {
       dispatch(setCurrentManga(data));
-      promises.push(dispatch(pushViewedManga(data)));
+      dispatch(pushViewedManga(data));
     });
 
-    promises.push(
-      dispatch(fetchMangaChapters(mangaId))
-        .then(unwrapResult)
-        .then(() => setChaptersLoaded(true))
-        .catch(() => {
-          console.log('Chapters are not yet loaded, scheduled a timeout');
-          setTimeout(() => {
-            promises.push(dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true)));
-          }, 2000);
-        })
-    );
-
-    return () => {
-      // @ts-ignore
-      promises.forEach((p) => p?.abort());
-    };
+    dispatch(fetchMangaChapters(mangaId))
+      .then(unwrapResult)
+      .then(() => setChaptersLoaded(true))
+      .catch(() => {
+        console.log('Chapters are not yet loaded, scheduled a timeout');
+        setTimeout(() => {
+          dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
+        }, 2000);
+      });
   });
 
   return (
@@ -93,7 +89,17 @@ export default function Detail({ mangaId }: Props) {
           <MangaDetail manga={manga} />
         </Box>
         <Box p={2}>
-          {chaptersLoaded ? <ChapterList mangaId={manga.id} chapters={manga.chapters} /> : <CenteredProgress />}
+          {chaptersLoaded ? (
+            <ChapterList mangaId={manga.id} chapters={manga.chapters} />
+          ) : (
+            <List>
+              {Array(17).fill(
+                <Skeleton width="100%">
+                  <ChapterItem chapter={{} as any} mangaId={0} index={0} />
+                </Skeleton>
+              )}
+            </List>
+          )}
         </Box>
       </SwipeableTabs>
     </div>

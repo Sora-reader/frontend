@@ -1,3 +1,7 @@
+import { Dispatch } from '@reduxjs/toolkit';
+import { useCallback } from 'react';
+import { setRead } from '../../redux/manga/actions';
+import { CurrentChapter } from '../../redux/manga/reducer';
 import { MangaChapterImages } from '../../utils/apiTypes';
 import { VH } from '../../utils/css';
 
@@ -23,7 +27,7 @@ const scrollVh = (direction: 'up' | 'down' = 'down') => {
 };
 
 /**
- * Return event handler for ArrowUp/Down
+ * @returns event handler for ArrowUp/Down
  */
 export const getKeyboardScrollHandler = (images?: MangaChapterImages) => {
   return function (e: KeyboardEvent): any {
@@ -39,3 +43,14 @@ export const getKeyboardScrollHandler = (images?: MangaChapterImages) => {
     }
   };
 };
+
+/**
+ * @returns Memoized callback which dispatched setRead if needed
+ */
+export const useSetReadOnCurrent = (dispatch: Dispatch, mangaId: number, chapter?: CurrentChapter) =>
+  useCallback(
+    (position: number) => {
+      if (chapter && chapter.images && position >= chapter.images.length / 2) dispatch(setRead(mangaId, chapter.id));
+    },
+    [dispatch, mangaId, chapter]
+  );

@@ -13,9 +13,10 @@ type Props = {
   chapter: MangaChapter;
   index: number;
   chipWidth?: number;
+  read?: boolean;
 };
 
-export const ChapterItem = memo(({ mangaId, chapter, index, chipWidth }: Props) => {
+export const ChapterItem = memo(({ mangaId, chapter, index, chipWidth, read }: Props) => {
   const dispatch = useDispatch() as TDispatch;
   const router = useRouter();
 
@@ -28,7 +29,7 @@ export const ChapterItem = memo(({ mangaId, chapter, index, chipWidth }: Props) 
   return (
     <ListItem button onClick={passChapterCallback} alignItems="flex-start">
       <ListItemText>
-        <ChapterChip chipWidth={chipWidth} value={index} />
+        <ChapterChip chipWidth={chipWidth} value={index} variant={(read && 'outlined') || 'default'} />
         <span>{chapter.title || ''}</span>
       </ListItemText>
     </ListItem>

@@ -94,8 +94,18 @@ export const DetailDescription = memo(({ manga }: Props) => {
       </div>
 
       <Divider className={classes.divider} />
-
-      <Typography>{manga.description}</Typography>
+      {manga.description ? (
+        <Typography>{manga.description}</Typography>
+      ) : (
+        <>
+          <Skeleton width="100%" />
+          <Skeleton width="70%" />
+          <Skeleton width="50%" />
+          <Skeleton width="80%" />
+          <Skeleton width="80%" />
+          <Skeleton width="90%" />
+        </>
+      )}
     </div>
   );
 });

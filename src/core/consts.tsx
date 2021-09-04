@@ -13,3 +13,5 @@ export const protocol = 'https';
 export const domain = 'sora-reader.app';
 export const baseUrl = `${protocol}://${domain}`;
 export const resizeUrl = 'https://hr5yipay69.execute-api.eu-central-1.amazonaws.com/prod/imageResize?image=';
+
+export const mangaListImageSize = { width: 130, height: 180 };

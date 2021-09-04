@@ -40,20 +40,18 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) =>
       top: '10%',
       left: '2.5%',
 
-      height: '100%',
+      objectFit: 'contain',
+      height: '300px',
       width: 'auto',
 
       [theme.breakpoints.down('sm')]: {
-        maxWidth: '40%',
+        height: '250px',
       },
-      [theme.breakpoints.up('sm')]: {
-        maxWidth: '30%',
-      },
-      [theme.breakpoints.up('md')]: {
-        maxWidth: '20%',
+      [theme.breakpoints.down('xs')]: {
+        height: '200px',
       },
     },
-    avatarImg: { width: 'auto' },
+    avatarImg: { width: 'auto', objectFit: 'contain' },
     avatarBg: {
       borderRadius: 0,
       height: '100%',
@@ -92,13 +90,7 @@ export const DetailHeader = memo((props: Props) => {
             classes={{ img: classes.avatarImg }}
           />
         ) : (
-          <Skeleton
-            height="250px"
-            width="175px"
-            variant="rect"
-            className={classes.avatar}
-            style={{ borderRadius: '0.5rem' }}
-          />
+          <Skeleton width="185px" variant="rect" className={classes.avatar} style={{ borderRadius: '0.5rem' }} />
         )}
       </div>
       <div className={classes.titleContainer}>

@@ -4,6 +4,8 @@ import { ChapterItem } from './ChapterItem';
 import { Divider } from '@material-ui/core';
 import { memo } from 'react';
 import { useMemo } from 'react';
+import { RootState } from '../../../../redux/store';
+import { useSelector } from 'react-redux';
 
 type Props = {
   mangaId: number;
@@ -18,28 +20,57 @@ export const ChapterList = memo(({ mangaId, chapters }: Props) => {
     if (len < 1000) return 2.6;
     return 3;
   }, [chapters]);
+  const readChapterMap = useSelector((state: RootState) => state.manga.readChapters);
+  const readChapter = useMemo(() => {
+    const id = readChapterMap[mangaId];
+    if (id) return { id, index: chapters?.findIndex((c) => c.id === id) };
+  }, [chapters, readChapterMap, mangaId]);
+  const readChapters = useMemo(() => {
+    if (readChapter && readChapter.index) return chapters?.slice(readChapter.index);
+    return [];
+  }, [readChapter, chapters]);
+  const unreadChapters = useMemo(() => {
+    if (readChapter && readChapter.index) return chapters?.slice(0, readChapter.index);
+    return chapters;
+  }, [readChapter, chapters]);
+
+  const mappedChapters = useMemo(() => {
+    if (chapters && readChapters && unreadChapters) {
+      const read = readChapters?.map((chapter, index) => (
+        <ChapterItem
+          key={chapter.link}
+          mangaId={mangaId}
+          chapter={chapter}
+          index={chapters?.length - index}
+          chipWidth={chipWidth}
+          read={true}
+        />
+      ));
+      const unread = unreadChapters?.map((chapter, index) => (
+        <ChapterItem
+          key={chapter.link}
+          mangaId={mangaId}
+          chapter={chapter}
+          index={chapters?.length - index}
+          chipWidth={chipWidth}
+        />
+      ));
+      return unread.concat(read);
+    }
+    return [];
+  }, [mangaId, chipWidth, chapters, readChapters, unreadChapters]);
 
   return (
     <List>
       {chapters && chapters?.length ? (
-        chapters
-          .map((chapter, index) => (
-            <ChapterItem
-              key={chapter.link}
-              mangaId={mangaId}
-              chapter={chapter}
-              index={chapters.length - index}
-              chipWidth={chipWidth}
-            />
-          ))
-          .reduce((prev, curr) => (
-            // Reduce to place dividers between chapters, can't use join with JSX
-            <>
-              {prev}
-              <Divider />
-              {curr}
-            </>
-          ))
+        mappedChapters.reduce((prev, curr) => (
+          // Reduce to place dividers between chapters, can't use join with JSX
+          <>
+            {prev}
+            <Divider />
+            {curr}
+          </>
+        ))
       ) : (
         <Typography variant="h5" align="center">
           Главы не найдены

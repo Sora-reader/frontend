@@ -9,6 +9,7 @@ import {
   setCurrentChapter,
   fetchChapterImages,
   fetchAll,
+  setRead,
 } from './actions';
 
 export type CurrentChapterImages = { images?: MangaChapterImages };
@@ -18,17 +19,22 @@ type StateType = {
   current: Manga;
   chapter?: CurrentChapter;
   viewed: MangaList;
+  readChapters: Record<number, number>;
 };
 
 const initialState: StateType = {
   current: { id: -1, title: '', description: '' },
   viewed: [],
+  readChapters: {},
 };
 
 const reducer = createReducer(initialState, (builder) => {
   // Manga
   builder.addCase(setCurrentManga, (state, action) => {
-    state.current = action.payload;
+    state.current = {
+      ...action.payload,
+      chapters: (action.payload.chapters?.length && action.payload.chapters) || state.current.chapters,
+    };
   });
   builder.addCase(fetchMangaDetail.fulfilled, (state, action) => {
     state.current = { ...state.current, ...action.payload };
@@ -43,6 +49,9 @@ const reducer = createReducer(initialState, (builder) => {
   });
   builder.addCase(fetchMangaChapters.fulfilled, (state, action) => {
     state.current.chapters = action.payload;
+  });
+  builder.addCase(setRead, (state, action) => {
+    state.readChapters[action.payload.mangaId] = action.payload.chapterId;
   });
 
   // Viewed

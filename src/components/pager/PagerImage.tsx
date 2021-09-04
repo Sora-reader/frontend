@@ -19,13 +19,14 @@ export type ReaderImageProps = {
   current: boolean;
   position: number;
   setHeaderImageNumber: Dispatch<SetStateAction<number>>;
+  onCurrent?: (position: number) => any;
   persist?: boolean;
   classes?: Partial<ReturnType<typeof useStyles>>;
 };
 
 export const PagerImage = forwardRef(
   (
-    { image, current, position, persist, classes: propClasses, setHeaderImageNumber }: ReaderImageProps,
+    { image, current, position, onCurrent, persist, classes: propClasses, setHeaderImageNumber }: ReaderImageProps,
     ref: Ref<any>
   ) => {
     /**
@@ -47,8 +48,11 @@ export const PagerImage = forwardRef(
     }, [persist, loaded]);
 
     useEffect(() => {
-      if (current && loaded && setHeaderImageNumber) setHeaderImageNumber(position + 1);
-    }, [current, position, loaded, setHeaderImageNumber]);
+      if (current && loaded && setHeaderImageNumber) {
+        if (onCurrent) onCurrent(position);
+        setHeaderImageNumber(position + 1);
+      }
+    }, [current, position, loaded, onCurrent, setHeaderImageNumber]);
 
     useEffect(() => {
       if (current && !visited) {

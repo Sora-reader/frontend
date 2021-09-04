@@ -1,13 +1,14 @@
 import { memo, useCallback, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
-import { roundBinary } from '../pager/utils';
+import { roundBinary, setReadIfNeeded } from '../pager/utils';
 import { useGetValidImageNumber } from '../pager/hooks';
 import { PagerImage } from './PagerImage';
 import { GoNextButton } from '../reader/GoNextButton';
 import { PagerProps } from '../reader/types';
 import { useEffect } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
@@ -27,6 +28,7 @@ const useStyles = makeStyles(() =>
  */
 export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeaderImageNumber }: PagerProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [currentImage, setCurrentImage] = useState(0);
   const validImageNumber = useGetValidImageNumber(chapter.images);
 
@@ -57,6 +59,7 @@ export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
               key={image}
               image={image}
               position={index}
+              onCurrent={setReadIfNeeded(dispatch, mangaId, chapter)}
               current={index === currentImage}
               classes={{ root: classes.imageRoot }}
               setHeaderImageNumber={setHeaderImageNumber}

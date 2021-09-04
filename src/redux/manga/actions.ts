@@ -35,6 +35,10 @@ export const fetchChapterImages = createAsyncThunk<MangaChapterImages, Number>(
   }
 );
 
+export const setRead = createAction('manga/setRead', (mangaId: number, chapterId: number) => {
+  return { payload: { mangaId, chapterId } };
+});
+
 // Viewed
 export const loadViewedManga = createAction<MangaList>('manga/loadViewed');
 export const pushViewedManga = createAction<Manga>('manga/pushViewed');

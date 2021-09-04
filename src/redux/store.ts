@@ -62,7 +62,7 @@ const createStoreWrapped: MakeStore = () => {
   };
 
   const persistReducers = {
-    manga: persistReducer({ key: 'viewed', whitelist: ['viewed'], storage }, manga),
+    manga: persistReducer({ key: 'manga', whitelist: ['viewed', 'readChapters'], storage }, manga),
   };
 
   const persistCombinedReducers = combineReducers({ ...defaultReducers, ...persistReducers });

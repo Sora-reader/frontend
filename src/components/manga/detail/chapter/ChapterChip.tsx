@@ -6,7 +6,7 @@ type Props = {
   chipWidth: number;
 } & SoraChipProps;
 
-export const ChapterChip = forwardRef(({ value, chipWidth, ...props }: Props, ref: any) => {
+export const ChapterChip = forwardRef(({ value, chipWidth, variant, ...props }: Props, ref: any) => {
   const style = {
     width: `${chipWidth}rem`,
     padding: 0,
@@ -14,7 +14,7 @@ export const ChapterChip = forwardRef(({ value, chipWidth, ...props }: Props, re
     fontSize: 'small',
   };
   // classes override seems to not work, hotfixing for now with inline styles
-  return <SoraChip label={value} style={style} variant="outlined" size="small" ref={ref} props={props} />;
+  return <SoraChip label={value} style={style} variant={variant || 'outlined'} size="small" ref={ref} props={props} />;
 });
 
 ChapterChip.defaultProps = {

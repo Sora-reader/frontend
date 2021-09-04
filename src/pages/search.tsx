@@ -61,13 +61,9 @@ export default function Search() {
   useEffect(() => {
     if (scrolledBottom && storedResults.next) {
       setPaginating(true);
-      const promise = dispatch(paginateNext()).then(() => {
+      dispatch(paginateNext()).then(() => {
         setPaginating(false);
       });
-      return () => {
-        // @ts-ignore
-        promise?.abort();
-      };
     }
   }, [scrolledBottom, dispatch, storedResults]);
 
@@ -85,7 +81,7 @@ export default function Search() {
       setMessage('');
       setContent([]);
       setSearching(true);
-      const promise = dispatch(startSearch(query))
+      dispatch(startSearch(query))
         .then(unwrapResult)
         .then(({ query, results }) => {
           setSearching(false);
@@ -94,10 +90,6 @@ export default function Search() {
         .catch(() => {
           setMessage('Ошибка, проверьте подключение к интернету');
         });
-      return () => {
-        // @ts-ignore
-        promise?.abort();
-      };
     }
     // eslint-disable-next-line
   }, [query, storedResults]);

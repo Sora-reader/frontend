@@ -7,6 +7,7 @@ import { MangaImage } from '../MangaImage';
 import { setCurrentManga } from '../../../redux/manga/actions';
 import { Manga } from '../../../utils/apiTypes';
 import { memo } from 'react';
+import { mangaListImageSize } from '../../../core/consts';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,8 +19,8 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 0,
     },
     avatar: {
-      height: 'auto',
-      width: 'auto',
+      height: mangaListImageSize.height,
+      width: mangaListImageSize.width,
     },
   })
 );
