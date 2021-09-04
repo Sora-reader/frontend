@@ -3,8 +3,9 @@ import { useScrolledBottom } from '../../utils/hooks';
 import { GoNextButton } from '../reader/GoNextButton';
 import { PagerProps } from '../reader/types';
 import { memo } from 'react';
-import { setReadIfNeeded } from './utils';
 import { useDispatch } from 'react-redux';
+import { useSetReadOnCurrent } from './PagerImage';
+import { useLoadImages } from './utils';
 
 /**
  * Webtoon pager. Append every other image to the bottom to form complete canvas
@@ -12,6 +13,9 @@ import { useDispatch } from 'react-redux';
 export const WebtoonPager = memo(({ mangaId, chapter, nextChapterLink, setHeaderImageNumber }: PagerProps) => {
   const scrolledBottom = useScrolledBottom();
   const dispatch = useDispatch();
+  const onCurrent = useSetReadOnCurrent(dispatch, mangaId, chapter);
+
+  useLoadImages(chapter.images);
 
   return (
     <div>
@@ -21,7 +25,7 @@ export const WebtoonPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
             key={image}
             image={image}
             position={index}
-            onCurrent={setReadIfNeeded(dispatch, mangaId, chapter)}
+            onCurrent={onCurrent}
             setHeaderImageNumber={setHeaderImageNumber}
           />
         );

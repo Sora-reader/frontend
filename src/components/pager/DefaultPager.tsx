@@ -1,9 +1,9 @@
 import { memo, useCallback, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
-import { roundBinary, setReadIfNeeded } from '../pager/utils';
+import { roundBinary, useLoadImages } from '../pager/utils';
 import { useGetValidImageNumber } from '../pager/hooks';
-import { PagerImage } from './PagerImage';
+import { PagerImage, useSetReadOnCurrent } from './PagerImage';
 import { GoNextButton } from '../reader/GoNextButton';
 import { PagerProps } from '../reader/types';
 import { useEffect } from 'react';
@@ -31,10 +31,13 @@ export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
   const dispatch = useDispatch();
   const [currentImage, setCurrentImage] = useState(0);
   const validImageNumber = useGetValidImageNumber(chapter.images);
+  const onCurrent = useSetReadOnCurrent(dispatch, mangaId, chapter);
 
   useEffect(() => {
     setHeaderImageNumber(currentImage + 1);
   }, [currentImage, setHeaderImageNumber]);
+
+  useLoadImages(chapter.images);
 
   const onChangeIndex = useCallback(
     (newIndex, prevIndex) => {
@@ -59,7 +62,7 @@ export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
               key={image}
               image={image}
               position={index}
-              onCurrent={setReadIfNeeded(dispatch, mangaId, chapter)}
+              onCurrent={onCurrent}
               current={index === currentImage}
               classes={{ root: classes.imageRoot }}
               setHeaderImageNumber={setHeaderImageNumber}

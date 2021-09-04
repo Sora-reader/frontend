@@ -1,7 +1,4 @@
-import { Dispatch } from '@reduxjs/toolkit';
-import { useCallback } from 'react';
-import { setRead } from '../../redux/manga/actions';
-import { CurrentChapter } from '../../redux/manga/reducer';
+import { useEffect, useState } from 'react';
 import { MangaChapterImages } from '../../utils/apiTypes';
 import { VH } from '../../utils/css';
 
@@ -45,12 +42,22 @@ export const getKeyboardScrollHandler = (images?: MangaChapterImages) => {
 };
 
 /**
- * @returns Memoized callback which dispatched setRead if needed
+ * Load images sequentially
  */
-export const useSetReadOnCurrent = (dispatch: Dispatch, mangaId: number, chapter?: CurrentChapter) =>
-  useCallback(
-    (position: number) => {
-      if (chapter && chapter.images && position >= chapter.images.length / 2) dispatch(setRead(mangaId, chapter.id));
-    },
-    [dispatch, mangaId, chapter]
-  );
+export const useLoadImages = (images: MangaChapterImages) => {
+  const [loadedImageIndex, setLoadedImageIndex] = useState(0);
+
+  useEffect(() => {
+    setLoadedImageIndex(0);
+  }, [images]);
+
+  useEffect(() => {
+    console.log('==> Loading image', images[loadedImageIndex]);
+    const image = new Image();
+    image.src = images[loadedImageIndex];
+    image.onload = () => {
+      setLoadedImageIndex(loadedImageIndex + 1);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedImageIndex, setLoadedImageIndex]);
+};
