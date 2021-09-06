@@ -20,17 +20,23 @@ export const ChapterList = memo(({ mangaId, chapters }: Props) => {
     if (len < 1000) return 2.6;
     return 3;
   }, [chapters]);
+
   const readChapterMap = useSelector((state: RootState) => state.manga.readChapters);
   const readChapter = useMemo(() => {
-    const id = readChapterMap[mangaId];
+    const id = readChapterMap ? readChapterMap[mangaId] : undefined;
     if (id) return { id, index: chapters?.findIndex((c) => c.id === id) };
   }, [chapters, readChapterMap, mangaId]);
+
   const readChapters = useMemo(() => {
-    if (readChapter && readChapter.index) return chapters?.slice(readChapter.index);
+    if (readChapter && readChapter.index !== undefined) {
+      return chapters?.slice(readChapter.index);
+    }
     return [];
   }, [readChapter, chapters]);
   const unreadChapters = useMemo(() => {
-    if (readChapter && readChapter.index) return chapters?.slice(0, readChapter.index);
+    if (readChapter && readChapter.index !== undefined) {
+      return chapters?.slice(0, readChapter.index);
+    }
     return chapters;
   }, [readChapter, chapters]);
 

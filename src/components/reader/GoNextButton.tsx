@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useCallback, useEffect, useMemo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import ForwardIcon from '@material-ui/icons/Forward';
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-  nextUrl: string | number;
+  nextUrl: string;
   setCurrentImage?: Dispatch<SetStateAction<number>>;
   exit?: boolean;
 };
@@ -36,15 +36,22 @@ export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
     router.prefetch(String(nextUrl));
   }, [router, nextUrl]);
 
-  const goNext = useCallback(() => {
-    if (nextUrl && nextChapter) {
-      router.replace(String(nextUrl)).then(() => {
-        !exit && setCurrentImage && setCurrentImage(1);
-        dispatch(setCurrentChapter(nextChapter));
-        dispatch(fetchChapterImages(nextChapter.id));
-      });
-    }
-  }, [nextUrl, exit, setCurrentImage, nextChapter, router, dispatch]);
+  const goNext = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      if (nextUrl) {
+        if (exit) router.replace(nextUrl, undefined, { shallow: true });
+        else if (nextChapter) {
+          router.replace(nextUrl, undefined, { shallow: true }).then(() => {
+            setCurrentImage && setCurrentImage(1);
+            dispatch(setCurrentChapter(nextChapter));
+            dispatch(fetchChapterImages(nextChapter.id));
+          });
+        }
+      }
+    },
+    [nextUrl, exit, setCurrentImage, nextChapter, router, dispatch]
+  );
 
   return (
     <Fab className={classes.goNext} aria-label="goNext" variant="round" color="primary" onClick={goNext}>

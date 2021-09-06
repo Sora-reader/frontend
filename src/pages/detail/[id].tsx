@@ -43,9 +43,18 @@ export default function Detail({ mangaId, ssrManga }: Props) {
   const [manga, setManga] = useState(ssrManga ?? { id: -1, title: '', description: '' });
 
   const stateManga: Manga = useSelector((state: RootState) => state.manga.current);
+
+  useInitialEffect(() => {
+    if (stateManga.id === -1 && ssrManga && ssrManga?.id !== -1) dispatch(setCurrentManga(ssrManga));
+  });
+
   useEffect(() => {
-    setManga(stateManga);
+    if (stateManga.id !== -1) setManga(stateManga);
   }, [stateManga]);
+
+  useEffect(() => {
+    console.log('Manga was updated', manga);
+  }, [manga]);
 
   const dispatch = useAppDispatch();
 
@@ -112,6 +121,7 @@ export default function Detail({ mangaId, ssrManga }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  console.log('Detail GSS');
   const mangaId = Number(params?.id);
   if (mangaId) {
     const ssrManga = await requestMangaData(mangaId);

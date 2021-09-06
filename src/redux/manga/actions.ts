@@ -1,5 +1,6 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { sleep } from '../../core/utils';
 import { Manga, MangaChapter, MangaChapterImages, MangaChapters, MangaList } from '../../utils/apiTypes';
 import { chapterDidNotChange, mangaDidNotChange } from './conditions';
 import { CurrentChapter } from './reducer';
@@ -16,7 +17,7 @@ export const setCurrentChapter = createAction<MangaChapter>('manga/setCurrentCha
 export const fetchMangaChapters = createAsyncThunk<MangaChapters, Number>(
   'manga/fetchChapters',
   async (id: Number) => {
-    console.log('Fetching chapters');
+    console.log('Fetching chapters for', id);
     const response = await axios.get(`manga/${id}/chapters`);
     return response.data;
   },
@@ -52,17 +53,24 @@ export const fetchAll = createAsyncThunk<
 >(
   'manga/fetchAll',
   async ({ mangaId, volumeNumber, chapterNumber }) => {
+    console.log('====> Fetch all');
     let manga;
+    let shouldRetry = true;
     do {
       manga = (await axios.get(`manga/${mangaId}`)).data as Manga;
-    } while (detailsNeedUpdate(manga));
+      if (detailsNeedUpdate(manga)) await sleep(1000);
+      else shouldRetry = false;
+    } while (shouldRetry);
+    console.log('1. Fetched manga, getting chapters...');
 
     const { data: chapters }: { data: MangaChapters } = await axios.get(`manga/${mangaId}/chapters`);
+    console.log('2. Fetched chapters, getting image links');
 
     const currentChapter = chapters.find(
       (chapter) => chapter.volume === volumeNumber && chapter.number == chapterNumber
     );
     const { data: currentChapterImages } = await axios.get(`manga/${currentChapter?.id}/images`);
+    console.log('3. Fetched all\n<====');
 
     return {
       manga: {

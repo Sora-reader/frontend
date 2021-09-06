@@ -77,7 +77,6 @@ export default function Search() {
       return;
     }
     if (!searching) {
-      console.log('Started in progress');
       setMessage('');
       setContent([]);
       setSearching(true);

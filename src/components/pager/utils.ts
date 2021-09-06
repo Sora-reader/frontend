@@ -52,7 +52,6 @@ export const useLoadImages = (images: MangaChapterImages) => {
   }, [images]);
 
   useEffect(() => {
-    console.log('==> Loading image', images[loadedImageIndex]);
     const image = new Image();
     image.src = images[loadedImageIndex];
     image.onload = () => {

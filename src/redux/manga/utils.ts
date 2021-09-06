@@ -1,11 +1,23 @@
 import axios from 'axios';
+import { chapterUpdateDeadline, detailUpdateDeadline } from '../../core/consts';
+import { utcDate } from '../../core/utils';
 import { Manga } from '../../utils/apiTypes';
 
-export const requestMangaData = async (id: Number) => {
+/**
+ * Make API call to fetch manga data
+ * @param id manga DB id
+ */
+export const requestMangaData = async (id: Number): Promise<Manga> => {
   const response = await axios.get(`manga/${id}`);
   return response.data;
 };
 
+/**
+ * Re-request manga detail data once
+ * @param manga initial manga data
+ * @param onUpdate callback if manga updates
+ * @param timeout ms timeout before re-request
+ */
 export const reRequestMangaData = async (manga: Manga, onUpdate: (data: Manga) => any, timeout = 2000) => {
   if (detailsNeedUpdate(manga)) {
     setTimeout(() => {
@@ -16,17 +28,24 @@ export const reRequestMangaData = async (manga: Manga, onUpdate: (data: Manga) =
   }
 };
 
+/**
+ * Check if manga details need update
+ */
 export const detailsNeedUpdate = (manga: Manga) => {
   if (!manga.updatedDetail) return false;
-  if (~manga.id) return true;
-  const hourAgo = new Date();
-  hourAgo.setHours(hourAgo.getHours() - 1);
-  return new Date(manga.updatedDetail) < hourAgo;
+  if (manga.id === -1) return true;
+  const updateDeadline = utcDate();
+  updateDeadline.setHours(updateDeadline.getHours() - detailUpdateDeadline);
+  return new Date(manga.updatedDetail) < updateDeadline;
 };
 
+/**
+ * Check if manga chapters need update
+ */
 export const chaptersNeedUpdate = (manga: Manga) => {
   if (!manga.updatedChapters) return false;
-  const hourAgo = new Date();
-  hourAgo.setHours(hourAgo.getHours() - 1);
-  return new Date(manga.updatedChapters) < hourAgo;
+  if (manga.id === -1) return true;
+  const updateDeadline = utcDate();
+  updateDeadline.setHours(updateDeadline.getHours() - chapterUpdateDeadline);
+  return new Date(manga.updatedChapters) < updateDeadline;
 };
