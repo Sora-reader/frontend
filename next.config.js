@@ -34,7 +34,7 @@ if (process.env.NODE_ENV !== 'development') {
     pwa: pwaConfig,
   }
 
-  module.exports = withSentryConfig(withPWA(config), sentryConfig); 
+  if (process.env.SENTRY_DSN) module.exports = withSentryConfig(withPWA(config), sentryConfig); 
   if (process.env.ANALYZE === 'true') {
     const withBundleAnalyzer = require('@next/bundle-analyzer')()
     module.exports = withBundleAnalyzer(module.exports, bundleAnalyzerConfig);

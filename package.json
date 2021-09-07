@@ -28,7 +28,6 @@
     "@types/react-redux": "^7.1.16",
     "@types/react-swipeable-views": "^0.13.0",
     "@types/react-swipeable-views-utils": "^0.13.2",
-    "@types/redux-thunk": "^2.1.0",
     "@types/yup": "^0.29.12",
     "axios": "^0.21.1",
     "axios-case-converter": "^0.8.0",

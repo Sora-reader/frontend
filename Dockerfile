@@ -1,14 +1,28 @@
-FROM node:14.15.4-slim
+FROM node:16
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+ARG SENTRY_DSN
+ARG SENTRY_URL
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+ARG SENTRY_AUTH_TOKEN
 
+ENV PORT=8884
+EXPOSE $PORT
+
+RUN npm install -g npm@latest
+
+COPY package.json package-lock.json ./
 RUN npm i
 
 COPY . .
 
-EXPOSE 3000
+RUN SENTRY_DSN=${SENTRY_DSN} \
+    SENTRY_URL=${SENTRY_URL} \
+    SENTRY_ORG=${SENTRY_ORG} \
+    SENTRY_PROJECT=${SENTRY_PROJECT} \
+    SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
+    npm run build
 
-RUN chmod +x docker-entrypoint.sh
-CMD ["./docker-entrypoint.sh"]
+CMD ["npm", "run", "start"]
