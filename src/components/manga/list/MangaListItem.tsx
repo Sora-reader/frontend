@@ -8,6 +8,7 @@ import { setCurrentManga } from '../../../redux/manga/actions';
 import { Manga } from '../../../utils/apiTypes';
 import { memo } from 'react';
 import { mangaListImageSize } from '../../../core/consts';
+import { navigateToDetail } from '../../../core/router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,7 +33,7 @@ export const MangaListItem = memo((manga: Manga) => {
 
   const passManga = useCallback(() => {
     dispatch(setCurrentManga(manga));
-    router.push(`/detail/${manga.id}`, undefined, { shallow: true });
+    navigateToDetail(router, manga.id);
   }, [router, manga, dispatch]);
 
   return (

@@ -2,6 +2,7 @@ import { HTMLAttributes, useCallback, useMemo } from 'react';
 import { AppBar, createStyles, makeStyles, Tab, Tabs, Theme, useTheme } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
 import { useRouter } from 'next/router';
+import { shallowNavigate } from '../core/router';
 
 interface TabPanelProps extends HTMLAttributes<any> {
   dir?: string;
@@ -66,8 +67,8 @@ export function SwipeableTabs({ panelNames, children }: Props) {
   }, [queryTab]);
 
   const changeTab = useCallback(
-    (value: Number) => {
-      router.replace(`${router.asPath.split('?')[0]}?tab=${value}`, undefined, { shallow: true });
+    (value: number) => {
+      shallowNavigate(router, `${router.asPath.split('?')[0]}?tab=${value}`, 'replace');
     },
     [router]
   );

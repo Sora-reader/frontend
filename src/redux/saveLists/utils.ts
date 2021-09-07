@@ -7,8 +7,12 @@ export const getUniqueSaveLists = (lists: RootState['saveLists']) =>
 
 export const inWhichList = (manga: Manga, lists: RootState['saveLists']): ListType | undefined => {
   const entries = getUniqueSaveLists(lists);
-  for (let i = 0, size = entries.length; i < size; i++)
-    if (inList(manga, entries[i][1])) return entries[i][0] as ListType;
+  let listName, list;
+  for (let i = 0, size = entries.length; i < size; i++) {
+    [listName, list] = entries[i];
+    if (listName[0] === '_') continue;
+    if (inList(manga, list)) return listName as ListType;
+  }
 };
 
 export const inList = (manga: Manga, list: Array<Manga>) => {

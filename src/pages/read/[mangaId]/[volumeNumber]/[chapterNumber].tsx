@@ -15,6 +15,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { createStyles, makeStyles, Typography } from '@material-ui/core';
 import { useInitialEffect } from '../../../../utils/hooks';
 import { Header } from '../../../../components/header/Header';
+import { navigateToDetail } from '../../../../core/router';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -80,7 +81,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
         <Header
           className={classes.header}
           icon={<ArrowBackIcon />}
-          onIconClick={() => router.push(`/detail/${manga.id}/?tab=1`, undefined, { shallow: true })}
+          onIconClick={() => navigateToDetail(router, manga.id, 1)}
         >
           <div className={classes.headerInner}>
             <Typography color="textPrimary" variant="h6">

@@ -9,6 +9,7 @@ import { RootState } from '../../redux/store';
 import { TDispatch } from '../../redux/types';
 import { getNextChapter } from '../pager/hooks';
 import { fetchChapterImages, setCurrentChapter } from '../../redux/manga/actions';
+import { shallowNavigate } from '../../core/router';
 
 const useStyles = makeStyles((theme) => ({
   goNext: {
@@ -40,9 +41,9 @@ export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
     (e: MouseEvent) => {
       e.preventDefault();
       if (nextUrl) {
-        if (exit) router.replace(nextUrl, undefined, { shallow: true });
+        if (exit) shallowNavigate(router, nextUrl, 'replace');
         else if (nextChapter) {
-          router.replace(nextUrl, undefined, { shallow: true }).then(() => {
+          shallowNavigate(router, nextUrl, 'replace').then(() => {
             setCurrentImage && setCurrentImage(1);
             dispatch(setCurrentChapter(nextChapter));
             dispatch(fetchChapterImages(nextChapter.id));
