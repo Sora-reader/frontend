@@ -54,25 +54,16 @@ const createStoreWrapped: MakeStore = () => {
   // If it's on client side, create a store which will persist
   const { persistStore, persistReducer } = require('redux-persist');
   const storage = require('redux-persist/lib/storage').default;
-  const autoMergeLevel1 = require('redux-persist/lib/stateReconciler/autoMergeLevel1').default;
 
   const persistConfig = {
     key: 'sora-reader',
-    whitelist: ['theme', 'saveLists'],
-    storage, // if needed, use a safer storage
+    whitelist: ['theme'],
+    storage,
   };
 
   const persistReducers = {
-    manga: persistReducer(
-      {
-        key: 'manga',
-        whitelist: ['viewed', 'readChapters'],
-        blacklist: ['current'],
-        storage,
-        stateReconciler: autoMergeLevel1,
-      },
-      manga
-    ),
+    manga: require('./manga/persist').default,
+    saveLists: require('./saveLists/persist').default,
   };
 
   const persistCombinedReducers = combineReducers({ ...defaultReducers, ...persistReducers });
