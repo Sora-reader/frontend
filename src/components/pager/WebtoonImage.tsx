@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { PagerImage, ReaderImageProps } from './PagerImage';
-import { useVisible } from '../../utils/hooks';
+import { useVisible } from '../../common/hooks';
 
 type Props = Omit<ReaderImageProps, 'current' | 'persist'>;
 

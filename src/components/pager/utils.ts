@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { MangaChapterImages } from '../../utils/apiTypes';
-import { VH } from '../../utils/css';
+import { MangaChapterImages } from '../../common/apiTypes';
+import { VH } from '../../common/css';
 
 /**
  * Round value diff to 0/1

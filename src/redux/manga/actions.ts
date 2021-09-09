@@ -1,7 +1,7 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { sleep } from '../../core/utils';
-import { Manga, MangaChapter, MangaChapterImages, MangaChapters, MangaList } from '../../utils/apiTypes';
+import { sleep } from '../../common/utils';
+import { Manga, MangaChapter, MangaChapterImages, MangaChapters, MangaList } from '../../common/apiTypes';
 import { chapterDidNotChange, mangaDidNotChange } from './conditions';
 import { CurrentChapter } from './reducer';
 import { detailsNeedUpdate, requestMangaData } from './utils';

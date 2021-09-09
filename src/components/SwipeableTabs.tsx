@@ -2,7 +2,7 @@ import { HTMLAttributes, useCallback, useMemo } from 'react';
 import { AppBar, createStyles, makeStyles, Tab, Tabs, Theme, useTheme } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
 import { useRouter } from 'next/router';
-import { shallowNavigate } from '../core/router';
+import { shallowNavigate } from '../common/router';
 
 interface TabPanelProps extends HTMLAttributes<any> {
   dir?: string;

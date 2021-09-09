@@ -1,4 +1,4 @@
-import { Manga } from '../../utils/apiTypes';
+import { Manga } from '../../common/apiTypes';
 import { RootState } from '../store';
 import { ListType } from './types';
 

@@ -13,9 +13,9 @@ import Slide from '@material-ui/core/Slide';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { createStyles, makeStyles, Typography } from '@material-ui/core';
-import { useInitialEffect } from '../../../../utils/hooks';
+import { useInitialEffect } from '../../../../common/hooks';
 import { Header } from '../../../../components/header/Header';
-import { navigateToDetail } from '../../../../core/router';
+import { navigateToDetail } from '../../../../common/router';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {

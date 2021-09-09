@@ -1,3 +1,4 @@
+import { IncomingMessage } from 'http';
 import { NextRouter } from 'next/router';
 
 /**
@@ -25,3 +26,11 @@ export const navigateToDetail = (
   if (tabNumber) url += `?tab=${tabNumber}`;
   return shallowNavigate(router, url, method);
 };
+
+/**
+ * Detect if navigation is done on client side
+ * @param req req prop from getServerSideProps
+ */
+export function isClientSideNavigation(req: IncomingMessage) {
+  return req.url?.startsWith('/_next');
+}

@@ -1,6 +1,6 @@
 import { createStyles, Divider, Link, makeStyles, Theme, Typography } from '@material-ui/core';
 import { SoraChip } from '../../SoraChip';
-import { Manga } from '../../../utils/apiTypes';
+import { Manga } from '../../../common/apiTypes';
 import { MangaRating } from '../MangaRating';
 import { memo } from 'react';
 import { Skeleton } from '@material-ui/lab';

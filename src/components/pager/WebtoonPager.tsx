@@ -1,5 +1,5 @@
 import { WebtoonImage } from './WebtoonImage';
-import { useScrolledBottom } from '../../utils/hooks';
+import { useScrolledBottom } from '../../common/hooks';
 import { GoNextButton } from '../reader/GoNextButton';
 import { PagerProps } from '../reader/types';
 import { memo } from 'react';

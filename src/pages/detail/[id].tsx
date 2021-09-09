@@ -5,17 +5,18 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
 import { fetchMangaChapters, pushViewedManga, setCurrentManga } from '../../redux/manga/actions';
-import { Manga } from '../../utils/apiTypes';
+import { Manga } from '../../common/apiTypes';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
-import { useInitialEffect } from '../../utils/hooks';
+import { useInitialEffect } from '../../common/hooks';
 import { MangaDetail } from '../../components/manga/detail/MangaDetail';
 import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
-import { baseUrl, domain, resizeUrl } from '../../core/consts';
 import { Skeleton } from '@material-ui/lab';
 import { ChapterItem } from '../../components/manga/detail/chapter/ChapterItem';
 import { useEffect } from 'react';
+import { getOpenGraphForManga } from '../../common/opengraph';
+import { isClientSideNavigation } from '../../common/router';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,12 +30,6 @@ const useStyles = makeStyles(() =>
 type Props = {
   mangaId: Number;
   ssrManga?: Manga;
-};
-
-const getDescription = (manga: Manga) => {
-  const output = `Sora: ${manga.description}`;
-  if (output.length > 55) return output.slice(0, 52) + '...';
-  return output;
 };
 
 export default function Detail({ mangaId, ssrManga }: Props) {
@@ -51,10 +46,6 @@ export default function Detail({ mangaId, ssrManga }: Props) {
   useEffect(() => {
     if (stateManga.id !== -1) setManga(stateManga);
   }, [stateManga]);
-
-  useEffect(() => {
-    console.log('Manga was updated', manga);
-  }, [manga]);
 
   const dispatch = useAppDispatch();
 
@@ -83,20 +74,7 @@ export default function Detail({ mangaId, ssrManga }: Props) {
     <div className={classes.root}>
       <Head>
         <title>Sora: {manga.title}</title>
-        <meta name="description" content={getDescription(manga)} />
-
-        <meta property="og:url" content={baseUrl} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={manga?.title} />
-        <meta property="og:description" content={getDescription(manga)} />
-        <meta property="og:image" content={resizeUrl + manga?.image || manga.thumbnail} />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content={domain} />
-        <meta property="twitter:url" content={baseUrl} />
-        <meta name="twitter:title" content={manga?.title} />
-        <meta name="twitter:description" content={getDescription(manga)} />
-        <meta name="twitter:image" content={resizeUrl + manga?.image || manga.thumbnail}></meta>
+        {getOpenGraphForManga(manga)}
       </Head>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
         <Box p={2} style={{ padding: 0 }}>
@@ -120,9 +98,12 @@ export default function Detail({ mangaId, ssrManga }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  console.log('Detail GSS');
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+  const clientSideNavigation = isClientSideNavigation(req);
   const mangaId = Number(params?.id);
+
+  if (clientSideNavigation) return { props: { mangaId } };
+
   if (mangaId) {
     const ssrManga = await requestMangaData(mangaId);
     return { props: { mangaId, ssrManga } };

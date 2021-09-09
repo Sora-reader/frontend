@@ -9,10 +9,10 @@ export const saveList: Record<ListType, SaveListMap> = {
   readLater: { icon: <ListIcon />, alt: 'Буду читать' },
 };
 
-export const protocol = 'https';
-export const domain = 'sora-reader.app';
+export const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+export const domain = process.env.NODE_ENV === 'production' ? 'sora-reader.app' : 'localhost:3000';
 export const baseUrl = `${protocol}://${domain}`;
-export const resizeUrl = 'https://hr5yipay69.execute-api.eu-central-1.amazonaws.com/prod/imageResize?image=';
+export const resizeUrl = process.env.RESIZE_URL;
 
 export const mangaListImageSize = { width: 130, height: 180 };
 

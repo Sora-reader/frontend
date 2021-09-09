@@ -3,11 +3,11 @@ import { Box, CircularProgress, createStyles, makeStyles, Theme } from '@materia
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { paginateNext, startSearch } from '../redux/search/actions';
-import { useNonLazyQuery, useSyncQuery } from '../utils/search/hooks';
+import { useNonLazyQuery, useSyncQuery } from '../common/search/hooks';
 import { Dispatch } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { MangaList, MangaSearchResult } from '../utils/apiTypes';
-import { useScrolledBottom } from '../utils/hooks';
+import { MangaList, MangaSearchResult } from '../common/apiTypes';
+import { useScrolledBottom } from '../common/hooks';
 import { MangaListView } from '../components/views/MangaListView';
 
 const useStyles = makeStyles((theme: Theme) =>

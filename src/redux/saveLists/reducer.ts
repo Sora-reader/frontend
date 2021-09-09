@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { Manga } from '../../utils/apiTypes';
+import { Manga } from '../../common/apiTypes';
 import { favor, unfavor, addToList, removeFromList } from './actions';
 import { ListType } from './types';
 import { pushToArray, removeFromArray } from './utils';

@@ -1,6 +1,6 @@
 import { createStyles, ListItemText, makeStyles, Theme, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 import { SoraChip } from '../../SoraChip';
-import { Manga } from '../../../utils/apiTypes';
+import { Manga } from '../../../common/apiTypes';
 import { MangaRating } from '../MangaRating';
 import { memo } from 'react';
 import { useMemo } from 'react';

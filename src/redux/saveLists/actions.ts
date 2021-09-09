@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Manga } from '../../utils/apiTypes';
+import { Manga } from '../../common/apiTypes';
 import { ListType } from './types';
 
 export const favor = createAction<Manga>('saveLists/favor');

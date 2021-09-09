@@ -5,10 +5,10 @@ import { useDispatch } from 'react-redux';
 import { MangaListItemDesc } from './MangaListItemDesc';
 import { MangaImage } from '../MangaImage';
 import { setCurrentManga } from '../../../redux/manga/actions';
-import { Manga } from '../../../utils/apiTypes';
+import { Manga } from '../../../common/apiTypes';
 import { memo } from 'react';
 import { mangaListImageSize } from '../../../core/consts';
-import { navigateToDetail } from '../../../core/router';
+import { navigateToDetail } from '../../../common/router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

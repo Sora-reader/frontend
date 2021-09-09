@@ -1,6 +1,6 @@
 import { createStyles, List, makeStyles, Typography } from '@material-ui/core';
 import { MangaListItem } from '../../components/manga/list/MangaListItem';
-import { MangaList } from '../../utils/apiTypes';
+import { MangaList } from '../../common/apiTypes';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

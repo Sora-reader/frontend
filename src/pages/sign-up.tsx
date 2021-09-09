@@ -1,7 +1,7 @@
 import { signUp } from '../redux/user/actions';
 import { useRouter } from 'next/router';
 import { UserCredentialsForm } from '../components/UserCredentialsForm';
-import { useInitialEffect } from '../utils/hooks';
+import { useInitialEffect } from '../common/hooks';
 
 export default function SignOut() {
   const router = useRouter();

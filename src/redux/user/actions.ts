@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { UserCredentials } from './types';
 import cookie from 'cookie';
-import { CustomAxiosConfig } from '../../utils/axios/types';
+import { CustomAxiosConfig } from '../../common/axios/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const AUTH_URL = 'auth/';

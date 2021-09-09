@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { signIn } from '../redux/user/actions';
 import { NextLink } from '../components/NextLink';
 import { UserCredentialsForm } from '../components/UserCredentialsForm';
-import { useInitialEffect } from '../utils/hooks';
+import { useInitialEffect } from '../common/hooks';
 
 export default function SignIn() {
   const router = useRouter();

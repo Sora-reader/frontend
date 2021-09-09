@@ -9,7 +9,7 @@ import { refreshAxiosDefaults, shouldRetry, taskNameFromConfig } from './utils';
 export function initInterceptors(store: StoreType) {
   const loadingDispatch = (config: CustomAxiosConfig, type: 'start' | 'end' = 'end') => {
     if (!config.silent) {
-      const taskExists = store.getState().progressBar.includes(taskNameFromConfig(config));
+      const taskExists = store.getState().progressBar?.includes(taskNameFromConfig(config));
       if (type === 'start' && taskExists) return;
       else if (type === 'end' && !taskExists) return;
 

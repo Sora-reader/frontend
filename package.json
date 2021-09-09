@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "fix": "prettier-eslint --write --arrow-parens always 'src/**/*.ts' 'src/**/*.tsx' 'src/**/*.js'",
-    "check": "eslint src",
+    "check": "echo '====> ESLint' && eslint src && echo '====> Typescript' && tsc --noEmit -p .",
     "heroku-postbuild": "npm run build"
   },
   "engines": {

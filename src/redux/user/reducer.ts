@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { refreshAxiosDefaults } from '../../utils/axios/utils';
+import { refreshAxiosDefaults } from '../../common/axios/utils';
 import { signIn, signOut, signUp, refreshUser } from './actions';
 
 type StateType = {

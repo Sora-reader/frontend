@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
 import { MangaImage } from '../MangaImage';
 import { Skeleton } from '@material-ui/lab';
-import { useImageLoaded } from '../../../utils/hooks';
+import { useImageLoaded } from '../../../common/hooks';
 import { memo } from 'react';
 
 const useStyles = makeStyles<Theme, Props>((theme: Theme) =>

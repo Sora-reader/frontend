@@ -6,6 +6,7 @@ const defaultConfig = {
   env: {
     BACKEND_URL: process.env.BACKEND_URL,
     BACKEND_PORT: process.env.BACKEND_PORT,
+    RESIZE_URL: process.env.RESIZE_URL,
     SENTRY_URL: process.env.SENTRY_URL,
     SENTRY_DSN: process.env.SENTRY_DSN,
     SENTRY_ORG: process.env.SENTRY_ORG,

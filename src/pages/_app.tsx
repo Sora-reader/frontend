@@ -5,14 +5,15 @@ import { createMuiTheme, createStyles, makeStyles, Theme, ThemeOptions } from '@
 import Head from 'next/head';
 import { useSelector, useStore } from 'react-redux';
 import { RootState, StoreType, wrapper } from '../redux/store';
-import { useCustomInterceptors } from '../utils/axios';
+import { useCustomInterceptors } from '../common/axios';
 import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
 import { NavigationHeader } from '../components/header/NavigationHeader';
 import { useRouter } from 'next/router';
-import { useCustomEventListeners } from '../utils/customListeners';
+import { useCustomEventListeners } from '../common/customListeners';
 import { useNeedSpinner } from '../redux/progressBar/utils';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { defaultDark } from '../redux/theme/defaults';
+import { getBaseOpenGraph } from '../common/opengraph';
 
 type StyleProps = { minHeight: string };
 
@@ -84,6 +85,8 @@ function WrappedApp({ Component, pageProps }: AppProps) {
           name="theme-color"
           content={theme.palette.type === 'dark' ? theme.palette.grey['800'] : theme.palette.primary.main}
         />
+
+        {getBaseOpenGraph()}
       </Head>
 
       <ThemeProvider theme={theme}>

@@ -9,7 +9,7 @@ import { RootState } from '../../redux/store';
 import { TDispatch } from '../../redux/types';
 import { getNextChapter } from '../pager/hooks';
 import { fetchChapterImages, setCurrentChapter } from '../../redux/manga/actions';
-import { shallowNavigate } from '../../core/router';
+import { shallowNavigate } from '../../common/router';
 
 const useStyles = makeStyles((theme) => ({
   goNext: {
