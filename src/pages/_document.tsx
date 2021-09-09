@@ -7,7 +7,7 @@ class MyDocument extends Document {
     return (
       <Html lang="ru">
         <Head>
-          <meta charSet="utf-8" />
+          <meta charSet="UTF-8" />
           <meta name="referrer" content="no-referrer" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="icon" href="/favicon.ico" />

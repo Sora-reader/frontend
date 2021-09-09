@@ -30,7 +30,7 @@ function getDescription(manga: Manga) {
 export function getBaseOpenGraph(url: string = baseUrl, domain: string = baseDomain) {
   const description = 'Читайте мангу на Sora';
   const title = 'Sora-reader';
-  const preview = `${url}/preview.png`;
+  const preview = `${url}/assets/preview.png`;
   return (
     <>
       <meta key={propertyKeyMap['description']} name="description" content={description} />
