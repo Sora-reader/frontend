@@ -8,7 +8,7 @@ export default function IndexView() {
       <Typography gutterBottom variant="h4">
         Страница не найдена
       </Typography>
-      <Image src="/assets/404.png" alt="404" />
+      <Image src="/assets/404.png" alt="404" width="417" height="384" />
     </ErrorView>
   );
 }

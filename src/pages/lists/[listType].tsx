@@ -6,8 +6,11 @@ import { ListType } from '../../redux/saveLists/types';
 import { RootState } from '../../redux/store';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const listType = context.params?.listType;
+  if (!listType || !(String(listType) in saveList)) return { notFound: true };
+
   return {
-    props: { listType: context.params?.listType },
+    props: { listType },
   };
 };
 

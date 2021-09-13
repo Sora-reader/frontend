@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { Reader } from '../../../../components/reader/Reader';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { RootState } from '../../../../redux/store';
@@ -17,12 +17,23 @@ import { useInitialEffect } from '../../../../common/hooks';
 import { Header } from '../../../../components/header/Header';
 import { navigateToDetail } from '../../../../common/router';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const mangaId = Number(query.mangaId);
+  const volumeNumber = Number(query.volumeNumber);
+  const chapterNumber = Number(query.chapterNumber);
+
+  if (!(mangaId && volumeNumber && chapterNumber))
+    return {
+      redirect: {
+        destination: '/search',
+        permanent: false,
+      },
+    };
   return {
     props: {
-      mangaId: Number(context.query.mangaId),
-      volumeNumber: Number(context.query.volumeNumber),
-      chapterNumber: Number(context.query.chapterNumber),
+      mangaId,
+      volumeNumber,
+      chapterNumber,
     },
   };
 };
@@ -50,9 +61,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const dispatch = useDispatch() as TDispatch;
 
   useInitialEffect(() => {
-    if (!(mangaId && volumeNumber && chapterNumber)) {
-      router.push('/search');
-    } else if (!manga || !chapter) {
+    if (!manga || !chapter) {
       dispatch(fetchAll({ mangaId, volumeNumber, chapterNumber }));
     } else if (chapter && !chapter?.images) {
       dispatch(fetchChapterImages(chapter.id));
@@ -74,8 +83,13 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
     }
   }, [chapter?.images]);
 
+  const chapterReady = useMemo(
+    () => Boolean(manga && chapter && chapter.number === chapterNumber && chapter.images !== undefined),
+    [manga, chapter, chapterNumber]
+  );
+
   // Current chapter.number may differ from chapterNumber in case of replacing route
-  return manga && chapter && chapter.number === chapterNumber && chapter.images !== undefined ? (
+  return chapterReady ? (
     <>
       <Slide appear={false} direction="down" in={!showHeader}>
         <Header
@@ -85,7 +99,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
         >
           <div className={classes.headerInner}>
             <Typography color="textPrimary" variant="h6">
-              {chapter.title}
+              {chapter?.title}
             </Typography>
             {chapter?.images ? (
               <Typography color="textPrimary" variant="subtitle1">
