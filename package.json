@@ -28,12 +28,10 @@
     "@types/react-redux": "^7.1.16",
     "@types/react-swipeable-views": "^0.13.0",
     "@types/react-swipeable-views-utils": "^0.13.2",
-    "@types/yup": "^0.29.12",
     "axios": "^0.21.1",
     "axios-case-converter": "^0.8.0",
     "cookie": "^0.4.1",
     "dotenv": "^8.2.0",
-    "formik": "^2.2.9",
     "lodash.isempty": "^4.4.0",
     "material-ui-color": "^1.2.0",
     "next": "^11.0.1",
@@ -47,8 +45,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.2.1",
-    "typescript": "^4.1.5",
-    "yup": "^0.32.9"
+    "typescript": "^4.1.5"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^11.0.1",
