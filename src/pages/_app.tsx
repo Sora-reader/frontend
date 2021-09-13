@@ -14,6 +14,7 @@ import { useNeedSpinner } from '../redux/progressBar/utils';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { defaultDark } from '../redux/theme/defaults';
 import { getBaseOpenGraph } from '../common/opengraph';
+import { ErrorAlert } from '../components/ErrorAlert';
 
 type StyleProps = { minHeight: string };
 
@@ -51,6 +52,7 @@ const useStyles = (theme: Theme) =>
 function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;
   const themeState = useSelector((state: RootState) => state.theme);
+  const errors = useSelector((state: RootState) => state.errors);
   const router = useRouter();
 
   const theme = useMemo(() => {
@@ -106,6 +108,9 @@ function WrappedApp({ Component, pageProps }: AppProps) {
             </Container>
           )}
         </Box>
+        {errors.map((e, i) => (
+          <ErrorAlert key={Number(e.id)} error={e} index={i} />
+        ))}
       </ThemeProvider>
     </>
   );
