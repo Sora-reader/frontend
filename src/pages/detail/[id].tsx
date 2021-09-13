@@ -17,6 +17,8 @@ import { ChapterItem } from '../../components/manga/detail/chapter/ChapterItem';
 import { useEffect } from 'react';
 import { getOpenGraphForManga } from '../../common/opengraph';
 import { isClientSideNavigation } from '../../common/router';
+import { AxiosError } from 'axios';
+import * as Sentry from '@sentry/nextjs';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -98,15 +100,23 @@ export default function Detail({ mangaId, ssrManga }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
   const clientSideNavigation = isClientSideNavigation(req);
   const mangaId = Number(params?.id);
 
   if (clientSideNavigation) return { props: { mangaId } };
 
   if (mangaId) {
-    const ssrManga = await requestMangaData(mangaId);
-    return { props: { mangaId, ssrManga } };
+    try {
+      const ssrManga = await requestMangaData(mangaId);
+      return { props: { mangaId, ssrManga } };
+    } catch (e) {
+      const error = e as AxiosError;
+      if (error?.response?.status === 404) return { notFound: true };
+      Sentry.captureException(e);
+      res.statusCode = Number(error?.response?.status) || 400;
+      return { props: {} };
+    }
   }
   return {
     redirect: {
