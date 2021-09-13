@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const defaultConfig = {
+module.exports = {
   env: {
     BACKEND_URL: process.env.BACKEND_URL,
     BACKEND_PORT: process.env.BACKEND_PORT,
@@ -25,21 +25,20 @@ const pwaConfig = {
 }
 const sentryConfig = {};
 
-
 if (process.env.NODE_ENV !== 'development') {
   const withPWA = require('next-pwa');
-  const { withSentryConfig } = require("@sentry/nextjs");
-
-  const config = {
-    ...defaultConfig,
+  module.exports = withPWA({
+    ...module.exports,
     pwa: pwaConfig,
-  }
+  });
 
-  if (process.env.SENTRY_DSN) module.exports = withSentryConfig(withPWA(config), sentryConfig); 
+  if (process.env.SENTRY_DSN) 
+  {
+    const { withSentryConfig } = require("@sentry/nextjs");
+    module.exports = withSentryConfig(module.exports, sentryConfig); 
+  }
   if (process.env.ANALYZE === 'true') {
     const withBundleAnalyzer = require('@next/bundle-analyzer')()
     module.exports = withBundleAnalyzer(module.exports, bundleAnalyzerConfig);
   }
 }
-else
-  module.exports = defaultConfig;
