@@ -14,7 +14,7 @@ import { useNeedSpinner } from '../redux/progressBar/utils';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { defaultDark } from '../redux/theme/defaults';
 import { getBaseOpenGraph } from '../common/opengraph';
-import { ErrorAlert } from '../components/ErrorAlert';
+import { ErrorSnackbar } from '../components/error/ErrorSnackbar';
 
 type StyleProps = { minHeight: string };
 
@@ -109,7 +109,7 @@ function WrappedApp({ Component, pageProps }: AppProps) {
           )}
         </Box>
         {errors.map((e, i) => (
-          <ErrorAlert key={Number(e.id)} error={e} index={i} />
+          <ErrorSnackbar key={Number(e.id)} error={e} index={i} />
         ))}
       </ThemeProvider>
     </>

@@ -16,9 +16,8 @@ import { createStyles, makeStyles, Typography } from '@material-ui/core';
 import { useInitialEffect } from '../../../../common/hooks';
 import { Header } from '../../../../components/header/Header';
 import { navigateToDetail } from '../../../../common/router';
-import { Manga } from '../../../../common/apiTypes';
 
-export const getServerSideProps: GetServerSideProps = async ({ query, req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const mangaId = Number(query.mangaId);
   const volumeNumber = Number(query.volumeNumber);
   const chapterNumber = Number(query.chapterNumber);
@@ -86,7 +85,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
 
   const chapterReady = useMemo(
     () => Boolean(manga && chapter && chapter.number === chapterNumber && chapter.images !== undefined),
-    [manga, chapter]
+    [manga, chapter, chapterNumber]
   );
 
   // Current chapter.number may differ from chapterNumber in case of replacing route
