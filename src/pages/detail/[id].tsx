@@ -87,11 +87,11 @@ export default function Detail({ mangaId, ssrManga }: Props) {
             <ChapterList mangaId={manga.id} chapters={manga.chapters} />
           ) : (
             <List>
-              {Array(17).fill(
-                <Skeleton width="100%">
+              {Array.from(Array(17), (_, i) => (
+                <Skeleton key={i} width="100%">
                   <ChapterItem chapter={{} as any} mangaId={0} index={0} />
                 </Skeleton>
-              )}
+              ))}
             </List>
           )}
         </Box>
