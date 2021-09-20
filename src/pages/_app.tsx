@@ -1,5 +1,5 @@
 import '../style/global.css';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { AppProps } from 'next/app';
 import { createMuiTheme, createStyles, makeStyles, Theme, ThemeOptions } from '@material-ui/core';
 import Head from 'next/head';
@@ -10,10 +10,10 @@ import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core
 import { NavigationHeader } from '../components/header/NavigationHeader';
 import { useRouter } from 'next/router';
 import { useCustomEventListeners } from '../common/customListeners';
-import { useNeedSpinner } from '../redux/progressBar/utils';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { defaultDark } from '../redux/theme/defaults';
 import { getBaseOpenGraph } from '../common/opengraph';
+import { useRouteChanges as useRouteChanging } from '../common/hooks';
 
 type StyleProps = { minHeight: string };
 
@@ -43,7 +43,8 @@ const useStyles = (theme: Theme) =>
       },
       progress: {
         position: 'absolute',
-        width: '100%',
+        zIndex: 9999, // to render over header
+        width: '100vw',
       },
     })
   );
@@ -52,6 +53,7 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;
   const themeState = useSelector((state: RootState) => state.theme);
   const router = useRouter();
+  const routeChaning = useRouteChanging();
 
   const theme = useMemo(() => {
     let options: ThemeOptions = { palette: defaultDark };
@@ -64,7 +66,10 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
   useCustomEventListeners();
   useCustomInterceptors(store);
-  const needSpinner = useNeedSpinner();
+
+  useEffect(() => {
+    console.log(routeChaning);
+  }, [routeChaning]);
 
   return (
     <>
@@ -91,11 +96,11 @@ function WrappedApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <Box className={classes.box}>
+          {routeChaning && <LinearProgress className={classes.progress} />}
           {!/^\/read/.test(router.asPath) ? (
             <>
               <NavigationHeader />
               <Container maxWidth="md" component="main" className={classes.main}>
-                {needSpinner && <LinearProgress className={classes.progress} />}
                 <Component {...pageProps} />
               </Container>
             </>
