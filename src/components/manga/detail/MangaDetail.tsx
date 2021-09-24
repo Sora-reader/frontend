@@ -10,7 +10,7 @@ const useStyles = makeStyles(() =>
 );
 
 type Props = {
-  manga: Manga;
+  manga?: Manga;
 };
 
 export function MangaDetail({ manga }: Props) {
@@ -18,7 +18,7 @@ export function MangaDetail({ manga }: Props) {
 
   return (
     <div className={classes.root}>
-      <DetailHeader image={manga.image} title={manga.title} altTitle={manga.altTitle} />
+      <DetailHeader image={manga?.image} title={manga?.title} altTitle={manga?.altTitle} />
       <DetailDescription manga={manga} />
     </div>
   );

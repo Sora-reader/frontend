@@ -1,3 +1,7 @@
+import { AxiosError } from 'axios';
+import { addError } from '../redux/errors/actions';
+import { TDispatch } from '../redux/types';
+
 /**
  * Sleep for {ms} milliseconds
  */
@@ -12,4 +16,11 @@ export function sleep(ms: number) {
 export function utcDate(date?: Date) {
   date = date ?? new Date();
   return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+}
+
+/**
+ * Capture axios error into a proper dispatch call
+ */
+export function captureAxiosToError(dispatch: TDispatch, error: AxiosError, title?: string) {
+  return dispatch(addError({ title: title || 'Ошибка', url: error.config.url, message: String(error) }));
 }

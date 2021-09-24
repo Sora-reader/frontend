@@ -32,8 +32,8 @@ export const reRequestMangaData = async (manga: Manga, onUpdate: (data: Manga) =
  * Check if manga details need update
  */
 export const detailsNeedUpdate = (manga: Manga) => {
+  if (!manga) return true;
   if (!manga.updatedDetail) return false;
-  if (manga.id === -1) return true;
   const updateDeadline = utcDate();
   updateDeadline.setHours(updateDeadline.getHours() - detailUpdateDeadline);
   return new Date(manga.updatedDetail) < updateDeadline;
@@ -43,8 +43,8 @@ export const detailsNeedUpdate = (manga: Manga) => {
  * Check if manga chapters need update
  */
 export const chaptersNeedUpdate = (manga: Manga) => {
+  if (!manga) return true;
   if (!manga.updatedChapters) return false;
-  if (manga.id === -1) return true;
   const updateDeadline = utcDate();
   updateDeadline.setHours(updateDeadline.getHours() - chapterUpdateDeadline);
   return new Date(manga.updatedChapters) < updateDeadline;

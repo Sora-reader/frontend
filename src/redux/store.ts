@@ -11,6 +11,7 @@ import errors from './errors/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { TDispatch } from './types';
+import { cloneDeep } from 'lodash';
 
 const defaultReducers = {
   theme,
@@ -26,28 +27,31 @@ const combinedReducer = combineReducers(defaultReducers);
 export type RootState = ReturnType<typeof combinedReducer>;
 export type StoreType = Store<RootState>;
 
-const reducer: Reducer = (state: RootState, action: AnyAction) => {
-  switch (action.type) {
-    case HYDRATE: {
-      // Hydrate action payload contains server state
-      // So we merge the previous state with the server one
-      return {
-        ...state, // use previous state
-        ...action.payload, // apply delta from hydration
-      };
-      // We are also able to persist some client state as described here
-      // https://github.com/vercel/next.js/blob/canary/examples/with-redux-wrapper/README.md
+const withHydration =
+  (originalReducer: any): Reducer =>
+  (state: RootState, action: AnyAction) => {
+    switch (action.type) {
+      case HYDRATE: {
+        // Hydrate action payload contains server state
+        // So we merge the previous state with the server one
+        let nextState = cloneDeep(state);
+
+        if (action?.payload?.manga?.current.id !== -1) nextState.manga.current = action.payload.manga.current;
+
+        return nextState;
+        // We are also able to persist some client state as described here
+        // https://github.com/vercel/next.js/blob/canary/examples/with-redux-wrapper/README.md
+      }
+      default:
+        return originalReducer(state, action);
     }
-    default:
-      return combinedReducer(state, action);
-  }
-};
+  };
 
 const createStoreWrapped: MakeStore = () => {
   const isServer = typeof window === 'undefined';
   if (isServer) {
     return configureStore<RootState>({
-      reducer,
+      reducer: combinedReducer,
       devTools: process.env.NODE_ENV !== 'production',
       middleware: [thunkMiddleware],
     });
@@ -72,7 +76,8 @@ const createStoreWrapped: MakeStore = () => {
   const persistedReducer = persistReducer(persistConfig, persistCombinedReducers);
 
   const store = configureStore({
-    reducer: persistedReducer,
+    // reducer: persistedReducer,
+    reducer: withHydration(persistedReducer),
     devTools: process.env.NODE_ENV !== 'production',
     middleware: [thunkMiddleware],
   }); // Creating the store again

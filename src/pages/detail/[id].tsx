@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { Box, createStyles, List, makeStyles } from '@material-ui/core';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../../redux/store';
+import { RootState, useAppDispatch, wrapper } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
 import { fetchMangaChapters, pushViewedManga, setCurrentManga } from '../../redux/manga/actions';
-import { Manga } from '../../common/apiTypes';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
@@ -14,11 +13,11 @@ import { MangaDetail } from '../../components/manga/detail/MangaDetail';
 import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
 import { Skeleton } from '@material-ui/lab';
 import { ChapterItem } from '../../components/manga/detail/chapter/ChapterItem';
-import { useEffect } from 'react';
 import { getOpenGraphForManga } from '../../common/opengraph';
 import { isClientSideNavigation } from '../../common/router';
 import { AxiosError } from 'axios';
 import * as Sentry from '@sentry/nextjs';
+import { captureAxiosToError } from '../../common/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,35 +30,23 @@ const useStyles = makeStyles(() =>
 
 type Props = {
   mangaId: Number;
-  ssrManga?: Manga;
 };
 
-export default function Detail({ mangaId, ssrManga }: Props) {
+export default function Detail({ mangaId }: Props) {
   const classes = useStyles();
   const [chaptersLoaded, setChaptersLoaded] = useState(false);
-  const [manga, setManga] = useState(ssrManga ?? { id: -1, title: '', description: '' });
-
-  const stateManga: Manga = useSelector((state: RootState) => state.manga.current);
-
-  useInitialEffect(() => {
-    if (stateManga.id === -1 && ssrManga && ssrManga?.id !== -1) dispatch(setCurrentManga(ssrManga));
-  });
-
-  useEffect(() => {
-    if (stateManga.id !== -1) setManga(stateManga);
-  }, [stateManga]);
-
+  const manga = useSelector((state: RootState) => state.manga.current);
   const dispatch = useAppDispatch();
 
   useInitialEffect(() => {
-    if (~manga.id) {
+    if (manga) {
       dispatch(pushViewedManga(manga));
-    }
 
-    reRequestMangaData(manga, (data) => {
-      dispatch(setCurrentManga(data));
-      dispatch(pushViewedManga(data));
-    });
+      reRequestMangaData(manga, (data) => {
+        dispatch(setCurrentManga(data));
+        dispatch(pushViewedManga(data));
+      });
+    }
 
     dispatch(fetchMangaChapters(mangaId))
       .then(unwrapResult)
@@ -75,15 +62,19 @@ export default function Detail({ mangaId, ssrManga }: Props) {
   return (
     <div className={classes.root}>
       <Head>
-        <title>Sora: {manga.title}</title>
-        {getOpenGraphForManga(manga)}
+        {manga ? (
+          <>
+            <title>Sora: {manga.title}</title>
+            {getOpenGraphForManga(manga)}
+          </>
+        ) : null}
       </Head>
       <SwipeableTabs panelNames={['Описание', 'Главы']}>
         <Box p={2} style={{ padding: 0 }}>
           <MangaDetail manga={manga} />
         </Box>
         <Box p={2}>
-          {chaptersLoaded ? (
+          {chaptersLoaded && manga ? (
             <ChapterList mangaId={manga.id} chapters={manga.chapters} />
           ) : (
             <List>
@@ -100,28 +91,37 @@ export default function Detail({ mangaId, ssrManga }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
-  const clientSideNavigation = isClientSideNavigation(req);
-  const mangaId = Number(params?.id);
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
+  async ({ params, req, res, store }) => {
+    const clientSideNavigation = isClientSideNavigation(req);
+    const mangaId = Number(params?.id);
 
-  if (clientSideNavigation) return { props: { mangaId } };
+    if (clientSideNavigation) return { props: { mangaId } };
 
-  if (mangaId) {
-    try {
-      const ssrManga = await requestMangaData(mangaId);
-      return { props: { mangaId, ssrManga } };
-    } catch (e) {
-      const error = e as AxiosError;
-      if (error?.response?.status === 404) return { notFound: true };
-      Sentry.captureException(e);
-      res.statusCode = Number(error?.response?.status) || 400;
-      return { props: {} };
+    if (mangaId) {
+      try {
+        const ssrManga = await requestMangaData(mangaId);
+        store.dispatch(setCurrentManga(ssrManga));
+        return { props: { mangaId } };
+      } catch (e) {
+        const error = e as AxiosError;
+        console.log(error.config);
+        if (error?.response?.status === 404) return { notFound: true };
+        Sentry.captureException(e);
+        captureAxiosToError(store.dispatch, error);
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        };
+      }
     }
+    return {
+      redirect: {
+        destination: '/search',
+        permanent: false,
+      },
+    };
   }
-  return {
-    redirect: {
-      destination: '/search',
-      permanent: false,
-    },
-  };
-};
+);
