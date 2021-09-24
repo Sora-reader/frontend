@@ -1,5 +1,5 @@
 import '../style/global.css';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { AppProps } from 'next/app';
 import { createMuiTheme, createStyles, makeStyles, Theme, ThemeOptions } from '@material-ui/core';
 import Head from 'next/head';
@@ -67,10 +67,6 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   useCustomEventListeners();
   useCustomInterceptors(store);
 
-  useEffect(() => {
-    console.log(routeChaning);
-  }, [routeChaning]);
-
   return (
     <>
       <CssBaseline />
@@ -105,7 +101,7 @@ function WrappedApp({ Component, pageProps }: AppProps) {
               </Container>
             </>
           ) : (
-            // We don't want to render progress bar when in reader mode
+            // We don't want to render header when in reader mode
             <Container maxWidth="md" component="main" className={classes.readerMain}>
               <Component {...pageProps} />
             </Container>
