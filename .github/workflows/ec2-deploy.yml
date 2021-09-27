@@ -27,7 +27,7 @@ jobs:
 
             docker build \
               -m 4g \
-              --build-arg NODE_OPTIONS=--max-old-space=3700 \
+              --build-arg NODE_OPTIONS=--max_old_space_size=3700 \
               --build-arg SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
               --build-arg SENTRY_URL=${{ secrets.SENTRY_URL }} \
               --build-arg SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
