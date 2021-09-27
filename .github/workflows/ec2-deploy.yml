@@ -26,22 +26,23 @@ jobs:
             git reset --hard origin/master || exit 1
 
             docker build \
-              --build-arg NODE_OPTIONS=${{ secrets.NODE_OPTIONS }} \
+              -m 4g \
+              --build-arg NODE_OPTIONS=--max-old-space=3700 \
               --build-arg SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
               --build-arg SENTRY_URL=${{ secrets.SENTRY_URL }} \
               --build-arg SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
               --build-arg SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
               --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-              .-t "sora-frontend:$(git rev-parse HEAD)" .
+              -t "sora-frontend:$(git rev-parse HEAD)" .
+            [ $? = "0" ] || exit $?
             
-            [ $? = "0" ] && exit $?
             docker stop sora-frontend
             docker rm sora-frontend
 
             docker run -d --restart unless-stopped --network host \
               --name sora-frontend --env-file=${{ secrets.SOURCE_PATH }}/.env \
               "sora-frontend:$(git rev-parse HEAD)"
-            [ $? = "0" ] && exit $?
+            [ $? = "0" ] || exit $?
 
             sleep 1
             docker image prune -f -a
