@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { EffectCallback, useRef } from 'react';
 import { MutableRefObject, useEffect, useState } from 'react';
 
@@ -75,3 +76,30 @@ export const useVisible = (rootElRef: MutableRefObject<any>) => {
   });
   return visible;
 };
+
+/**
+ * Listen to route change events and see if route is being changed
+ */
+export function useRouteChanges() {
+  const [isChanging, setIsChanging] = useState(false);
+  const router = useRouter();
+
+  const handleRouteChange = () => {
+    setIsChanging(true);
+  };
+
+  const handleRouteComplete = () => {
+    setIsChanging(false);
+  };
+
+  useEffect(() => {
+    router.events.on('routeChangeStart', handleRouteChange);
+    router.events.on('routeChangeComplete', handleRouteComplete);
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+      router.events.off('routeChangeComplete', handleRouteComplete);
+    };
+  });
+
+  return isChanging;
+}
