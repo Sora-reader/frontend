@@ -13,6 +13,7 @@ import { useCustomEventListeners } from '../common/customListeners';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { defaultDark } from '../redux/theme/defaults';
 import { getBaseOpenGraph } from '../common/opengraph';
+import { ErrorSnackbar } from '../components/error/ErrorSnackbar';
 import { useRouteChanges as useRouteChanging } from '../common/hooks';
 
 type StyleProps = { minHeight: string };
@@ -52,6 +53,7 @@ const useStyles = (theme: Theme) =>
 function WrappedApp({ Component, pageProps }: AppProps) {
   const store = useStore() as StoreType;
   const themeState = useSelector((state: RootState) => state.theme);
+  const errors = useSelector((state: RootState) => state.errors);
   const router = useRouter();
   const routeChaning = useRouteChanging();
 
@@ -107,6 +109,9 @@ function WrappedApp({ Component, pageProps }: AppProps) {
             </Container>
           )}
         </Box>
+        {errors.map((e, i) => (
+          <ErrorSnackbar key={Number(e.id)} error={e} index={i} />
+        ))}
       </ThemeProvider>
     </>
   );

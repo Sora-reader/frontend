@@ -6,6 +6,7 @@ import theme from './theme/reducer';
 import search from './search/reducer';
 import user from './user/reducer';
 import saveLists from './saveLists/reducer';
+import errors from './errors/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { TDispatch } from './types';
@@ -16,6 +17,7 @@ const defaultReducers = {
   search,
   user,
   saveLists,
+  errors,
 };
 const combinedReducer = combineReducers(defaultReducers);
 
