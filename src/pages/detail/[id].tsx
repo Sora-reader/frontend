@@ -18,6 +18,7 @@ import { isClientSideNavigation } from '../../common/router';
 import { AxiosError } from 'axios';
 import * as Sentry from '@sentry/nextjs';
 import { captureAxiosToError } from '../../common/utils';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,7 +30,7 @@ const useStyles = makeStyles(() =>
 );
 
 type Props = {
-  mangaId: Number;
+  mangaId?: number;
 };
 
 export default function Detail({ mangaId }: Props) {
@@ -37,6 +38,7 @@ export default function Detail({ mangaId }: Props) {
   const [chaptersLoaded, setChaptersLoaded] = useState(false);
   const manga = useSelector((state: RootState) => state.manga.current);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   useInitialEffect(() => {
     if (manga) {
@@ -47,16 +49,19 @@ export default function Detail({ mangaId }: Props) {
         dispatch(pushViewedManga(data));
       });
     }
-
-    dispatch(fetchMangaChapters(mangaId))
-      .then(unwrapResult)
-      .then(() => setChaptersLoaded(true))
-      .catch(() => {
-        console.log('Chapters are not yet loaded, scheduled a timeout');
-        setTimeout(() => {
-          dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
-        }, 2000);
-      });
+    if (mangaId) {
+      dispatch(fetchMangaChapters(mangaId))
+        .then(unwrapResult)
+        .then(() => setChaptersLoaded(true))
+        .catch(() => {
+          console.log('Chapters are not yet loaded, scheduled a timeout');
+          setTimeout(() => {
+            dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
+          }, 2000);
+        });
+    } else {
+      router.replace('/search');
+    }
   });
 
   return (
@@ -91,37 +96,39 @@ export default function Detail({ mangaId }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
-  async ({ params, req, res, store }) => {
-    const clientSideNavigation = isClientSideNavigation(req);
-    const mangaId = Number(params?.id);
+/**
+ * Server-side props for manga detail view.
+ * 1. Ignore client-side requests
+ * 2. If manga id param was provided, then fetch
+ *    - If fetch fails, then send empty mangaId which triggers client-side redirect.
+ *        This is because there is not hydration if we redirect from SSR and we want to show error alerts
+ * 3. If it's not provided - redirect to search
+ */
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(async ({ req, store, query }) => {
+  const clientSideNavigation = isClientSideNavigation(req);
+  const mangaId = Number(query?.id);
 
-    if (clientSideNavigation) return { props: { mangaId } };
+  if (clientSideNavigation) return { props: { mangaId } };
 
-    if (mangaId) {
-      try {
-        const ssrManga = await requestMangaData(mangaId);
-        store.dispatch(setCurrentManga(ssrManga));
-        return { props: { mangaId } };
-      } catch (e) {
-        const error = e as AxiosError;
-        console.log(error.config);
-        if (error?.response?.status === 404) return { notFound: true };
-        Sentry.captureException(e);
-        captureAxiosToError(store.dispatch, error);
-        return {
-          redirect: {
-            destination: '/',
-            permanent: false,
-          },
-        };
-      }
+  if (mangaId) {
+    try {
+      const ssrManga = await requestMangaData(mangaId);
+      store.dispatch(setCurrentManga(ssrManga));
+      return { props: { mangaId } };
+    } catch (e) {
+      const error = e as AxiosError;
+      if (error?.response?.status === 404) return { notFound: true };
+      Sentry.captureException(e);
+      await captureAxiosToError(store.dispatch, error);
+      return {
+        props: {},
+      };
     }
-    return {
-      redirect: {
-        destination: '/search',
-        permanent: false,
-      },
-    };
   }
-);
+  return {
+    redirect: {
+      destination: '/search',
+      permanent: false,
+    },
+  };
+});

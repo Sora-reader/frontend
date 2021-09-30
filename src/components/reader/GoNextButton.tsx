@@ -31,7 +31,7 @@ export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch() as TDispatch;
   const { current: manga, chapter } = useSelector((state: RootState) => state.manga);
-  const nextChapter = useMemo(() => getNextChapter(manga, chapter), [manga, chapter]);
+  const nextChapter = useMemo(() => manga ? getNextChapter(manga, chapter) : undefined, [manga, chapter]);
 
   useEffect(() => {
     router.prefetch(String(nextUrl));

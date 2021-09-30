@@ -32,9 +32,15 @@ const withHydration =
       case HYDRATE: {
         // Hydrate action payload contains server state
         // So we merge the previous state with the server one
+        console.log('Hydration from', originalReducer.name);
         let nextState = cloneDeep(state);
 
-        if (action?.payload?.manga?.current.id !== -1) nextState.manga.current = action.payload.manga.current;
+        if (action.payload.manga?.current) {
+          console.log('Using manga from server state');
+          nextState.manga.current = action.payload.manga.current;
+        }
+        // Reuse server-side dispatched errors if were any
+        nextState.errors = action.payload.errors;
 
         return nextState;
         // We are also able to persist some client state as described here

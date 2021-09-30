@@ -23,7 +23,6 @@ type StateType = {
 };
 
 const initialState: StateType = {
-  current: undefined,
   viewed: [],
   readChapters: {},
 };

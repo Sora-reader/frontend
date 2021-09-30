@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { baseUrl } from '../core/consts';
 import { addError } from '../redux/errors/actions';
 import { TDispatch } from '../redux/types';
 
@@ -22,5 +23,11 @@ export function utcDate(date?: Date) {
  * Capture axios error into a proper dispatch call
  */
 export function captureAxiosToError(dispatch: TDispatch, error: AxiosError, title?: string) {
-  return dispatch(addError({ title: title || 'Ошибка', url: error.config.url, message: String(error) }));
+  return dispatch(
+    addError({
+      title: title || 'Ошибка',
+      url: error.config.url ? baseUrl + error.config.url : undefined,
+      message: String(error),
+    })
+  );
 }
