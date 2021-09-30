@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { CustomAxiosConfig } from './types';
 
 export function refreshAxiosDefaults(access: String) {
@@ -10,8 +10,4 @@ export function refreshAxiosDefaults(access: String) {
 export const shouldRetry = (error: AxiosError) => {
   const config = error.config as CustomAxiosConfig;
   return [401, 403].includes(Number(error.response?.status)) && !config.retry;
-};
-
-export const taskNameFromConfig = (config: AxiosRequestConfig) => {
-  return `${config.baseURL}${config.url}`;
 };

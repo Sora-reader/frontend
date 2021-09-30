@@ -1,41 +1,14 @@
 import axios, { AxiosError } from 'axios';
-import * as progressBarActions from '../../redux/progressBar/actions';
 import { StoreType } from '../../redux/store';
 import { TDispatch } from '../../redux/types';
 import { refreshUser } from '../../redux/user/actions';
 import { CustomAxiosConfig } from './types';
-import { refreshAxiosDefaults, shouldRetry, taskNameFromConfig } from './utils';
+import { refreshAxiosDefaults, shouldRetry } from './utils';
 
 export function initInterceptors(store: StoreType) {
-  const loadingDispatch = (config: CustomAxiosConfig, type: 'start' | 'end' = 'end') => {
-    if (!config.silent) {
-      const taskExists = store.getState().progressBar?.includes(taskNameFromConfig(config));
-      if (type === 'start' && taskExists) return;
-      else if (type === 'end' && !taskExists) return;
-
-      const key = `${type}Loading` as keyof typeof progressBarActions;
-      store.dispatch(progressBarActions[key](taskNameFromConfig(config)));
-    }
-  };
-
-  // Request interceptor to dispatch loading
-  axios.interceptors.request.use(
-    (request: CustomAxiosConfig) => {
-      loadingDispatch(request, 'start');
-      return request;
-    },
-    (error: AxiosError) => {
-      loadingDispatch(error.config);
-      return Promise.reject(error);
-    }
-  );
-
   // Response interceptor to retry 401/403 with refreshed token
   axios.interceptors.response.use(
-    (response) => {
-      loadingDispatch(response.config);
-      return response;
-    },
+    (response) => response,
     async (error: AxiosError) => {
       const requestConfig = error.config as CustomAxiosConfig;
 
@@ -54,7 +27,6 @@ export function initInterceptors(store: StoreType) {
         console.log('Request retry failed');
       }
 
-      loadingDispatch(requestConfig);
       return Promise.reject(error);
     }
   );
