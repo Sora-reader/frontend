@@ -1,12 +1,12 @@
 import '../style/global.css';
 import { useMemo } from 'react';
 import { AppProps } from 'next/app';
-import { createMuiTheme, createStyles, makeStyles, Theme, ThemeOptions } from '@material-ui/core';
+import { createMuiTheme, createStyles, LinearProgress, makeStyles, Theme, ThemeOptions } from '@material-ui/core';
 import Head from 'next/head';
 import { useSelector, useStore } from 'react-redux';
 import { RootState, StoreType, wrapper } from '../redux/store';
 import { useCustomInterceptors } from '../common/axios';
-import { Box, Container, LinearProgress, ThemeProvider } from '@material-ui/core';
+import { Box, Container, ThemeProvider } from '@material-ui/core';
 import { NavigationHeader } from '../components/header/NavigationHeader';
 import { useRouter } from 'next/router';
 import { useCustomEventListeners } from '../common/customListeners';

@@ -1,42 +1,23 @@
 import { GetServerSideProps } from 'next';
 import { Reader } from '../../../../components/reader/Reader';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { RootState } from '../../../../redux/store';
-import { TDispatch } from '../../../../redux/types';
-import { fetchAll, fetchChapterImages } from '../../../../redux/manga/actions';
+import { RootState, useAppDispatch, wrapper } from '../../../../redux/store';
+import { fetchAll, fetchChapterImages, setCurrentChapter, setCurrentManga } from '../../../../redux/manga/actions';
 import { CenteredProgress } from '../../../../components/CenteredProgress';
 import { ReaderMode } from '../../../../components/reader/types';
 import { CurrentChapter, CurrentChapterImages } from '../../../../redux/manga/reducer';
 import Slide from '@material-ui/core/Slide';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
+import * as Sentry from '@sentry/nextjs';
 import { createStyles, makeStyles, Typography } from '@material-ui/core';
 import { useInitialEffect } from '../../../../common/hooks';
 import { Header } from '../../../../components/header/Header';
-import { navigateToDetail } from '../../../../common/router';
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const mangaId = Number(query.mangaId);
-  const volumeNumber = Number(query.volumeNumber);
-  const chapterNumber = Number(query.chapterNumber);
-
-  if (!(mangaId && volumeNumber && chapterNumber))
-    return {
-      redirect: {
-        destination: '/search',
-        permanent: false,
-      },
-    };
-  return {
-    props: {
-      mangaId,
-      volumeNumber,
-      chapterNumber,
-    },
-  };
-};
+import { isClientSideNavigation, navigateToDetail } from '../../../../common/router';
+import { requestAllMangaData } from '../../../../redux/manga/utils';
+import { AxiosError } from 'axios';
+import { captureAxiosToError } from '../../../../common/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -58,13 +39,17 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const [headerImageNumber, setHeaderImageNumber] = useState(0);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
   const [showHeader, setShowHeader] = useState(false);
-  const dispatch = useDispatch() as TDispatch;
+  const dispatch = useAppDispatch();
 
   useInitialEffect(() => {
-    if (!manga || !chapter) {
-      dispatch(fetchAll({ mangaId, volumeNumber, chapterNumber }));
-    } else if (chapter && !chapter?.images) {
-      dispatch(fetchChapterImages(chapter.id));
+    if (mangaId && volumeNumber && chapterNumber) {
+      if (!manga || !chapter) {
+        dispatch(fetchAll({ mangaId, volumeNumber, chapterNumber }));
+      } else if (chapter && !chapter?.images) {
+        dispatch(fetchChapterImages(chapter.id));
+      }
+    } else {
+      router.replace('/search');
     }
   });
 
@@ -84,12 +69,12 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   }, [chapter?.images]);
 
   const chapterReady = useMemo(
-    () => Boolean(manga && chapter && chapter.number === chapterNumber && chapter.images !== undefined),
-    [manga, chapter, chapterNumber]
+    () => Boolean(chapter && chapter.number === chapterNumber && chapter.images !== undefined),
+    [chapter, chapterNumber]
   );
 
   // Current chapter.number may differ from chapterNumber in case of replacing route
-  return chapterReady ? (
+  return chapterReady && manga ? (
     <>
       <Slide appear={false} direction="down" in={!showHeader}>
         <Header
@@ -121,3 +106,49 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
     <CenteredProgress />
   );
 }
+
+/**
+ * Server-side props for chapter read view.
+ * 1. Ignore client-side requests
+ * 2. If all needed params were provided, then fetch
+ *    - If fetch fails, then send empty props which triggers client-side redirect.
+ *        This is because there is not hydration if we redirect from SSR and we want to show error alerts
+ * 3. If it's not provided - redirect to search
+ */
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(async ({ req, store, query }) => {
+  const mangaId = Number(query.mangaId);
+  const volumeNumber = Number(query.volumeNumber);
+  const chapterNumber = Number(query.chapterNumber);
+  const props = {
+    mangaId,
+    volumeNumber,
+    chapterNumber,
+  };
+
+  const clientSideNavigation = isClientSideNavigation(req);
+
+  if (clientSideNavigation) return { props };
+
+  if (mangaId && volumeNumber && chapterNumber) {
+    try {
+      const ssrData = await requestAllMangaData(mangaId, volumeNumber, chapterNumber);
+      store.dispatch(setCurrentManga(ssrData.current));
+      store.dispatch(setCurrentChapter(ssrData.chapter));
+      return { props: { mangaId } };
+    } catch (e) {
+      const error = e as AxiosError;
+      if (error?.response?.status === 404) return { notFound: true };
+      Sentry.captureException(e);
+      await captureAxiosToError(store.dispatch, error);
+      return {
+        props: {},
+      };
+    }
+  }
+  return {
+    redirect: {
+      destination: '/search',
+      permanent: false,
+    },
+  };
+});

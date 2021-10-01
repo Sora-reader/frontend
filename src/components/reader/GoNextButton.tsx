@@ -4,9 +4,8 @@ import Fab from '@material-ui/core/Fab';
 import ForwardIcon from '@material-ui/icons/Forward';
 import ExitIcon from '@material-ui/icons/ExitToApp';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { TDispatch } from '../../redux/types';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../../redux/store';
 import { getNextChapter } from '../pager/hooks';
 import { fetchChapterImages, setCurrentChapter } from '../../redux/manga/actions';
 import { shallowNavigate } from '../../common/router';
@@ -29,9 +28,9 @@ type Props = {
 export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
   const classes = useStyles();
   const router = useRouter();
-  const dispatch = useDispatch() as TDispatch;
+  const dispatch = useAppDispatch();
   const { current: manga, chapter } = useSelector((state: RootState) => state.manga);
-  const nextChapter = useMemo(() => getNextChapter(manga, chapter), [manga, chapter]);
+  const nextChapter = useMemo(() => manga ? getNextChapter(manga, chapter) : undefined, [manga, chapter]);
 
   useEffect(() => {
     router.prefetch(String(nextUrl));

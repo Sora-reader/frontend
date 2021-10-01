@@ -69,7 +69,7 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) =>
 );
 
 type Props = {
-  title: string;
+  title?: string;
   image?: string;
   altTitle?: string;
 };

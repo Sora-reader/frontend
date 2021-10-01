@@ -16,14 +16,13 @@ export type CurrentChapterImages = { images?: MangaChapterImages };
 export type CurrentChapter = MangaChapter & CurrentChapterImages;
 
 type StateType = {
-  current: Manga;
+  current?: Manga;
   chapter?: CurrentChapter;
   viewed: MangaList;
   readChapters: Record<number, number>;
 };
 
 const initialState: StateType = {
-  current: { id: -1, title: '', description: '' },
   viewed: [],
   readChapters: {},
 };
@@ -31,10 +30,11 @@ const initialState: StateType = {
 const reducer = createReducer(initialState, (builder) => {
   // Manga
   builder.addCase(setCurrentManga, (state, action) => {
+    const chapters = (action.payload.chapters?.length && action.payload.chapters) || state.current?.chapters;
     state.current = {
       ...action.payload,
-      chapters: (action.payload.chapters?.length && action.payload.chapters) || state.current.chapters,
     };
+    if (chapters) state.current.chapters = chapters;
   });
   builder.addCase(fetchMangaDetail.fulfilled, (state, action) => {
     state.current = { ...state.current, ...action.payload };
@@ -48,7 +48,7 @@ const reducer = createReducer(initialState, (builder) => {
     if (state.chapter) state.chapter.images = action.payload;
   });
   builder.addCase(fetchMangaChapters.fulfilled, (state, action) => {
-    state.current.chapters = action.payload;
+    if (state.current) state.current.chapters = action.payload;
   });
   builder.addCase(setRead, (state, action) => {
     state.readChapters[action.payload.mangaId] = action.payload.chapterId;

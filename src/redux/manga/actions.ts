@@ -8,15 +8,15 @@ import { detailsNeedUpdate, requestMangaData } from './utils';
 
 // Manga
 export const setCurrentManga = createAction<Manga>('manga/setPreview');
-export const fetchMangaDetail = createAsyncThunk<Manga, Number>('manga/fetchDetail', requestMangaData, {
+export const fetchMangaDetail = createAsyncThunk<Manga, number>('manga/fetchDetail', requestMangaData, {
   condition: mangaDidNotChange,
 });
 
 // Chapters
 export const setCurrentChapter = createAction<MangaChapter>('manga/setCurrentChapter');
-export const fetchMangaChapters = createAsyncThunk<MangaChapters, Number>(
+export const fetchMangaChapters = createAsyncThunk<MangaChapters, number>(
   'manga/fetchChapters',
-  async (id: Number) => {
+  async (id: number) => {
     console.log('Fetching chapters for', id);
     const response = await axios.get(`manga/${id}/chapters`);
     return response.data;
@@ -25,9 +25,9 @@ export const fetchMangaChapters = createAsyncThunk<MangaChapters, Number>(
     condition: mangaDidNotChange,
   }
 );
-export const fetchChapterImages = createAsyncThunk<MangaChapterImages, Number>(
+export const fetchChapterImages = createAsyncThunk<MangaChapterImages, number>(
   'manga/fetchChapterImages',
-  async (id: Number) => {
+  async (id: number) => {
     const response = await axios.get(`manga/${id}/images`);
     return response.data;
   },

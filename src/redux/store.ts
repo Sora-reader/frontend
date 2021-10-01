@@ -9,7 +9,8 @@ import saveLists from './saveLists/reducer';
 import errors from './errors/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import { TDispatch } from './types';
+import { AppDispatch } from './types';
+import { cloneDeep } from 'lodash';
 
 const defaultReducers = {
   theme,
@@ -24,28 +25,37 @@ const combinedReducer = combineReducers(defaultReducers);
 export type RootState = ReturnType<typeof combinedReducer>;
 export type StoreType = Store<RootState>;
 
-const reducer: Reducer = (state: RootState, action: AnyAction) => {
-  switch (action.type) {
-    case HYDRATE: {
-      // Hydrate action payload contains server state
-      // So we merge the previous state with the server one
-      return {
-        ...state, // use previous state
-        ...action.payload, // apply delta from hydration
-      };
-      // We are also able to persist some client state as described here
-      // https://github.com/vercel/next.js/blob/canary/examples/with-redux-wrapper/README.md
-    }
-    default:
-      return combinedReducer(state, action);
-  }
-};
+const withHydration =
+  (originalReducer: any): Reducer =>
+  (state: RootState, action: AnyAction) => {
+    switch (action.type) {
+      case HYDRATE: {
+        // Hydrate action payload contains server state
+        // So we merge the previous state with the server one
+        console.log('Hydration from', originalReducer.name);
+        let nextState = cloneDeep(state);
 
-const createStoreWrapped: MakeStore = () => {
+        if (action.payload.manga?.current) {
+          console.log('Using manga from server state');
+          nextState.manga.current = action.payload.manga.current;
+        }
+        // Reuse server-side dispatched errors if were any
+        nextState.errors = action.payload.errors;
+
+        return nextState;
+        // We are also able to persist some client state as described here
+        // https://github.com/vercel/next.js/blob/canary/examples/with-redux-wrapper/README.md
+      }
+      default:
+        return originalReducer(state, action);
+    }
+  };
+
+const createStoreWrapped: MakeStore<RootState, any> = () => {
   const isServer = typeof window === 'undefined';
   if (isServer) {
-    return configureStore<RootState>({
-      reducer,
+    return configureStore({
+      reducer: combinedReducer,
       devTools: process.env.NODE_ENV !== 'production',
       middleware: [thunkMiddleware],
     });
@@ -70,7 +80,7 @@ const createStoreWrapped: MakeStore = () => {
   const persistedReducer = persistReducer(persistConfig, persistCombinedReducers);
 
   const store = configureStore({
-    reducer: persistedReducer,
+    reducer: withHydration(persistedReducer),
     devTools: process.env.NODE_ENV !== 'production',
     middleware: [thunkMiddleware],
   }); // Creating the store again
@@ -84,4 +94,4 @@ const createStoreWrapped: MakeStore = () => {
 
 export const wrapper = createWrapper(createStoreWrapped);
 
-export const useAppDispatch = () => useDispatch<TDispatch>();
+export const useAppDispatch = () => useDispatch<AppDispatch>();

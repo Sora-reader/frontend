@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
-  manga: Manga;
+  manga?: Manga;
 };
 
 export const DetailDescription = memo(({ manga }: Props) => {
@@ -55,23 +55,22 @@ export const DetailDescription = memo(({ manga }: Props) => {
 
   return (
     <div className={classes.root}>
-      {manga.authors?.length ? <h3 className={classes.authors}>{manga.authors?.join(', ')}</h3> : null}
+      {manga?.authors?.length ? <h3 className={classes.authors}>{manga.authors?.join(', ')}</h3> : null}
 
       <ul className={classes.genres}>
-        {manga.genres?.map((genre) => (
+        {manga?.genres?.map((genre) => (
           <SoraChip key={genre} component="li" label={genre} />
         ))}
       </ul>
 
-      {manga.source ? (
+      {manga?.source ? (
         <DetailSave manga={manga} />
       ) : (
-        <Skeleton>
-          <DetailSave manga={manga} />
-        </Skeleton>
+        // TODO
+        <Skeleton />
       )}
 
-      {manga.rating ? (
+      {manga?.rating ? (
         <div className={classes.ratingContainer}>
           <MangaRating value={manga.rating} />
           <p>
@@ -82,8 +81,8 @@ export const DetailDescription = memo(({ manga }: Props) => {
       ) : null}
 
       <div>
-        <Link className={classes.source} target="_blank" href={manga.sourceUrl}>
-          {manga.source ? (
+        <Link className={classes.source} target="_blank" href={manga?.sourceUrl}>
+          {manga?.source ? (
             <Typography variant="body1">Читать на {manga.source}</Typography>
           ) : (
             <Skeleton>
@@ -94,7 +93,7 @@ export const DetailDescription = memo(({ manga }: Props) => {
       </div>
 
       <Divider className={classes.divider} />
-      {manga.description ? (
+      {manga?.description ? (
         <Typography>{manga.description}</Typography>
       ) : (
         <>
