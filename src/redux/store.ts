@@ -9,7 +9,7 @@ import saveLists from './saveLists/reducer';
 import errors from './errors/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import { TDispatch } from './types';
+import { AppDispatch } from './types';
 import { cloneDeep } from 'lodash';
 
 const defaultReducers = {
@@ -51,10 +51,10 @@ const withHydration =
     }
   };
 
-const createStoreWrapped: MakeStore = () => {
+const createStoreWrapped: MakeStore<RootState, any> = () => {
   const isServer = typeof window === 'undefined';
   if (isServer) {
-    return configureStore<RootState>({
+    return configureStore({
       reducer: combinedReducer,
       devTools: process.env.NODE_ENV !== 'production',
       middleware: [thunkMiddleware],
@@ -80,7 +80,6 @@ const createStoreWrapped: MakeStore = () => {
   const persistedReducer = persistReducer(persistConfig, persistCombinedReducers);
 
   const store = configureStore({
-    // reducer: persistedReducer,
     reducer: withHydration(persistedReducer),
     devTools: process.env.NODE_ENV !== 'production',
     middleware: [thunkMiddleware],
@@ -95,4 +94,4 @@ const createStoreWrapped: MakeStore = () => {
 
 export const wrapper = createWrapper(createStoreWrapped);
 
-export const useAppDispatch = () => useDispatch<TDispatch>();
+export const useAppDispatch = () => useDispatch<AppDispatch>();

@@ -1,10 +1,9 @@
 import { GetServerSideProps } from 'next';
 import { Reader } from '../../../../components/reader/Reader';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { RootState, wrapper } from '../../../../redux/store';
-import { TDispatch } from '../../../../redux/types';
+import { RootState, useAppDispatch, wrapper } from '../../../../redux/store';
 import { fetchAll, fetchChapterImages, setCurrentChapter, setCurrentManga } from '../../../../redux/manga/actions';
 import { CenteredProgress } from '../../../../components/CenteredProgress';
 import { ReaderMode } from '../../../../components/reader/types';
@@ -40,7 +39,7 @@ export default function Read({ mangaId, volumeNumber, chapterNumber }: Props) {
   const [headerImageNumber, setHeaderImageNumber] = useState(0);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
   const [showHeader, setShowHeader] = useState(false);
-  const dispatch = useDispatch() as TDispatch;
+  const dispatch = useAppDispatch();
 
   useInitialEffect(() => {
     if (mangaId && volumeNumber && chapterNumber) {

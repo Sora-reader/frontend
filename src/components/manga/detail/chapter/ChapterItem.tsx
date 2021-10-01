@@ -3,10 +3,9 @@ import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
 import { setCurrentChapter } from '../../../../redux/manga/actions';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
-import { TDispatch } from '../../../../redux/types';
 import { memo } from 'react';
 import { ChapterChip } from './ChapterChip';
+import { useAppDispatch } from '../../../../redux/store';
 
 type Props = {
   mangaId: number;
@@ -17,7 +16,7 @@ type Props = {
 };
 
 export const ChapterItem = memo(({ mangaId, chapter, index, chipWidth, read }: Props) => {
-  const dispatch = useDispatch() as TDispatch;
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   // Don't need to use useCallback as it's memo
