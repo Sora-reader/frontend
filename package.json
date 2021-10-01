@@ -9,7 +9,8 @@
     "start": "next start",
     "fix": "prettier-eslint --write --arrow-parens always 'src/**/*.ts' 'src/**/*.tsx' 'src/**/*.js'",
     "check": "echo '====> ESLint' && eslint src && echo '====> Typescript' && tsc --noEmit -p .",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "prepare": "husky install"
   },
   "engines": {
     "node": "16.x"
@@ -56,6 +57,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.1.1",
+    "husky": "^7.0.2",
     "prettier": "^2.3.2",
     "prettier-eslint-cli": "^5.0.1"
   }
