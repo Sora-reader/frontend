@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { MangaListItemDesc } from './MangaListItemDesc';
 import { MangaImage } from '../MangaImage';
 import { setCurrentManga } from '../../../redux/manga/actions';
-import { Manga } from '../../../common/apiTypes';
+import { Manga } from '../../../api/types';
 import { memo } from 'react';
 import { mangaListImageSize } from '../../../core/consts';
 import { navigateToDetail } from '../../../common/router';

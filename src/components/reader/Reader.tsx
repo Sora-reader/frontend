@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import { useKeyboardScroll, useNextChapterLink } from '../pager/hooks';
-import { Manga } from '../../common/apiTypes';
+import { Manga } from '../../api/types';
 import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
 import { ReaderMode } from './types';
 import { DefaultPager } from '../pager/DefaultPager';

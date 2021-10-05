@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { Manga, MangaChapter, MangaChapterImages } from '../../common/apiTypes';
+import { Manga, MangaChapter, MangaChapterImages } from '../../api/types';
 import { getKeyboardScrollHandler } from './utils';
 
 /**

@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { MangaSearchResult } from '../../common/apiTypes';
+import { MangaSearchResult } from '../../api/types';
 import { paginateNext, startSearch } from './actions';
 
 type StateType = {

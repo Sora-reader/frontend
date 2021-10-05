@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { chapterUpdateDeadline, detailUpdateDeadline } from '../../core/consts';
 import { utcDate } from '../../common/utils';
-import { Manga, MangaChapter, MangaChapters } from '../../common/apiTypes';
+import { Manga, MangaChapter, MangaChapters } from '../../api/types';
 import { CurrentChapter } from './reducer';
 
 /**

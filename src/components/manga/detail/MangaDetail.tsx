@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import { Manga } from '../../../common/apiTypes';
+import { Manga } from '../../../api/types';
 import { DetailHeader } from './DetailHeader';
 import { DetailDescription } from './DetailDescription';
 

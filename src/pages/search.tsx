@@ -6,7 +6,7 @@ import { paginateNext, startSearch } from '../redux/search/actions';
 import { useNonLazyQuery, useSyncQuery } from '../common/search/hooks';
 import { Dispatch } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { MangaList, MangaSearchResult } from '../common/apiTypes';
+import { MangaList, MangaSearchResult } from '../api/types';
 import { useScrolledBottom } from '../common/hooks';
 import { MangaListView } from '../components/views/MangaListView';
 

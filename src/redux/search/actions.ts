@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { MangaSearchResult } from '../../common/apiTypes';
+import { MangaSearchResult } from '../../api/types';
 import { RootState } from '../store';
 import { queryDidNotChange } from './conditions';
 

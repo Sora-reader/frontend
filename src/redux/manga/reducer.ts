@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { Manga, MangaChapter, MangaChapterImages, MangaList } from '../../common/apiTypes';
+import { Manga, MangaChapter, MangaChapterImages, MangaList } from '../../api/types';
 import {
   setCurrentManga,
   loadViewedManga,

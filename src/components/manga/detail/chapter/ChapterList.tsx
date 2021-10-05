@@ -1,4 +1,4 @@
-import { MangaChapters } from '../../../../common/apiTypes';
+import { MangaChapters } from '../../../../api/types';
 import { List, Typography } from '@material-ui/core';
 import { ChapterItem } from './ChapterItem';
 import { Divider } from '@material-ui/core';

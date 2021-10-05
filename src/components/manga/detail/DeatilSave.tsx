@@ -1,6 +1,6 @@
 import { createStyles, FormControl, FormHelperText, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 import { IconButton } from '@material-ui/core';
-import { Manga } from '../../../common/apiTypes';
+import { Manga } from '../../../api/types';
 import { ChangeEvent, useCallback, useMemo } from 'react';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';

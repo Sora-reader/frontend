@@ -1,4 +1,4 @@
-import { Manga } from './apiTypes';
+import { Manga } from '../api/types';
 import { baseUrl, domain as baseDomain } from '../core/consts';
 
 const resizeUrl = process.env.RESIZE_URL;
