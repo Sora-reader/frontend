@@ -4,7 +4,6 @@ import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
 import search from './search/reducer';
-import user from './user/reducer';
 import saveLists from './saveLists/reducer';
 import errors from './errors/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
@@ -16,7 +15,6 @@ const defaultReducers = {
   theme,
   manga,
   search,
-  user,
   saveLists,
   errors,
 };
