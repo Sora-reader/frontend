@@ -10,8 +10,20 @@ import { configureStore, Store } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './types';
 import { cloneDeep } from 'lodash';
+import { searchAPI } from '../api/search';
+import { mangaAPI } from '../api/manga';
+import { camelMiddleware } from './middleware';
+
+const middleware = [
+  thunkMiddleware,
+  searchAPI.middleware,
+  mangaAPI.middleware,
+  camelMiddleware(/^searchAPI\/execute(Mutation|Query)\/fulfilled$/, 'payload.results'),
+];
 
 const defaultReducers = {
+  [searchAPI.reducerPath]: searchAPI.reducer,
+  [mangaAPI.reducerPath]: mangaAPI.reducer,
   theme,
   manga,
   search,
@@ -55,7 +67,7 @@ const createStoreWrapped: MakeStore<RootState, any> = () => {
     return configureStore({
       reducer: combinedReducer,
       devTools: process.env.NODE_ENV !== 'production',
-      middleware: [thunkMiddleware],
+      middleware,
     });
   }
 
@@ -80,7 +92,7 @@ const createStoreWrapped: MakeStore<RootState, any> = () => {
   const store = configureStore({
     reducer: withHydration(persistedReducer),
     devTools: process.env.NODE_ENV !== 'production',
-    middleware: [thunkMiddleware],
+    middleware,
   }); // Creating the store again
 
   // @ts-ignore

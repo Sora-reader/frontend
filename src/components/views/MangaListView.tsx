@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) =>
 
 type Props = {
   header: string;
-  mangaList: MangaList;
+  mangaList?: MangaList;
 };
 
 export const MangaListView = ({ header, mangaList }: Props) => {
@@ -27,9 +27,9 @@ export const MangaListView = ({ header, mangaList }: Props) => {
         </Typography>
       ) : null}
       <List>
-        {mangaList.map((element) => (
-          <MangaListItem key={element.id} {...element} />
-        ))}
+        {mangaList
+          ? mangaList.map((element) => <MangaListItem key={element.id} {...element} />)
+          : Array.from(Array(17), (_, i) => <MangaListItem key={i} />)}
       </List>
     </div>
   );

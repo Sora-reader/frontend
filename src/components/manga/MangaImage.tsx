@@ -1,5 +1,6 @@
 import { forwardRef, Ref } from 'react';
 import { Avatar, AvatarProps, createStyles, makeStyles } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -7,8 +8,10 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export const MangaImage = forwardRef<any, AvatarProps>((props: AvatarProps, ref: Ref<any>) => {
-  const classes = { ...useStyles(), ...props.classes };
+type MangaImageProps = Omit<AvatarProps, 'src'> & { src?: string };
 
-  return <Avatar className={classes.root} variant="rounded" ref={ref} {...props} />;
+export const MangaImage = forwardRef<any, MangaImageProps>((props: MangaImageProps, ref: Ref<any>) => {
+  const classes = { ...useStyles(), ...props.classes };
+  const avatar = <Avatar className={classes.root} variant="rounded" ref={ref} {...props} />;
+  return props.src ? avatar : <Skeleton variant="rect">{avatar}</Skeleton>;
 });

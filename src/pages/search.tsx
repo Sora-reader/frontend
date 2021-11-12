@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Box, CircularProgress, createStyles, makeStyles, Theme } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../redux/store';
-import { paginateNext, startSearch } from '../redux/search/actions';
+import { useAppDispatch } from '../redux/store';
 import { useNonLazyQuery, useSyncQuery } from '../common/search/hooks';
-import { Dispatch } from 'react';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { MangaList, MangaSearchResult } from '../api/types';
 import { useScrolledBottom } from '../common/hooks';
 import { MangaListView } from '../components/views/MangaListView';
+import { usePaginateMutation, useSearchQuery } from '../api/search';
+import { addError } from '../redux/errors/actions';
+import { isAbortError, isFetchError, unwrapMutationResult } from '../api/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingTop: theme.spacing(1),
+      overflowY: 'hidden',
     },
     header: {
       padding: theme.spacing(0, 1),
@@ -29,75 +29,86 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const parseSearchResults = (
-  searchResults: MangaSearchResult,
-  storedQuery: string,
-  setMessage: Dispatch<any>,
-  setContent: Dispatch<any>
-) => {
-  if (!searchResults.results.length) {
-    setMessage('Результатов не найдено');
-    setContent(undefined);
-  } else {
-    setMessage(`Итог поиска по запросу: "${storedQuery}"`);
-    setContent(searchResults.results);
-  }
-};
-
 export default function Search() {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-
-  const { results: storedResults, query: storedQuery } = useSelector((state: RootState) => state.search);
-  const [searching, setSearching] = useState(false);
-  const [message, setMessage] = useState('' as string);
-  const [content, setContent] = useState([] as MangaList);
-  const [paginating, setPaginating] = useState(false);
   const scrolledBottom = useScrolledBottom();
 
   const query = useNonLazyQuery('name');
   useSyncQuery(query);
 
-  useEffect(() => {
-    if (scrolledBottom && storedResults.next) {
-      setPaginating(true);
-      dispatch(paginateNext()).then(() => {
-        setPaginating(false);
-      });
-    }
-  }, [scrolledBottom, dispatch, storedResults]);
+  const search = useSearchQuery(query, { skip: !Boolean(query) });
+  const [paginate, pagination] = usePaginateMutation();
+  const [results, setResults] = useState(undefined as MangaList | undefined);
+  const [lastResult, setLastResult] = useState(undefined as MangaSearchResult | undefined);
 
   useEffect(() => {
-    if (!query) {
-      setMessage('Введите название манги для поиска');
-      return;
-    }
-    if (query === storedQuery) {
-      parseSearchResults(storedResults, storedQuery, setMessage, setContent);
-      return;
-    }
-    if (!searching) {
-      setMessage('');
-      setContent([]);
-      setSearching(true);
-      dispatch(startSearch(query))
-        .then(unwrapResult)
-        .then(({ query, results }) => {
-          setSearching(false);
-          parseSearchResults(results, query, setMessage, setContent);
+    if (!search.isError) {
+      setLastResult(search.data);
+      setResults(search.data?.results);
+    } else {
+      if (isAbortError(search.error)) {
+        console.log('Search aborted', search.error);
+        return;
+      }
+      dispatch(
+        addError({
+          title: 'Ошибка поиска',
+          message: isFetchError(search.error) ? search.error.error : JSON.stringify(search.error),
         })
-        .catch(() => {
-          setMessage('Ошибка, проверьте подключение к интернету');
+      );
+    }
+  }, [search, dispatch]);
+
+  useEffect(() => {
+    let paginatePromise: ReturnType<typeof paginate> | undefined;
+    if (scrolledBottom && !(search.isLoading || pagination.isLoading) && lastResult?.next) {
+      console.log('===> Starting to paginate');
+      paginatePromise = paginate(lastResult.next);
+      paginatePromise
+        .then(unwrapMutationResult)
+        .then((res: any) => {
+          console.log('Finished paginating', res, paginatePromise, pagination);
+          setLastResult(res.data);
+          setResults([...(results || []), ...res.data.results]);
+        })
+        .catch((err) => {
+          if (isAbortError(err)) {
+            console.log('Pagination aborted', err);
+            return;
+          }
+          dispatch(
+            addError({
+              title: 'Ошибка пагинации',
+              url: paginatePromise?.arg.originalArgs,
+              message: isFetchError(err) ? err.error : JSON.stringify(err),
+            })
+          );
         });
     }
-    // eslint-disable-next-line
-  }, [query, storedResults]);
+    return () => {
+      if (paginatePromise?.abort) paginatePromise.abort();
+    };
+  }, [scrolledBottom, dispatch, lastResult, paginate, pagination, search.isLoading, results]);
 
   return (
     <div className={classes.root}>
-      <h1 className={classes.header}>{message}</h1>
-      {content && <MangaListView header="" mangaList={content} />}
-      {paginating ? (
+      <h1 className={classes.header}>
+        {search.isError
+          ? 'Ошибка, проверьте подключение к интернету'
+          : !query
+          ? 'Введите название манги для поиска'
+          : null}
+      </h1>
+      {search.isLoading || search.isFetching ? (
+        <MangaListView header="Идет поиск" />
+      ) : query && !search.isError ? (
+        <MangaListView
+          header={lastResult?.count !== undefined ? `Найдено ${lastResult?.count} результатов` : ''}
+          mangaList={results}
+        />
+      ) : null}
+      {pagination.isLoading ? (
         <Box display="flex" justifyContent="center" alignItems="center">
           <CircularProgress disableShrink />
         </Box>

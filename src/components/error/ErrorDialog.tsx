@@ -27,9 +27,17 @@ export const ErrorDialog = ({ error, open, handleClose }: Props) => {
       <DialogTitle id="alert-dialog-title">{error.title}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {error.url ? <Typography variant="body1">URL: {error.url}</Typography> : null}
+          {error.url ? (
+            <Typography variant="body1" component="span">
+              URL: {error.url}
+            </Typography>
+          ) : null}
           <br />
-          {error.message ? <Typography variant="body1">{error.message}</Typography> : null}
+          {error.message ? (
+            <Typography variant="body1" component="span">
+              {error.message}
+            </Typography>
+          ) : null}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

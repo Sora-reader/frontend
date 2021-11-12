@@ -1,24 +1,20 @@
-import { useState } from 'react';
-import { Box, createStyles, List, makeStyles } from '@material-ui/core';
+import { useEffect, useMemo } from 'react';
+import { Box, createStyles, makeStyles } from '@material-ui/core';
 import Head from 'next/head';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch, wrapper } from '../../redux/store';
+import { useAppDispatch, wrapper } from '../../redux/store';
+import { detailsNeedUpdate } from '../../redux/manga/utils';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
-import { fetchMangaChapters, pushViewedManga, setCurrentManga } from '../../redux/manga/actions';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { pushViewedManga } from '../../redux/manga/actions';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
-import { useInitialEffect } from '../../common/hooks';
 import { MangaDetail } from '../../components/manga/detail/MangaDetail';
-import { requestMangaData, reRequestMangaData } from '../../redux/manga/utils';
-import { Skeleton } from '@material-ui/lab';
-import { ChapterItem } from '../../components/manga/detail/chapter/ChapterItem';
 import { getOpenGraphForManga } from '../../common/opengraph';
 import { isClientSideNavigation } from '../../common/router';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as Sentry from '@sentry/nextjs';
 import { captureAxiosToError } from '../../common/utils';
-import { useRouter } from 'next/router';
+import { Manga } from '../../api/types';
+import { mangaAPIBaseUrl, mangaDetailQuery, useChaptersQuery, useDetailQuery } from '../../api/manga';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,38 +27,24 @@ const useStyles = makeStyles(() =>
 
 type Props = {
   mangaId?: number;
+  manga?: Manga;
 };
 
-export default function Detail({ mangaId }: Props) {
+export default function Detail({ mangaId, manga: initialData }: Props) {
   const classes = useStyles();
-  const [chaptersLoaded, setChaptersLoaded] = useState(false);
-  const manga = useSelector((state: RootState) => state.manga.current);
+  const detailQuery = useDetailQuery(mangaId as number, { skip: !Boolean(mangaId) });
+  const chaptersQuery = useChaptersQuery(mangaId as number, { skip: !Boolean(mangaId) });
+  const manga = useMemo(() => (detailQuery.isSuccess ? detailQuery.data : initialData), [detailQuery, initialData]);
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
-  useInitialEffect(() => {
+  useEffect(() => {
     if (manga) {
       dispatch(pushViewedManga(manga));
-
-      reRequestMangaData(manga, (data) => {
-        dispatch(setCurrentManga(data));
-        dispatch(pushViewedManga(data));
-      });
+      if (detailsNeedUpdate(manga)) {
+        detailQuery.refetch();
+      }
     }
-    if (mangaId) {
-      dispatch(fetchMangaChapters(mangaId))
-        .then(unwrapResult)
-        .then(() => setChaptersLoaded(true))
-        .catch(() => {
-          console.log('Chapters are not yet loaded, scheduled a timeout');
-          setTimeout(() => {
-            dispatch(fetchMangaChapters(mangaId)).then(() => setChaptersLoaded(true));
-          }, 2000);
-        });
-    } else {
-      router.replace('/search');
-    }
-  });
+  }, [manga, dispatch, detailQuery]);
 
   return (
     <div className={classes.root}>
@@ -79,17 +61,7 @@ export default function Detail({ mangaId }: Props) {
           <MangaDetail manga={manga} />
         </Box>
         <Box p={2}>
-          {chaptersLoaded && manga ? (
-            <ChapterList mangaId={manga.id} chapters={manga.chapters} />
-          ) : (
-            <List>
-              {Array.from(Array(17), (_, i) => (
-                <Skeleton key={i} width="100%">
-                  <ChapterItem chapter={{} as any} mangaId={0} index={0} />
-                </Skeleton>
-              ))}
-            </List>
-          )}
+          <ChapterList mangaId={mangaId} chapters={chaptersQuery.data} />
         </Box>
       </SwipeableTabs>
     </div>
@@ -112,9 +84,8 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
 
   if (mangaId) {
     try {
-      const ssrManga = await requestMangaData(mangaId);
-      store.dispatch(setCurrentManga(ssrManga));
-      return { props: { mangaId } };
+      const manga = await axios.get(mangaAPIBaseUrl + mangaDetailQuery(mangaId));
+      return { props: { mangaId, manga: manga.data } };
     } catch (e) {
       const error = e as AxiosError;
       if (error?.response?.status === 404) return { notFound: true };
