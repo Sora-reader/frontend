@@ -6,7 +6,6 @@ import reducer from './reducer';
 const persistConfig = {
   key: 'manga',
   whitelist: ['viewed', 'readChapters'],
-  blacklist: ['current'],
   storage,
   stateReconciler: autoMergeLevel1,
 };

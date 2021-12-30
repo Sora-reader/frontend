@@ -33,16 +33,27 @@ export const useImageLoaded = (image?: string) => {
 };
 
 /**
- * Hook to determine whether user scrolled to bottom or not
+ * Hook to determine whether user scrolled to bottom or not.
+ * Basically calculate if user is on bottom on every scroll & on every <body> height change
  */
 export const useScrolledBottom = () => {
   const [scrolledBottom, setScrolledBottom] = useState(false);
   // On mobile scrollY + outerHeight may be couple pixels less than offsetHeight
   const mobileOffset = 20;
 
-  useEffect(() => {
+  const calculate = () =>
+    window.window.scrollY + window.window.outerHeight >= document.body.offsetHeight - mobileOffset;
+
+  useInitialEffect(() => {
+    const observer = new ResizeObserver(() => {
+      setScrolledBottom(calculate());
+    });
     document.onscroll = () => {
-      setScrolledBottom(window.window.scrollY + window.window.outerHeight >= document.body.offsetHeight - mobileOffset);
+      setScrolledBottom(calculate());
+    };
+    observer.observe(document.querySelector('body') as HTMLBodyElement);
+    return () => {
+      observer.unobserve(document.querySelector('body') as HTMLBodyElement);
     };
   });
 

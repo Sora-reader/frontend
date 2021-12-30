@@ -17,7 +17,7 @@
         "NODE_OPTIONS": "--inspect"
       },
       "port": 9229,
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     }
   ],
   "compounds": [

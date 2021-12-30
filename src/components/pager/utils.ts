@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MangaChapterImages } from '../../common/apiTypes';
+import { MangaChapterImages } from '../../api/types';
 import { VH } from '../../common/css';
 
 /**

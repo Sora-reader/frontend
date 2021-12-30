@@ -1,11 +1,11 @@
 import '../style/global.css';
+import '../common/axios';
 import { useMemo } from 'react';
 import { AppProps } from 'next/app';
 import { createMuiTheme, createStyles, LinearProgress, makeStyles, Theme, ThemeOptions } from '@material-ui/core';
 import Head from 'next/head';
-import { useSelector, useStore } from 'react-redux';
-import { RootState, StoreType, wrapper } from '../redux/store';
-import { useCustomInterceptors } from '../common/axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, wrapper } from '../redux/store';
 import { Box, Container, ThemeProvider } from '@material-ui/core';
 import { NavigationHeader } from '../components/header/NavigationHeader';
 import { useRouter } from 'next/router';
@@ -14,7 +14,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { defaultDark } from '../redux/theme/defaults';
 import { getBaseOpenGraph } from '../common/opengraph';
 import { ErrorSnackbar } from '../components/error/ErrorSnackbar';
-import { useRouteChanges as useRouteChanging } from '../common/hooks';
+import { useInitialEffect, useRouteChanges as useRouteChanging } from '../common/hooks';
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 type StyleProps = { minHeight: string };
 
@@ -51,7 +52,7 @@ const useStyles = (theme: Theme) =>
   );
 
 function WrappedApp({ Component, pageProps }: AppProps) {
-  const store = useStore() as StoreType;
+  const dispatch = useDispatch();
   const themeState = useSelector((state: RootState) => state.theme);
   const errors = useSelector((state: RootState) => state.errors);
   const router = useRouter();
@@ -67,7 +68,9 @@ function WrappedApp({ Component, pageProps }: AppProps) {
   });
 
   useCustomEventListeners();
-  useCustomInterceptors(store);
+  useInitialEffect(() => {
+    setupListeners(dispatch);
+  });
 
   return (
     <>
@@ -109,9 +112,12 @@ function WrappedApp({ Component, pageProps }: AppProps) {
             </Container>
           )}
         </Box>
-        {errors.map((e, i) => (
-          <ErrorSnackbar key={Number(e.id)} error={e} index={i} />
-        ))}
+        {errors
+          .slice(0)
+          .reverse()
+          .map((e, i) => (
+            <ErrorSnackbar key={Number(e.id)} error={e} index={i} />
+          ))}
       </ThemeProvider>
     </>
   );

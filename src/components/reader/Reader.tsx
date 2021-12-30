@@ -1,7 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import { useKeyboardScroll, useNextChapterLink } from '../pager/hooks';
-import { Manga } from '../../common/apiTypes';
-import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
+import { Manga, MangaChapter, MangaChapterImages, MangaChapters } from '../../api/types';
 import { ReaderMode } from './types';
 import { DefaultPager } from '../pager/DefaultPager';
 import { WebtoonPager } from '../pager/WebtoonPager';
@@ -17,21 +16,23 @@ const useStyles = makeStyles(() =>
 );
 type Props = {
   manga: Manga;
-  chapter: CurrentChapter & Required<CurrentChapterImages>;
+  chapters: MangaChapters;
+  chapter: MangaChapter;
+  images: MangaChapterImages;
   mode: ReaderMode;
   onClick?: MouseEventHandler<HTMLDivElement> | undefined;
   setHeaderImageNumber: Dispatch<SetStateAction<number>>;
 };
 
-export const Reader = ({ manga, chapter, mode, onClick, setHeaderImageNumber }: Props) => {
+export const Reader = ({ manga, chapters, chapter, images, mode, onClick, setHeaderImageNumber }: Props) => {
   const classes = useStyles();
   const mangaId = manga.id;
-  useKeyboardScroll(chapter.images);
-  const nextChapterLink = useNextChapterLink(manga, chapter);
+  useKeyboardScroll(images);
+  const nextChapterLink = useNextChapterLink(manga, chapters, chapter);
 
   const pagerProps = useMemo(() => {
-    return { mangaId, chapter, nextChapterLink, setHeaderImageNumber };
-  }, [mangaId, chapter, nextChapterLink, setHeaderImageNumber]);
+    return { mangaId, chapter, images, nextChapterLink, setHeaderImageNumber };
+  }, [mangaId, chapter, images, nextChapterLink, setHeaderImageNumber]);
 
   return (
     <div className={classes.root} onClick={onClick}>

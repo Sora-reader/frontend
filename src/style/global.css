@@ -24,4 +24,7 @@ body {
     /* min-height: 100vh; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* MUI Dialog adds right padding which breaks HTML */
+    padding-right: 0 !important;
 }

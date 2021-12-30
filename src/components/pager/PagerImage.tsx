@@ -1,10 +1,7 @@
-import { Dispatch, forwardRef, Ref, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+import { Dispatch, forwardRef, Ref, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core';
 import { Avatar } from '@material-ui/core';
 import { CenteredProgress } from '../CenteredProgress';
-import { Dispatch as RDispatch } from '@reduxjs/toolkit';
-import { CurrentChapter } from '../../redux/manga/reducer';
-import { setRead } from '../../redux/manga/actions';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -75,14 +72,3 @@ export const PagerImage = forwardRef(
     );
   }
 );
-
-/**
- * @returns Memoized callback which dispatched setRead if needed
- */
-export const useSetReadOnCurrent = (dispatch: RDispatch, mangaId: number, chapter?: CurrentChapter) =>
-  useCallback(
-    (position: number) => {
-      if (chapter && chapter.images && position >= chapter.images.length / 2) dispatch(setRead(mangaId, chapter.id));
-    },
-    [dispatch, mangaId, chapter]
-  );

@@ -3,20 +3,28 @@ import { createWrapper, HYDRATE, MakeStore } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
-import search from './search/reducer';
-import user from './user/reducer';
 import saveLists from './saveLists/reducer';
 import errors from './errors/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './types';
 import { cloneDeep } from 'lodash';
+import { searchAPI } from '../api/search';
+import { mangaAPI } from '../api/manga';
+import { camelMiddleware } from './middleware';
+
+const middleware = [
+  thunkMiddleware,
+  searchAPI.middleware,
+  mangaAPI.middleware,
+  camelMiddleware(/^searchAPI\/execute(Mutation|Query)\/fulfilled$/, 'payload.results'),
+];
 
 const defaultReducers = {
+  [searchAPI.reducerPath]: searchAPI.reducer,
+  [mangaAPI.reducerPath]: mangaAPI.reducer,
   theme,
   manga,
-  search,
-  user,
   saveLists,
   errors,
 };
@@ -35,10 +43,6 @@ const withHydration =
         console.log('Hydration from', originalReducer.name);
         let nextState = cloneDeep(state);
 
-        if (action.payload.manga?.current) {
-          console.log('Using manga from server state');
-          nextState.manga.current = action.payload.manga.current;
-        }
         // Reuse server-side dispatched errors if were any
         nextState.errors = action.payload.errors;
 
@@ -57,7 +61,7 @@ const createStoreWrapped: MakeStore<RootState, any> = () => {
     return configureStore({
       reducer: combinedReducer,
       devTools: process.env.NODE_ENV !== 'production',
-      middleware: [thunkMiddleware],
+      middleware,
     });
   }
 
@@ -82,7 +86,7 @@ const createStoreWrapped: MakeStore<RootState, any> = () => {
   const store = configureStore({
     reducer: withHydration(persistedReducer),
     devTools: process.env.NODE_ENV !== 'production',
-    middleware: [thunkMiddleware],
+    middleware,
   }); // Creating the store again
 
   // @ts-ignore

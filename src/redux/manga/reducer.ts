@@ -1,23 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { Manga, MangaChapter, MangaChapterImages, MangaList } from '../../common/apiTypes';
-import {
-  setCurrentManga,
-  loadViewedManga,
-  pushViewedManga,
-  fetchMangaDetail,
-  fetchMangaChapters,
-  setCurrentChapter,
-  fetchChapterImages,
-  fetchAll,
-  setRead,
-} from './actions';
-
-export type CurrentChapterImages = { images?: MangaChapterImages };
-export type CurrentChapter = MangaChapter & CurrentChapterImages;
+import { MangaList } from '../../api/types';
+import { loadViewedManga, pushViewedManga, setRead } from './actions';
 
 type StateType = {
-  current?: Manga;
-  chapter?: CurrentChapter;
   viewed: MangaList;
   readChapters: Record<number, number>;
 };
@@ -28,28 +13,6 @@ const initialState: StateType = {
 };
 
 const reducer = createReducer(initialState, (builder) => {
-  // Manga
-  builder.addCase(setCurrentManga, (state, action) => {
-    const chapters = (action.payload.chapters?.length && action.payload.chapters) || state.current?.chapters;
-    state.current = {
-      ...action.payload,
-    };
-    if (chapters) state.current.chapters = chapters;
-  });
-  builder.addCase(fetchMangaDetail.fulfilled, (state, action) => {
-    state.current = { ...state.current, ...action.payload };
-  });
-
-  // Chapter
-  builder.addCase(setCurrentChapter, (state, action) => {
-    state.chapter = action.payload;
-  });
-  builder.addCase(fetchChapterImages.fulfilled, (state, action) => {
-    if (state.chapter) state.chapter.images = action.payload;
-  });
-  builder.addCase(fetchMangaChapters.fulfilled, (state, action) => {
-    if (state.current) state.current.chapters = action.payload;
-  });
   builder.addCase(setRead, (state, action) => {
     state.readChapters[action.payload.mangaId] = action.payload.chapterId;
   });
@@ -67,12 +30,6 @@ const reducer = createReducer(initialState, (builder) => {
     }
 
     state.viewed = newViewed;
-  });
-
-  // Other
-  builder.addCase(fetchAll.fulfilled, (state, action) => {
-    state.current = action.payload.manga;
-    state.chapter = action.payload.chapter;
   });
 });
 

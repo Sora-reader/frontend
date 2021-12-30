@@ -1,11 +1,9 @@
-import { MangaChapter } from '../../../../common/apiTypes';
+import { MangaChapter } from '../../../../api/types';
 import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
-import { setCurrentChapter } from '../../../../redux/manga/actions';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import { ChapterChip } from './ChapterChip';
-import { useAppDispatch } from '../../../../redux/store';
 
 type Props = {
   mangaId: number;
@@ -16,12 +14,10 @@ type Props = {
 };
 
 export const ChapterItem = memo(({ mangaId, chapter, index, chipWidth, read }: Props) => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
 
   // Don't need to use useCallback as it's memo
   const passChapterCallback = () => {
-    dispatch(setCurrentChapter(chapter));
     router.push(`/read/${mangaId}/${chapter.volume}/${chapter.number}/`);
   };
 

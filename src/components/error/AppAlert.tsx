@@ -14,11 +14,12 @@ const useStyles = makeStyles<Theme, AppAlertProps>((theme: Theme) =>
       },
       cursor: 'pointer',
       width: '200px',
-      textOverflow: 'ellipsis ellipsis',
+      textOverflow: 'ellipsis',
     },
     message: {
+      whiteSpace: 'nowrap',
       overflowX: 'clip',
-      textOverflow: 'ellipsis ellipsis',
+      textOverflow: 'ellipsis',
     },
   })
 );

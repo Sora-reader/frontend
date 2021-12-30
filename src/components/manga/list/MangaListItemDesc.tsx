@@ -1,9 +1,11 @@
 import { createStyles, ListItemText, makeStyles, Theme, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 import { SoraChip } from '../../SoraChip';
-import { Manga } from '../../../common/apiTypes';
+import { Manga } from '../../../api/types';
 import { MangaRating } from '../MangaRating';
 import { memo } from 'react';
 import { useMemo } from 'react';
+import { isNotEmpty } from '../../../common/utils';
+import { Skeleton } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const MangaListItemDesc = memo((manga: Manga) => {
+export const MangaListItemDesc = memo((manga: Manga | {}) => {
   const classes = useStyles();
   const theme = useTheme();
   const smallDevice = useMediaQuery(theme.breakpoints.down('xs'));
@@ -43,17 +45,29 @@ export const MangaListItemDesc = memo((manga: Manga) => {
   return (
     <div className={classes.root}>
       <ListItemText className={classes.title}>
-        <Typography variant={titleVariant}>{manga.title}</Typography>
+        {isNotEmpty<Manga>(manga) ? (
+          <Typography variant={titleVariant}>{manga.title}</Typography>
+        ) : (
+          <Skeleton width="100%">
+            <Typography variant={titleVariant}>.</Typography>
+          </Skeleton>
+        )}
       </ListItemText>
 
-      <MangaRating value={manga.rating} />
-      <div className={classes.footer}>
-        <ul className={classes.genres}>
-          {manga.genres?.map((genre) => (
-            <SoraChip key={genre} component="li" label={genre} />
-          ))}
-        </ul>
-      </div>
+      {isNotEmpty<Manga>(manga) ? (
+        <>
+          <MangaRating value={manga.rating} />
+          <div className={classes.footer}>
+            <ul className={classes.genres}>
+              {manga.genres?.map((genre) => (
+                <SoraChip key={genre} component="li" label={genre} />
+              ))}
+            </ul>
+          </div>
+        </>
+      ) : (
+        <Skeleton />
+      )}
     </div>
   );
 });
