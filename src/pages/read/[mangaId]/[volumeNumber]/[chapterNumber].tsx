@@ -3,22 +3,19 @@ import { Reader } from '../../../../components/reader/Reader';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAppDispatch, wrapper } from '../../../../redux/store';
-import { fetchAll, fetchChapterImages, setCurrentChapter, setCurrentManga } from '../../../../redux/manga/actions';
 import { CenteredProgress } from '../../../../components/CenteredProgress';
 import { ReaderMode } from '../../../../components/reader/types';
-import { CurrentChapter, CurrentChapterImages } from '../../../../redux/manga/reducer';
 import Slide from '@material-ui/core/Slide';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import * as Sentry from '@sentry/nextjs';
-import { CircularProgress, createStyles, makeStyles, Typography } from '@material-ui/core';
-import { useInitialEffect } from '../../../../common/hooks';
+import { createStyles, makeStyles, Typography } from '@material-ui/core';
 import { Header } from '../../../../components/header/Header';
 import { isClientSideNavigation, navigateToDetail } from '../../../../common/router';
-import { requestAllMangaData } from '../../../../redux/manga/utils';
 import { AxiosError } from 'axios';
 import { captureAxiosToError } from '../../../../common/utils';
 import { useChaptersQuery, useDetailQuery, useImagesQuery } from '../../../../api/manga';
 import { Manga, MangaChapter, MangaChapterImages, MangaChapters } from '../../../../api/types';
+import { addError } from '../../../../redux/errors/actions';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -37,13 +34,16 @@ type Props = {
 export default function Read({ mangaId, volumeNumber, chapterNumber, initial }: Props) {
   const classes = useStyles();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
+  // Manga details
   const detailQuery = useDetailQuery(mangaId, { skip: !Boolean(mangaId) });
   const manga = useMemo(
     () => (detailQuery.isSuccess ? detailQuery.data : initial?.manga),
     [detailQuery, initial?.manga]
   );
 
+  // Chapters
   const chaptersQuery = useChaptersQuery(mangaId, { skip: !Boolean(mangaId) });
   const chapters = useMemo(
     () => (chaptersQuery.isSuccess ? chaptersQuery.data : initial?.chapters),
@@ -67,9 +67,8 @@ export default function Read({ mangaId, volumeNumber, chapterNumber, initial }: 
   const [headerImageNumber, setHeaderImageNumber] = useState(0);
   const [mode, setMode] = useState(undefined as ReaderMode | undefined);
   const [showHeader, setShowHeader] = useState(false);
-  const dispatch = useAppDispatch();
-useEffect(() => {
-    if (chapter?.images?.length) {
+  useEffect(() => {
+    if (images?.length) {
       const img = new Image();
       img.src = images[0];
       img.onload = () => {
@@ -81,15 +80,32 @@ useEffect(() => {
         }
       };
     }
-  }, [chapter?.images]);
+  }, [images]);
 
+  useEffect(() => {
+    if (!imagesQuery.isFetching && !imagesQuery.isLoading && images === [])
+      navigateToDetail(router, mangaId).then(() => {
+        dispatch(
+          addError({
+            title: 'Ошибка',
+            message:
+              'Произошла ошибка загрузки или изображения не были найдены для главы ' +
+              `${manga?.title}: ${chapter?.volume} - ${chapter?.number}`,
+          })
+        );
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images?.length]);
 
-
-  if (!(images && chapterNumber === chapter?.number && volumeNumber === chapter?.volume && manga?.id === mangaId)) {
-    return <CircularProgress />;
-  }
-    // Current chapter.number may differ from chapterNumber in case of replacing route
-  return chapterReady && manga ? (
+  // Current chapter.number may differ from chapterNumber in case of replacing route
+  return manga &&
+    chapters &&
+    chapter &&
+    images &&
+    images.length &&
+    chapterNumber === chapter.number &&
+    volumeNumber === chapter.volume &&
+    manga.id === mangaId ? (
     <>
       <Slide appear={false} direction="down" in={!showHeader}>
         <Header
@@ -101,7 +117,7 @@ useEffect(() => {
             <Typography color="textPrimary" variant="h6">
               {chapter?.title}
             </Typography>
-            {chapter?.images ? (
+            {images ? (
               <Typography color="textPrimary" variant="subtitle1">
                 {headerImageNumber} / {images.length}
               </Typography>
@@ -112,7 +128,9 @@ useEffect(() => {
       <Reader
         onClick={() => setShowHeader(!showHeader)}
         manga={manga}
-        chapter={chapter as CurrentChapter & Required<CurrentChapterImages>}
+        chapters={chapters}
+        chapter={chapter}
+        images={images}
         mode={mode}
         setHeaderImageNumber={setHeaderImageNumber}
       />
@@ -146,9 +164,6 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
 
   if (mangaId && volumeNumber && chapterNumber) {
     try {
-      const ssrData = await requestAllMangaData(mangaId, volumeNumber, chapterNumber);
-      store.dispatch(setCurrentManga(ssrData.current));
-      store.dispatch(setCurrentChapter(ssrData.chapter));
       return { props: { mangaId } };
     } catch (e) {
       const error = e as AxiosError;

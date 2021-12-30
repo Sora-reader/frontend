@@ -1,13 +1,9 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useCallback, useEffect, useMemo } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useCallback, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import ForwardIcon from '@material-ui/icons/Forward';
 import ExitIcon from '@material-ui/icons/ExitToApp';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../../redux/store';
-import { getNextChapter } from '../pager/hooks';
-import { fetchChapterImages, setCurrentChapter } from '../../redux/manga/actions';
 import { shallowNavigate } from '../../common/router';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,9 +24,6 @@ type Props = {
 export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
   const classes = useStyles();
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { current: manga, chapter } = useSelector((state: RootState) => state.manga);
-  const nextChapter = useMemo(() => (manga ? getNextChapter(manga, chapter) : undefined), [manga, chapter]);
 
   useEffect(() => {
     router.prefetch(String(nextUrl));
@@ -41,16 +34,12 @@ export const GoNextButton = ({ nextUrl, setCurrentImage, exit }: Props) => {
       e.preventDefault();
       if (nextUrl) {
         if (exit) shallowNavigate(router, nextUrl, 'replace');
-        else if (nextChapter) {
-          shallowNavigate(router, nextUrl, 'replace').then(() => {
-            setCurrentImage && setCurrentImage(1);
-            dispatch(setCurrentChapter(nextChapter));
-            dispatch(fetchChapterImages(nextChapter.id));
-          });
-        }
+        shallowNavigate(router, nextUrl, 'replace').then(() => {
+          setCurrentImage && setCurrentImage(1);
+        });
       }
     },
-    [nextUrl, exit, setCurrentImage, nextChapter, router, dispatch]
+    [nextUrl, exit, setCurrentImage, router]
   );
 
   return (

@@ -3,7 +3,6 @@ import { createWrapper, HYDRATE, MakeStore } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import manga from './manga/reducer';
 import theme from './theme/reducer';
-import search from './search/reducer';
 import saveLists from './saveLists/reducer';
 import errors from './errors/reducer';
 import { configureStore, Store } from '@reduxjs/toolkit';
@@ -26,7 +25,6 @@ const defaultReducers = {
   [mangaAPI.reducerPath]: mangaAPI.reducer,
   theme,
   manga,
-  search,
   saveLists,
   errors,
 };
@@ -45,10 +43,6 @@ const withHydration =
         console.log('Hydration from', originalReducer.name);
         let nextState = cloneDeep(state);
 
-        if (action.payload.manga?.current) {
-          console.log('Using manga from server state');
-          nextState.manga.current = action.payload.manga.current;
-        }
         // Reuse server-side dispatched errors if were any
         nextState.errors = action.payload.errors;
 

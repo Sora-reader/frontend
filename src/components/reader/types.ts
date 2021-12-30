@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
-import { CurrentChapter, CurrentChapterImages } from '../../redux/manga/reducer';
+import { MangaChapter, MangaChapterImages } from '../../api/types';
 
 export type PagerProps = {
   mangaId: number;
-  chapter: CurrentChapter & Required<CurrentChapterImages>;
+  chapter: MangaChapter;
+  images: MangaChapterImages;
   nextChapterLink?: string;
   setHeaderImageNumber: Dispatch<SetStateAction<number>>;
 };

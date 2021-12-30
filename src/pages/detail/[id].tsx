@@ -1,10 +1,8 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Box, createStyles, makeStyles } from '@material-ui/core';
 import Head from 'next/head';
-import { useAppDispatch, wrapper } from '../../redux/store';
-import { detailsNeedUpdate } from '../../redux/manga/utils';
+import { wrapper } from '../../redux/store';
 import { SwipeableTabs } from '../../components/SwipeableTabs';
-import { pushViewedManga } from '../../redux/manga/actions';
 import { GetServerSideProps } from 'next';
 import { ChapterList } from '../../components/manga/detail/chapter/ChapterList';
 import { MangaDetail } from '../../components/manga/detail/MangaDetail';
@@ -35,16 +33,6 @@ export default function Detail({ mangaId, manga: initialData }: Props) {
   const detailQuery = useDetailQuery(mangaId as number, { skip: !Boolean(mangaId) });
   const chaptersQuery = useChaptersQuery(mangaId as number, { skip: !Boolean(mangaId) });
   const manga = useMemo(() => (detailQuery.isSuccess ? detailQuery.data : initialData), [detailQuery, initialData]);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (manga) {
-      dispatch(pushViewedManga(manga));
-      if (detailsNeedUpdate(manga)) {
-        detailQuery.refetch();
-      }
-    }
-  }, [manga, dispatch, detailQuery]);
 
   return (
     <div className={classes.root}>

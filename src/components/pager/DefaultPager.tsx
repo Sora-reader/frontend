@@ -2,8 +2,8 @@ import { memo, useCallback, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
 import { roundBinary, useLoadImages } from '../pager/utils';
-import { useGetValidImageNumber } from '../pager/hooks';
-import { PagerImage, useSetReadOnCurrent } from './PagerImage';
+import { useGetValidImageNumber, useSetReadOnCurrent } from '../pager/hooks';
+import { PagerImage } from './PagerImage';
 import { GoNextButton } from '../reader/GoNextButton';
 import { PagerProps } from '../reader/types';
 import { useEffect } from 'react';
@@ -26,22 +26,22 @@ const useStyles = makeStyles(() =>
 /**
  * Default pager component. Pages are changed by swiping Left/Right
  */
-export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeaderImageNumber }: PagerProps) => {
+export const DefaultPager = memo(({ mangaId, chapter, images, nextChapterLink, setHeaderImageNumber }: PagerProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentImage, setCurrentImage] = useState(0);
-  const validImageNumber = useGetValidImageNumber(chapter.images);
+  const validImageNumber = useGetValidImageNumber(images);
   const onCurrent = useSetReadOnCurrent(dispatch, mangaId, chapter);
 
   useEffect(() => {
     setHeaderImageNumber(currentImage + 1);
   }, [currentImage, setHeaderImageNumber]);
 
-  useLoadImages(chapter.images);
+  useLoadImages(images);
 
   const onChangeIndex = useCallback(
     (newIndex, prevIndex) => {
-      if (Math.abs(prevIndex - newIndex) === chapter.images.length - 1) return;
+      if (Math.abs(prevIndex - newIndex) === images.length - 1) return;
       const diff = roundBinary(newIndex - prevIndex);
       const newNumber = validImageNumber(currentImage + diff);
 
@@ -50,13 +50,13 @@ export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
         window.scroll({ top: 0 });
       }
     },
-    [validImageNumber, chapter.images, currentImage, setCurrentImage]
+    [validImageNumber, images, currentImage, setCurrentImage]
   );
 
   return (
     <div>
       <BindKeyboardSwipeableViews hysteresis={0.5} threshold={20} index={currentImage} onChangeIndex={onChangeIndex}>
-        {chapter.images.map((image, index) => {
+        {images.map((image, index) => {
           return (
             <PagerImage
               key={image}
@@ -70,7 +70,7 @@ export const DefaultPager = memo(({ mangaId, chapter, nextChapterLink, setHeader
           );
         })}
       </BindKeyboardSwipeableViews>
-      {currentImage === chapter.images.length - 1 ? (
+      {currentImage === images.length - 1 ? (
         nextChapterLink ? (
           <GoNextButton nextUrl={nextChapterLink} setCurrentImage={setCurrentImage} />
         ) : (
