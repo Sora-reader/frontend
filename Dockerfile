@@ -19,10 +19,6 @@ COPY . .
 RUN mv next.config.js next.config.js.base && \
   echo "module.exports={...require('./next.config.js.base'),typescript:{ignoreBuildErrors:true}}" >| next.config.js
 
-ARG PORT=3000
-ENV PORT $PORT
-EXPOSE $PORT
-
 RUN SENTRY_DSN=${SENTRY_DSN} \
     SENTRY_URL=${SENTRY_URL} \
     SENTRY_ORG=${SENTRY_ORG} \
