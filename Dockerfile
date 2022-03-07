@@ -8,8 +8,6 @@ ARG SENTRY_ORG
 ARG SENTRY_PROJECT
 ARG SENTRY_AUTH_TOKEN
 
-EXPOSE $PORT
-
 RUN npm install -g npm@latest
 
 COPY package.json package-lock.json ./
@@ -20,6 +18,10 @@ COPY . .
 # Skip type check on build to save resources
 RUN mv next.config.js next.config.js.base && \
   echo "module.exports={...require('./next.config.js.base'),typescript:{ignoreBuildErrors:true}}" >| next.config.js
+
+ARG PORT=3000
+ENV PORT $PORT
+EXPOSE $PORT
 
 RUN SENTRY_DSN=${SENTRY_DSN} \
     SENTRY_URL=${SENTRY_URL} \
