@@ -9,7 +9,6 @@ ARG SENTRY_ORG
 ARG SENTRY_PROJECT
 ARG SENTRY_AUTH_TOKEN
 
-ENV PORT=8884
 EXPOSE $PORT
 
 RUN npm install -g npm@latest
@@ -19,8 +18,11 @@ RUN npm i
 
 COPY . .
 
-RUN NODE_OPTIONS=${NODE_OPTIONS} \
-    SENTRY_DSN=${SENTRY_DSN} \
+# Skip type check on build to save resources
+RUN mv next.config.js next.config.js.base && \
+  echo "module.exports={...require('./next.config.js.base'),typescript:{ignoreBuildErrors:true}}" >| next.config.js
+
+RUN SENTRY_DSN=${SENTRY_DSN} \
     SENTRY_URL=${SENTRY_URL} \
     SENTRY_ORG=${SENTRY_ORG} \
     SENTRY_PROJECT=${SENTRY_PROJECT} \
