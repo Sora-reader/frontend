@@ -32,7 +32,6 @@
     "axios": "^0.21.1",
     "axios-case-converter": "^0.8.0",
     "cookie": "^0.4.1",
-    "dotenv": "^8.2.0",
     "lodash.isempty": "^4.4.0",
     "material-ui-color": "^1.2.0",
     "next": "^11.0.1",

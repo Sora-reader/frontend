@@ -1,4 +1,3 @@
-// TODO: Remove dotenv module
 module.exports = {
 };
 
