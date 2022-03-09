@@ -28,4 +28,4 @@ RUN SENTRY_DSN=${SENTRY_DSN} \
     SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
     npm run build
 
-CMD ["npm", "run", "start"]
+CMD env | /bin/grep NEXT_PUBLIC >| .env && npm run start

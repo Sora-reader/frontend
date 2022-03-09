@@ -1,7 +1,7 @@
 import { Manga } from '../api/types';
 import { baseUrl, domain as baseDomain } from '../core/consts';
 
-const resizeUrl = process.env.RESIZE_URL;
+const resizeUrl = process.env.NEXT_PUBLIC_RESIZE_URL;
 const propertyKeyMap = {
   description: 'description',
   'twitter:url': 'twitterUrl',

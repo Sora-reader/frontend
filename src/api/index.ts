@@ -1,1 +1,1 @@
-export const apiUrl = `${process.env.BACKEND_URL}:${process.env.BACKEND_PORT}/api`;
+export const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/api`;
